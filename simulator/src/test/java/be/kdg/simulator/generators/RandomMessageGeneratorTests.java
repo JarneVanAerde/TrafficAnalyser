@@ -17,8 +17,19 @@ public class RandomMessageGeneratorTests {
     private MessageGenerator messageGenerator;
 
     @Test
-    public void testMessageGenerator() {
+    public void testGenerate() {
         CameraMessage cameraMessage = messageGenerator.generate();
-        assertTrue(cameraMessage.getLicensePlate().equalsIgnoreCase("1-ABC-123"));
+        assertNotNull(cameraMessage);
+    }
+
+    @Test
+    public void testRandomLicensePlate() {
+        CameraMessage cameraMessage = messageGenerator.generate();
+        assertTrue(cameraMessage.getLicensePlate().matches("^[1-8]-[A-Z]{3}-[0-9]{3}$"));
+    }
+
+    @Test
+    public void testRandomGenration() {
+        assertNotEquals(messageGenerator.generate(), messageGenerator.generate());
     }
 }

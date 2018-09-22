@@ -4,6 +4,7 @@ import be.kdg.simulator.model.CameraMessage;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -19,25 +20,26 @@ import java.util.Random;
 public class RandomMessageGenerator implements MessageGenerator {
     @Value("${generator.message.maxid}")
     private int maxId;
-    private final Random idGenerator;
+    private final Random generator;
     private final List<Integer> messageIds;
 
     /**
      * Used for lazy initialisation of idGenerator and userids
      */
     public RandomMessageGenerator() {
-        idGenerator = new Random();
+        generator = new Random();
         messageIds = new ArrayList<>();
     }
 
     /**
-     * Apache common was used for this method
-     *
+     * Apache common plug-in was used for this method.
+     * First number needs be generated with normal generator,
+     * because belgian licencing plate's first number has a range of 1-8
      * @return a random generated licencing plate
      */
     private String generateLicenseplate() {
         return String.format("%s-%s-%s",
-                RandomStringUtils.random(1, false, true),
+                generator.nextInt(8) + 1,
                 RandomStringUtils.random(3, true, false).toUpperCase(),
                 RandomStringUtils.random(3, false, true));
     }
@@ -74,7 +76,6 @@ public class RandomMessageGenerator implements MessageGenerator {
      */
     @Override
     public CameraMessage generate() {
-
-        return new CameraMessage(idGenerator.nextInt(maxId) + 1, generateLicenseplate(), LocalDateTime.now());
+        return new CameraMessage(generator.nextInt(maxId) + 1, generateLicenseplate(), LocalDateTime.now());
     }
 }

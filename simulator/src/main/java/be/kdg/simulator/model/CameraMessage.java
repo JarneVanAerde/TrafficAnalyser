@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Getter
+@EqualsAndHashCode
 public class CameraMessage {
     private int id;
     private String licensePlate;
@@ -25,20 +26,7 @@ public class CameraMessage {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CameraMessage that = (CameraMessage) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public String toString() {
-        return String.format("Camera Message %d %s %s", id, licensePlate, DateTimeFormatter.ofPattern("HH:mm:ss:SS").format(timestamp));
+        return String.format("Camera %d spotted car with license plate %s at %s local time", id, licensePlate, DateTimeFormatter.ofPattern("HH:mm:ss:SS").format(timestamp));
     }
 }
