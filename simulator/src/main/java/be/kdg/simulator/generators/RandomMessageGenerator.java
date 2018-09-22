@@ -21,14 +21,12 @@ public class RandomMessageGenerator implements MessageGenerator {
     @Value("${generator.message.maxid}")
     private int maxId;
     private final Random generator;
-    private final List<Integer> messageIds;
 
     /**
      * Used for lazy initialisation of idGenerator and userids
      */
     public RandomMessageGenerator() {
         generator = new Random();
-        messageIds = new ArrayList<>();
     }
 
     /**
