@@ -1,5 +1,7 @@
 package be.kdg.simulator.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -7,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Objects;
 
+@Getter
 public class CameraMessage {
     private int id;
     private String licensePlate;
@@ -19,18 +22,6 @@ public class CameraMessage {
         this.id = id;
         this.licensePlate = licensePlate;
         this.timestamp = timestamp;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
     }
 
     @Override
