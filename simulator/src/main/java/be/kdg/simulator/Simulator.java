@@ -14,7 +14,7 @@ public class Simulator {
         this.messenger = messenger;
     }
 
-    @Scheduled(fixedDelayString = "${simulator.scheduledtime}")
+    @Scheduled(fixedDelayString = "${generator.scheduledtime}")
     public void GenerateMessages() {
         messenger.sendMessage();
     }

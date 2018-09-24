@@ -30,6 +30,5 @@ dependencies {
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
-    compile("org.springframework.boot:spring-boot-starter-amqp")
     compileOnly('org.projectlombok:lombok:1.18.2')
 }
