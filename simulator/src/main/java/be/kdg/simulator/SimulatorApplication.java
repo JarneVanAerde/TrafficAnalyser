@@ -17,7 +17,7 @@ import org.springframework.amqp.core.Queue;
 // => gebruik field injection bij de andere
 @SpringBootApplication
 public class SimulatorApplication {
-    static final String topicExcahgneName = "spring-boot-exchange";
+    public static final String topicExcahgneName = "spring-boot-exchange";
     static final String queueName = "spring-boot";
 
     /**
