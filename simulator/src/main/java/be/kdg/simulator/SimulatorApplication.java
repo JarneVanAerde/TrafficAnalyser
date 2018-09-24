@@ -12,20 +12,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.amqp.core.Queue;
 
-//cyclic dependency
-// => gebruik bij de ene constructor
-// => gebruik field injection bij de andere
 @SpringBootApplication
 public class SimulatorApplication {
-    public static final String topicExcahgneName = "spring-boot-exchange";
-    static final String queueName = "spring-boot";
+    public static final String TOPIC_EXCAHGNE_NAME = "cameramessage-exchange";
+    public static final String ROUTING_KEY = "camera.messages.#";
+    private static final String QUEUE_NAME = "cameramessages";
 
     /**
      * @return A new rabbitmq-queue with a chosen queue-name
      */
     @Bean
     Queue queue() {
-        return new Queue(queueName, false);
+        return new Queue(QUEUE_NAME, false);
     }
 
     /**
@@ -33,7 +31,7 @@ public class SimulatorApplication {
      */
     @Bean
     TopicExchange exchange() {
-        return new TopicExchange(topicExcahgneName);
+        return new TopicExchange(TOPIC_EXCAHGNE_NAME);
     }
 
     /**
@@ -43,7 +41,7 @@ public class SimulatorApplication {
      */
     @Bean
     Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
     /**
@@ -55,7 +53,7 @@ public class SimulatorApplication {
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
+        container.setQueueNames(QUEUE_NAME);
         container.setMessageListener(listenerAdapter);
         return container;
     }
@@ -66,7 +64,7 @@ public class SimulatorApplication {
      */
     @Bean
     MessageListenerAdapter listenerAdapter(Receiver receiver) {
-        return new MessageListenerAdapter(receiver, "receivemessage");
+        return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 
     public static void main(String[] args) {
