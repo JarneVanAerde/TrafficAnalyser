@@ -1,4 +1,4 @@
-package be.kdg.simulator.generators.config;
+package be.kdg.simulator.configs;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

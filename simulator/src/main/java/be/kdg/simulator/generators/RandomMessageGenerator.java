@@ -1,11 +1,9 @@
 package be.kdg.simulator.generators;
 
-import be.kdg.simulator.generators.config.GeneratorConfig;
+import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.model.CameraMessage;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
