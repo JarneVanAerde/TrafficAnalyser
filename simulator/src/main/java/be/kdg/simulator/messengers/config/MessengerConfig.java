@@ -1,6 +1,7 @@
 package be.kdg.simulator.messengers.config;
 
 import be.kdg.simulator.messengers.MessageReceiver;
+import be.kdg.simulator.messengers.QueueMessenger;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -13,10 +14,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MessengerConfig {
-    public static final String EXCHANGE_NAME = "amq.direct";
     private static final String QUEUE_NAME = "Cameramessages";
 
     @Bean
+    public Queue queue() {
+        return new Queue(QUEUE_NAME);
+    }
+
+    /*@Bean
     Queue queue() {
         System.out.println("test");
         return new Queue(EXCHANGE_NAME, false);
@@ -45,5 +50,5 @@ public class MessengerConfig {
     @Bean
     MessageListenerAdapter listenerAdapter(MessageReceiver receiver) {
         return new MessageListenerAdapter(receiver, "receiveMessage");
-    }
+    }*/
 }
