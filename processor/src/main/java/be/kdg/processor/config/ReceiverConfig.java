@@ -13,5 +13,4 @@ public class ReceiverConfig {
     @Bean
     public Queue queue() {
         return new Queue(QUEUE_NAME);
-    }
-}
+    }}

@@ -2,7 +2,6 @@ package be.kdg.simulator.messengers;
 
 import be.kdg.simulator.generators.MessageGenerator;
 import be.kdg.simulator.model.CameraMessage;
-import be.kdg.simulator.services.JAXBParsingService;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

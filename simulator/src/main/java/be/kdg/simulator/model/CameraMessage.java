@@ -1,7 +1,6 @@
 package be.kdg.simulator.model;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
