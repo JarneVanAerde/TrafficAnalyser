@@ -1,17 +1,18 @@
 package be.kdg.simulator.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;;
+import java.time.format.DateTimeFormatter;
 
 @Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@XmlRootElement
 public class CameraMessage {
     private int id;
     private String licensePlate;
