@@ -26,6 +26,7 @@ public class QueueMessenger implements Messenger {
     @Override
     public void sendMessage() {
         CameraMessage cameraMessage = messageGenerator.generate();
+        //rabbitTemplate.convertAndSend(camQueue.getName(), JAXBParsingService.marshel(messageGenerator.generate()));
         rabbitTemplate.convertAndSend(camQueue.getName(), cameraMessage.toString());
         System.out.println("Message " + cameraMessage.getId() + " with license plate " + cameraMessage.getLicensePlate() + " has been sent to the queue.");
     }
