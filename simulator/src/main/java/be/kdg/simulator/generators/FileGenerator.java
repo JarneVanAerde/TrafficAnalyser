@@ -1,6 +1,8 @@
 package be.kdg.simulator.generators;
 
+import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.model.CameraMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +19,13 @@ import java.util.stream.Collectors;
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "file")
 public class FileGenerator implements MessageGenerator {
-    private static Path filePath = Paths.get("simulator/src/main/resources/files/cameramessages.txt");
+    private final GeneratorConfig generatorConfig;
     private final List<CameraMessage> cameraMessages;
     private int counter;
 
-    public FileGenerator() {
+    @Autowired
+    public FileGenerator(GeneratorConfig generatorConfig) {
+        this.generatorConfig = generatorConfig;
         this.cameraMessages = extractdata();
         this.counter = 0;
     }
@@ -34,16 +38,18 @@ public class FileGenerator implements MessageGenerator {
     private List<CameraMessage> extractdata() {
         List<CameraMessage> cameraMessages = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(filePath)) {
+        try (Scanner scanner = new Scanner(generatorConfig.getFilePath())) {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(",");
 
-                cameraMessages.add(new CameraMessage(
-                        Integer.parseInt(values[0]),
-                        values[1],
-                        initializeLocalDateTime(values[2])
-                ));
+                if (Integer.parseInt(values[0]) < generatorConfig.getMaxId()) {
+                    cameraMessages.add(new CameraMessage(
+                            Integer.parseInt(values[0]),
+                            values[1],
+                            initializeLocalDateTime(values[2])
+                    ));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
