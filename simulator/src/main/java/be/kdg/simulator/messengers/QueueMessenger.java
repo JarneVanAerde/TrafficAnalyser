@@ -2,6 +2,7 @@ package be.kdg.simulator.messengers;
 
 import be.kdg.simulator.generators.MessageGenerator;
 import be.kdg.simulator.model.CameraMessage;
+import be.kdg.simulator.services.JAXBParsingService;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class QueueMessenger implements Messenger {
     @Override
     public void sendMessage() {
         CameraMessage cameraMessage = messageGenerator.generate();
-        //rabbitTemplate.convertAndSend(camQueue.getName(), JAXBParsingService.marshel(messageGenerator.generate()));
-        rabbitTemplate.convertAndSend(camQueue.getName(), cameraMessage.toString());
+        rabbitTemplate.convertAndSend(camQueue.getName(), JAXBParsingService.marshel(messageGenerator.generate()));
+        //rabbitTemplate.convertAndSend(camQueue.getName(), cameraMessage.toString());
         System.out.println("Message " + cameraMessage.getId() + " with license plate " + cameraMessage.getLicensePlate() + " has been sent to the queue.");
     }
 }

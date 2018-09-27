@@ -10,13 +10,13 @@ import java.io.StringWriter;
 
 @Component
 public class JAXBParsingService {
-    public static String marshel(CameraMessage objectToParse){
+    public static String marshel(CameraMessage cameraMessage){
         try {
-            JAXBContext context = JAXBContext.newInstance(objectToParse.getClass());
+            JAXBContext context = JAXBContext.newInstance(CameraMessage.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
-            marshaller.marshal(objectToParse, sw);
+            marshaller.marshal(cameraMessage, sw);
             return sw.toString();
         } catch (JAXBException e) {
             //TODO: log exception
