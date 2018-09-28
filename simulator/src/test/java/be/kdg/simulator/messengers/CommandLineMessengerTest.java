@@ -1,5 +1,6 @@
 package be.kdg.simulator.messengers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class CommandLineMessengerTest {
     private Messenger messenger;
 
     @Test
-    public void sendMessage() {
+    public void sendMessage() throws JsonProcessingException {
         messenger.sendMessage();
     }
 }

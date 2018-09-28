@@ -2,6 +2,8 @@ package be.kdg.processor.receivers;
 
 import be.kdg.processor.models.CameraMessage;
 import be.kdg.processor.services.XMLService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -11,9 +13,12 @@ import java.io.IOException;
 @Component
 @RabbitListener(queues = "${messaging.queue.name}")
 public class MessageReceiver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiver.class);
+
     @RabbitHandler
-    public void receive(String message) {
-        System.out.println(XMLService.unmarshel(message));
+    public void receive(String message) throws IOException {
+        CameraMessage cameraMessage = XMLService.unmarshel(message);
+        LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
     }
 }
 

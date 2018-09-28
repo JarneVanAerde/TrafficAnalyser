@@ -1,6 +1,7 @@
 package be.kdg.simulator;
 
 import be.kdg.simulator.messengers.Messenger;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class Simulator {
     }
 
     @Scheduled(fixedDelayString = "${generator.scheduledtime}")
-    public void GenerateMessages() {
+    public void GenerateMessages() throws JsonProcessingException {
         messenger.sendMessage();
     }
 }

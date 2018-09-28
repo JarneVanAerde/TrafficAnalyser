@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 public class CommandLineMessenger implements Messenger {
     private final MessageGenerator messageGenerator;
 
-    //Consturctor injection
     @Autowired
     public CommandLineMessenger(MessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
     }
 
+    /**
+     * Generates a message from the file -or random generator
+     * and prints it to the commandline.
+     */
     @Override
     public void sendMessage() {
         System.out.println(messageGenerator.generate());

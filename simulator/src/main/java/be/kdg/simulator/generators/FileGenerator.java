@@ -2,13 +2,13 @@ package be.kdg.simulator.generators;
 
 import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.model.CameraMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +22,11 @@ public class FileGenerator implements MessageGenerator {
     private final GeneratorConfig generatorConfig;
     private final List<CameraMessage> cameraMessages;
     private int counter;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileGenerator.class) ;
+
 
     @Autowired
-    public FileGenerator(GeneratorConfig generatorConfig) {
+    public FileGenerator(GeneratorConfig generatorConfig) throws IOException {
         this.generatorConfig = generatorConfig;
         this.cameraMessages = extractdata();
         this.counter = 0;
@@ -35,7 +37,7 @@ public class FileGenerator implements MessageGenerator {
      *
      * @return a list of Camera messages
      */
-    private List<CameraMessage> extractdata() {
+    private List<CameraMessage> extractdata() throws IOException {
         List<CameraMessage> cameraMessages = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(generatorConfig.getFilePath())) {
@@ -51,12 +53,12 @@ public class FileGenerator implements MessageGenerator {
                     ));
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: log exceptio,
-            //TODO: rethrow exception
+        } catch (IOException ioe) {
+            LOGGER.error("Extraction of file data failed.");
+            throw ioe;
         }
 
+        LOGGER.info("Extraction file succeeded.");
         return cameraMessages;
     }
 
