@@ -88,7 +88,7 @@ public class FileGenerator implements MessageGenerator {
      */
     @Override
     public CameraMessage generate() {
-        if (counter >= cameraMessages.size()) counter = 0;
+        if (counter >= cameraMessages.size()) System.exit(0);
         return cameraMessages.get(counter++);
     }
 }

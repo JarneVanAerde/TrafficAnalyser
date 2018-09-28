@@ -30,6 +30,7 @@ public class RandomMessageGenerator implements MessageGenerator {
      * Apache common plug-in was used for this method.
      * First number needs be generated with normal generator,
      * because belgian licencing plate's first number has a range of 1-8
+     *
      * @return a random generated licencing plate
      */
     private String generateLicenseplate() {

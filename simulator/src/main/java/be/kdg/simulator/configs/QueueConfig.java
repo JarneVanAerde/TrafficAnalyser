@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QueueConfig {
     @Value("${messaging.queue.name}")
-    private String QUEUE_NAME;
+    private String queueName;
 
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_NAME);
+        return new Queue(queueName);
     }
 }

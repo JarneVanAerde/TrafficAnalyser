@@ -2,7 +2,6 @@ package be.kdg.simulator.model;
 
 import lombok.*;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement
 public class CameraMessage {
     private int id;
     private String licensePlate;
