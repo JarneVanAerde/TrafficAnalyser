@@ -1,5 +1,6 @@
-package be.kdg.simulator.services;
+package be.kdg.processor.services;
 
+import be.kdg.processor.models.CameraMessage;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -9,18 +10,19 @@ import java.io.IOException;
 
 @Service
 public class XMLService {
-    public static String marshel(Object cameraMessage) {
+    public static CameraMessage unmarshel(String xmlString) {
         XmlMapper xmlMapper = new XmlMapper();
-        String xml = "";
+        CameraMessage cameraMessage = null;
+
         try {
             xmlMapper.registerModule(new JavaTimeModule());
-            xmlMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            xml =  xmlMapper.writeValueAsString(cameraMessage);
+            cameraMessage = xmlMapper.readValue(xmlString, CameraMessage.class);
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO: throw eception
             //TODO: log exception
-            //TODO: throw exception
         }
-        return xml;
+
+        return cameraMessage;
     }
 }

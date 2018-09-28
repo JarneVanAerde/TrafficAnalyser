@@ -29,4 +29,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.7'
+    compileOnly('org.projectlombok:lombok:1.18.2')
 }
