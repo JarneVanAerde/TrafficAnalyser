@@ -19,21 +19,24 @@ import java.util.stream.Collectors;
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "file")
 public class FileGenerator implements MessageGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileGenerator.class) ;
     private final GeneratorConfig generatorConfig;
     private final List<CameraMessage> cameraMessages;
+    private final List<Integer> delays;
     private int counter;
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileGenerator.class) ;
-
 
     @Autowired
     public FileGenerator(GeneratorConfig generatorConfig) throws IOException {
         this.generatorConfig = generatorConfig;
+        this.delays = new ArrayList<>();
         this.cameraMessages = extractdata();
         this.counter = 0;
     }
 
     /**
      * Bases file-reader that reads a given file.
+     * Information about camera messages is loaded into CameraMessage-objects.
+     * Information about delays is loaded into a separate collection.
      *
      * @return a list of Camera messages
      */
@@ -51,6 +54,8 @@ public class FileGenerator implements MessageGenerator {
                             values[1],
                             initializeLocalDateTime(values[2])
                     ));
+
+                    delays.add(Integer.parseInt(values[3]));
                 }
             }
         } catch (IOException ioe) {
@@ -86,11 +91,29 @@ public class FileGenerator implements MessageGenerator {
      * If the counter is at the end of the array, then it will be reset to 0 to
      * make sure we keep returning messages.
      *
+     * The time that is scheduled is subtracted from
+     *
+     * NOTE:
+     * The time it takes to generate a message is depended on not only the delay,
+     * but also the scheduled time.
+     *
      * @return a generated camera message that was extracted from the file previously.
      */
     @Override
     public CameraMessage generate() {
         if (counter >= cameraMessages.size()) System.exit(0);
+
+        int dif = delays.get(counter) - generatorConfig.getSchedulingTime();
+        if (dif > 0) {
+            try {
+                Thread.sleep(dif);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                //TODO: log exception
+                //TODO: rethrow if needed
+            }
+        }
+
         return cameraMessages.get(counter++);
     }
 }

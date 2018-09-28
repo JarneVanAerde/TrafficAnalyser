@@ -12,6 +12,9 @@ public class GeneratorConfig {
     @Getter
     @Value("${generator.message.maxid}")
     private int maxId;
+    @Getter
+    @Value("${generator.scheduledtime}")
+    private int schedulingTime;
     @Value("${generator.filepath}")
     private String filePath;
 
