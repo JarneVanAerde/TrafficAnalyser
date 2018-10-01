@@ -1,4 +1,4 @@
-package be.kdg.processor.models;
+package be.kdg.processor.models.cameras;
 
 import lombok.*;
 
