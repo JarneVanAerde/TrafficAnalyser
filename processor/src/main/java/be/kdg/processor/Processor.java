@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,6 +21,15 @@ public class Processor {
 
     public Processor() {
         this.cameraMessages = new ArrayList<>();
+    }
+
+    @Scheduled(fixedDelayString = "${processor.scheduledtime}")
+    public void processMessage() {
+        LOGGER.info("Processing " + cameraMessages.size() + " messages.");
+
+        //TODO: implement delegation to finedection service
+
+        cameraMessages.clear();
     }
 
     @RabbitHandler
