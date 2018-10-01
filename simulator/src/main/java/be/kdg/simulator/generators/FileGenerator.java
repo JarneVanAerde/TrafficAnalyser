@@ -11,10 +11,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "file")
@@ -49,6 +47,7 @@ public class FileGenerator implements MessageGenerator {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(",");
+                if (values.length > 3) LOGGER.warn("Line has more than 3 values.");
 
                 delay = Integer.parseInt(values[2]);
                 localDateTimeForMessage = localDateTimeForMessage.plusNanos(NANO_SECONDS * delay);
@@ -62,7 +61,7 @@ public class FileGenerator implements MessageGenerator {
                 }
             }
         } catch (IOException ioe) {
-            LOGGER.error("Extraction of file data failed.");
+            LOGGER.error("Extraction of file data failed. " + ioe.getMessage());
             throw ioe;
         }
 
