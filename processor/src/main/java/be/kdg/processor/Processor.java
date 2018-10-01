@@ -1,4 +1,4 @@
-package be.kdg.processor.receivers;
+package be.kdg.processor;
 
 import be.kdg.processor.models.CameraMessage;
 import be.kdg.processor.services.XMLService;
@@ -12,8 +12,8 @@ import java.io.IOException;
 
 @Component
 @RabbitListener(queues = "${messaging.queue.name}")
-public class MessageReceiver {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiver.class);
+public class Processor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Processor.class);
 
     @RabbitHandler
     public void receive(String message) throws IOException {
@@ -21,4 +21,3 @@ public class MessageReceiver {
         LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
     }
 }
-
