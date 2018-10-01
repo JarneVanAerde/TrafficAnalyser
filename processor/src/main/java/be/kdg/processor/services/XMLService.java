@@ -1,6 +1,6 @@
 package be.kdg.processor.services;
 
-import be.kdg.processor.models.CameraMessage;
+import be.kdg.processor.models.cameras.CameraMessage;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
