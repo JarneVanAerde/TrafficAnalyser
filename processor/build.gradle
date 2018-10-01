@@ -31,4 +31,7 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.7'
     compileOnly('org.projectlombok:lombok:1.18.2')
+    compile files('libs/camera-service-1.0.jar', 'libs/license-plate-service-1.0.jar')
+    compile group: 'javax.json', name: 'javax.json-api', version: '1.0'
+    compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
 }
