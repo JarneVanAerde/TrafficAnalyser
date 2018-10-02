@@ -1,7 +1,9 @@
 package be.kdg.processor.models.cameras;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +14,24 @@ import java.util.List;
 public class Camera {
     @JsonProperty("cameraId")
     private int id;
-    private int[] location;
-    @JsonProperty("lat")
-    private double locationLat;
-    @JsonProperty("long")
-    private double locationLong;
-    @JsonProperty("connectedCameraId")
-    private int secondCamera;
-    private int distance;
-    private int speedLimit;
     private int euroNorm;
+    private Segment segment;
+    private Location location;
     private final List<CameraMessage> cameraMessages;
 
-    public Camera(int id, double locationLat, double locationLong, int secondCamera, int distance, int speed, int euroNorm) {
+    public Camera(int id, int euroNorm, Segment segment, Location location) {
         this.id = id;
-        this.locationLat = locationLat;
-        this.locationLong = locationLong;
-        this.secondCamera = secondCamera;
-        this.distance = distance;
-        this.speedLimit = speed;
         this.euroNorm = euroNorm;
+        this.segment = segment;
+        this.location = location;
+        this.cameraMessages = new ArrayList<>();
+    }
+
+    public Camera(int id,  Segment segment, Location location) {
+        this.id = id;
+        this.euroNorm = -1;
+        this.segment = segment;
+        this.location = location;
         this.cameraMessages = new ArrayList<>();
     }
 
@@ -41,13 +41,10 @@ public class Camera {
 
     @Override
     public String toString() {
-        return String.format("Camera %d" +
-                "\nLocation:\n\tLatitude %.2f\n\tLongitude %.2f" +
-                "Second Camera %d" +
-                "Distance in segment %d" +
-                "Max legal speedLimit %d" +
+        return String.format("Camera %d\n" +
+                "%s\n" +
+                "%s\n" +
                 "euroNorm %d",
-                id, locationLat, locationLong, secondCamera,
-                distance, speedLimit, euroNorm);
+                id, location, segment, euroNorm);
     }
 }

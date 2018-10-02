@@ -24,14 +24,8 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
     }
 
     @Override
-    public void detectFine(CameraMessage message) {
-        try {
-            String cameraJson = licensePlateServiceProxy.get(message.getLicensePlate());
-            System.out.println(JSONService.unparse(cameraJson));
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: log exception
-            //TODO: throw exception
-        }
+    public void detectFine(CameraMessage message) throws IOException {
+        String cameraJson = cameraServiceProxy.get(message.getId());
+        System.out.println(JSONService.jsonToCamera(cameraJson));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -27,8 +28,15 @@ public class Processor {
     public void processMessages() {
         List<CameraMessage> cameraMessages = receiver.getBufferdObjects();
         LOGGER.info("Processing " + cameraMessages.size() + " messages.");
+
         cameraMessages.forEach(
-                message -> detectionServices.forEach(service -> service.detectFine(message))
+                message -> detectionServices.forEach(service -> {
+                    try {
+                        service.detectFine(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                })
         );
     }
 }
