@@ -1,4 +1,4 @@
-package be.kdg.processor.services;
+package be.kdg.processor.services.parsingServices;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class XMLService {
     private static final Logger LOGGER = LoggerFactory.getLogger(XMLService.class);
 
-    public static CameraMessage unmarshel(String xmlString) throws IOException {
+    public static Object unmarshel(String xmlString) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
         CameraMessage cameraMessage;
 
