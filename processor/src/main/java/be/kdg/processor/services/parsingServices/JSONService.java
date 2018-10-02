@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @Service
 public class JSONService {
-    public static <T> Object unmarshel(String jsonString, Class<T> objectClass) {
+    public static <T> Object unmarshal(String jsonString, Class<T> objectClass) {
         Object object = null;
 
         try {

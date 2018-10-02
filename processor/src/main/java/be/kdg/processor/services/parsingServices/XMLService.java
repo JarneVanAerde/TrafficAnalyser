@@ -13,18 +13,18 @@ import java.io.IOException;
 public class XMLService {
     private static final Logger LOGGER = LoggerFactory.getLogger(XMLService.class);
 
-    public static Object unmarshel(String xmlString) throws IOException {
+    public static <T> Object unmarshel(String xmlString, Class<T> objectClass) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
-        CameraMessage cameraMessage;
+        Object object;
 
         try {
             xmlMapper.registerModule(new JavaTimeModule());
-            cameraMessage = xmlMapper.readValue(xmlString, CameraMessage.class);
+            object = xmlMapper.readValue(xmlString, objectClass);
         } catch (IOException ioe) {
             LOGGER.error("Someting went wrong while unmarsheling an xml string to an object.");
             throw ioe;
         }
 
-        return cameraMessage;
+        return object;
     }
 }

@@ -35,7 +35,7 @@ public class QueueReceiver implements Receiver<CameraMessage> {
     @Override
     @RabbitHandler
     public void receiveMessage(String message) throws IOException {
-        CameraMessage cameraMessage = (CameraMessage) XMLService.unmarshel(message);
+        CameraMessage cameraMessage = (CameraMessage) XMLService.unmarshel(message, CameraMessage.class);
         messageBuffer.add(cameraMessage);
         LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
     }
