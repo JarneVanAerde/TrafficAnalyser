@@ -1,11 +1,9 @@
 package be.kdg.processor.models.licensePlateInfos;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -16,10 +14,7 @@ public class LicensePlateInfo {
 
     @Override
     public String toString() {
-        return "LicensePlateInfo{" +
-                "plate='" + plate + '\'' +
-                ", nationalNumber='" + nationalNumber + '\'' +
-                ", euroNumber=" + euroNumber +
-                '}';
+        return String.format("Plate: %s\nNational number: %s\nEuro standard: %d",
+                plate, nationalNumber, euroNumber);
     }
 }
