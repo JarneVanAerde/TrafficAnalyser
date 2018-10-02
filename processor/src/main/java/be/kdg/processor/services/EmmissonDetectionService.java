@@ -4,7 +4,7 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
+public class EmmissonDetectionService implements DetectionService<CameraMessage> {
     @Override
     public void detectFine(CameraMessage message) {
 
