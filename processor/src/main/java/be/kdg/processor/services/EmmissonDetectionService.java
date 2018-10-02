@@ -1,7 +1,9 @@
 package be.kdg.processor.services;
 
 import be.kdg.processor.config.ExternalServiceConfig;
+import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.models.licensePlateInfos.LicensePlateInfo;
 import be.kdg.processor.services.parsingServices.JSONService;
 import be.kdg.sa.services.CameraServiceProxy;
 import be.kdg.sa.services.LicensePlateServiceProxy;
@@ -25,7 +27,7 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
 
     @Override
     public void detectFine(CameraMessage message) throws IOException {
-        String cameraJson = cameraServiceProxy.get(message.getId());
-        System.out.println(JSONService.jsonToCamera(cameraJson));
+        String cameraJson = licensePlateServiceProxy.get(message.getLicensePlate());
+        System.out.println(JSONService.unmarshel(cameraJson, LicensePlateInfo.class));
     }
 }

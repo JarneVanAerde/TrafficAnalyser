@@ -3,24 +3,22 @@ package be.kdg.processor.models.cameras;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @EqualsAndHashCode
 public class Camera {
-    @JsonProperty("cameraId")
-    private int id;
+    private int cameraId;
     private int euroNorm;
     private Segment segment;
     private Location location;
     private final List<CameraMessage> cameraMessages;
 
     public Camera(int id, int euroNorm, Segment segment, Location location) {
-        this.id = id;
+        this.cameraId = id;
         this.euroNorm = euroNorm;
         this.segment = segment;
         this.location = location;
@@ -28,7 +26,7 @@ public class Camera {
     }
 
     public Camera(int id,  Segment segment, Location location) {
-        this.id = id;
+        this.cameraId = id;
         this.euroNorm = -1;
         this.segment = segment;
         this.location = location;
@@ -45,6 +43,6 @@ public class Camera {
                 "%s\n" +
                 "%s\n" +
                 "euroNorm %d",
-                id, location, segment, euroNorm);
+                cameraId, location, segment, euroNorm);
     }
 }

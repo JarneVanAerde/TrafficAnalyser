@@ -9,31 +9,18 @@ import java.io.IOException;
 
 @Service
 public class JSONService {
-    public static LicensePlateInfo jsonToLicensePlateInfo(String jsonString) {
-        LicensePlateInfo licensePlateInfo = null;
+    public static <T> Object unmarshel(String jsonString, Class<T> objectClass) {
+        Object object = null;
 
         try {
-            licensePlateInfo = new ObjectMapper().readValue(jsonString, LicensePlateInfo.class);
+            object = new ObjectMapper().readValue(jsonString, objectClass);
         } catch (IOException e) {
+            e.printStackTrace();
             e.printStackTrace();
             //TODO: log exception
             //TODO: throw exception
         }
 
-        return licensePlateInfo;
-    }
-
-    public static Camera jsonToCamera(String jsonString) {
-        Camera camera = null;
-
-        try {
-            camera = new ObjectMapper().readValue(jsonString, Camera.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: log exception
-            //TODO: throw exception
-        }
-
-        return camera;
+        return object;
     }
 }
