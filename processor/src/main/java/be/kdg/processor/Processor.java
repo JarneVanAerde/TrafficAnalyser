@@ -34,6 +34,7 @@ public class Processor {
 
     @RabbitHandler
     public void receive(String message) throws IOException {
+        System.out.println(message);
         CameraMessage cameraMessage = XMLService.unmarshel(message);
         cameraMessages.add(cameraMessage);
         LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
