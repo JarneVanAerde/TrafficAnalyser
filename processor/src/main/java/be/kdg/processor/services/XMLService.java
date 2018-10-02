@@ -15,7 +15,7 @@ public class XMLService {
 
     public static CameraMessage unmarshel(String xmlString) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
-        CameraMessage cameraMessage = null;
+        CameraMessage cameraMessage;
 
         try {
             xmlMapper.registerModule(new JavaTimeModule());

@@ -2,6 +2,7 @@ package be.kdg.processor;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.services.XMLService;
+import be.kdg.sa.services.CameraServiceProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
