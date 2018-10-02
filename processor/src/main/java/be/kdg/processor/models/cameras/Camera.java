@@ -35,14 +35,13 @@ public class Camera {
 
     @Override
     public String toString() {
-        return "Camera{" +
-                "id=" + id +
-                ", locationLat=" + locationLat +
-                ", locationLong=" + locationLong +
-                ", secondCamera=" + secondCamera +
-                ", distance=" + distance +
-                ", speed=" + speed +
-                ", euroNorm=" + euroNorm +
-                '}';
+        return String.format("Camera %d" +
+                "\nLocation:\n\tLatitude %.2f\n\tLongitude %.2f" +
+                "Second Camera %d" +
+                "Distance in segment %d" +
+                "Max legal speed %d" +
+                "euroNorm %d",
+                id, locationLat, locationLong, secondCamera,
+                distance, speed, euroNorm);
     }
 }
