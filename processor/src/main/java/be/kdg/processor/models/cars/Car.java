@@ -9,11 +9,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Car {
     private String licensePlate;
-    private int euroStandard;
+    private int euroNorm;
 
     @Override
     public String toString() {
         return String.format("Car with license plate %s and Euro standard %d",
-                licensePlate, euroStandard);
+                licensePlate, euroNorm);
     }
 }
