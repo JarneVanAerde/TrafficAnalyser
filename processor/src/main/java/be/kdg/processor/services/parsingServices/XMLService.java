@@ -21,7 +21,7 @@ public class XMLService {
             xmlMapper.registerModule(new JavaTimeModule());
             object = xmlMapper.readValue(xmlString, objectClass);
         } catch (IOException ioe) {
-            LOGGER.error("Someting went wrong while unmarsheling an xml string to an object.");
+            LOGGER.error("Someting went wrong while unmarsheling an xml string to an object " + objectClass.getSimpleName() + ".");
             throw ioe;
         }
 
