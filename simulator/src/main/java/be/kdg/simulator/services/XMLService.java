@@ -23,7 +23,7 @@ public class XMLService {
      */
     public static String marshel(Object objectToMarshel) throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
-        String xml = "";
+        String xml;
 
         try {
             xmlMapper.registerModule(new JavaTimeModule());

@@ -47,12 +47,11 @@ public class FileGenerator implements MessageGenerator {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(",");
-                if (values.length > 3) LOGGER.warn("Line has more than 3 values.");
 
                 delay = Integer.parseInt(values[2]);
                 localDateTimeForMessage = localDateTimeForMessage.plusNanos(NANO_SECONDS * delay);
 
-                if (Integer.parseInt(values[0]) < generatorConfig.getMaxId()) {
+                if (Integer.parseInt(values[0]) <= generatorConfig.getMaxId()) {
                     cameraMessages.add(new CameraMessage(
                             Integer.parseInt(values[0]),
                             values[1],

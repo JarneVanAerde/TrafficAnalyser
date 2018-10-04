@@ -3,6 +3,8 @@ package be.kdg.processor;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.receivers.Receiver;
 import be.kdg.processor.services.DetectionService;
+import be.kdg.sa.services.CameraNotFoundException;
+import be.kdg.sa.services.LicensePlateNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +35,13 @@ public class Processor {
                 message -> detectionServices.forEach(service -> {
                     try {
                         service.detectFine(message);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ioe) {
+                        LOGGER.error("Oops, something went wrong while detection fines: " + ioe.getMessage());
+                        //TODO: throw exception
+                    } catch (LicensePlateNotFoundException lnfe) {
+                        lnfe.printStackTrace();
+                    } catch (CameraNotFoundException cnfe) {
+                        cnfe.printStackTrace();
                     }
                 })
         );
