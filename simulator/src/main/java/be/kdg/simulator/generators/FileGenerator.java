@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This class main purpose is to generate CameraMessage-objects that come
+ * from one or more files.
+ */
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "file")
 public class FileGenerator implements MessageGenerator {
@@ -34,7 +38,7 @@ public class FileGenerator implements MessageGenerator {
      * Information about camera messages is loaded into CameraMessage-objects.
      * Delay is used to calculate the next LocalDateTime value.
      *
-     * @return a list of Camera messages
+     * @return A list of Camera messages
      */
     private List<CameraMessage> extractdata() throws IOException {
         List<CameraMessage> cameraMessages = new ArrayList<>();
@@ -71,10 +75,9 @@ public class FileGenerator implements MessageGenerator {
     /**
      * Every time we return a new camera message, a counter will be incremented
      * to make sure the next value is returned when the method is called again.
+     * If the counter is at the end of the collection, then the program will be exited.
      *
-     * If the counter is at the end of the array, then the program will be exited.
-     *
-     * @return a generated camera message that was extracted from the file previously.
+     * @return A generated camera message that was extracted from the file previously.
      */
     @Override
     public CameraMessage generate() {

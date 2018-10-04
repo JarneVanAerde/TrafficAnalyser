@@ -3,6 +3,7 @@ package be.kdg.simulator.generators;
 import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.model.CameraMessage;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 /**
- * This class is used for making random messages
+ * This class is used for making random messages.
  */
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "random")
@@ -18,9 +19,7 @@ public class RandomMessageGenerator implements MessageGenerator {
     private final Random generator;
     private final GeneratorConfig generatorConfig;
 
-    /**
-     * Used for lazy initialisation of idGenerator and userids
-     */
+    @Autowired
     public RandomMessageGenerator(GeneratorConfig generatorConfig) {
         this.generatorConfig = generatorConfig;
         this.generator = new Random();
@@ -31,7 +30,7 @@ public class RandomMessageGenerator implements MessageGenerator {
      * First number needs be generated with normal generator,
      * because belgian licencing plate's first number has a range of 1-8
      *
-     * @return a random generated licencing plate
+     * @return A random generated licencing plate
      */
     private String generateLicenseplate() {
         return String.format("%s-%s-%s",
@@ -41,7 +40,7 @@ public class RandomMessageGenerator implements MessageGenerator {
     }
 
     /**
-     * @return gives back a newly generated CameraMessage-instance based on random parameters
+     * @return Gives back a newly generated CameraMessage-instance based on random parameters.
      */
     @Override
     public CameraMessage generate() {

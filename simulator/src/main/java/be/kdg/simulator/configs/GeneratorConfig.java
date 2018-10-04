@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Configuration class used for injecting static values
+ * from application.properties that are used by the generator implementations
+ */
 @Configuration
 public class GeneratorConfig {
     @Getter

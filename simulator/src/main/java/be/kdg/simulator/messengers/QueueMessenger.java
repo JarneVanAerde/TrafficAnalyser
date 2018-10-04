@@ -19,7 +19,6 @@ public class QueueMessenger implements Messenger {
     private final XmlMapper xmlMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class) ;
 
-    //Consturctor injection
     @Autowired
     public QueueMessenger(RabbitTemplate rabbitTemplate, Queue camQueue, XmlMapper xmlMapper) {
         this.rabbitTemplate = rabbitTemplate;
@@ -29,8 +28,8 @@ public class QueueMessenger implements Messenger {
 
     /**
      * Generates a message from the file -or random generator
-     * Generates a xml-formatted message based on the XMLSerice class
-     * After that, the message is send using a remote proxy.
+     * Generates a xml-formatted message based on the XmlMapper class
+     * After that, the message is send using the rabbit template.
      */
     @Override
     public void sendMessage(CameraMessage message) throws JsonProcessingException {

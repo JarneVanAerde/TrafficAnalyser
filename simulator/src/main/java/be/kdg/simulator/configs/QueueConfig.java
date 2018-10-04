@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Used for the configuration of the queue.
+ * The name of the queue is injected from application.properties.
+ */
 @Configuration
 public class QueueConfig {
     @Value("${messaging.queue.name}")
