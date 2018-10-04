@@ -6,6 +6,6 @@ import be.kdg.sa.services.LicensePlateNotFoundException;
 
 import java.io.IOException;
 
-public interface DetectionService<E> {
-    void detectFine(E message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException;
+public interface DetectionService<T> {
+    void detectFine(T message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException;
 }

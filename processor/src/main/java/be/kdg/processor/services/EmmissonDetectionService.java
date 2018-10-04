@@ -40,5 +40,6 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
             LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
 
         //Save in repositories
+        //TODO: save in repositories
     }
 }
