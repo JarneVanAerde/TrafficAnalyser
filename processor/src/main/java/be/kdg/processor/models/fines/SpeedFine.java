@@ -16,7 +16,7 @@ public class SpeedFine extends Fine {
     private CameraMessage exitCamera;
 
     public SpeedFine(int fineId, FineType fineType, double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
-        super(fineId, fineType, amount);
+        super(fineId, amount, fineType);
         this.carSpeed = carSpeed;
         this.legalSpeed = legalSpeed;
         this.enterCamera = enterCamera;

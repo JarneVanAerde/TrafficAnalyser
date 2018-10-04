@@ -17,7 +17,7 @@ public abstract class Fine {
 
     @Override
     public String toString() {
-        return String.format("%s (%dà with an amount of %.2f.",
+        return String.format("%s (%d) with an amount of %.2f.",
                 fineType, fineId, amount);
     }
 }

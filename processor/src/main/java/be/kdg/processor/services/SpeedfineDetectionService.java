@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmmissonDetectionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
     private final CameraServiceProxy cameraServiceProxy;
     private final LicensePlateServiceProxy licensePlateServiceProxy;
     private final ObjectMapper objectMapper;
