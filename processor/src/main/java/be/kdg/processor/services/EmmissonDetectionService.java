@@ -6,10 +6,7 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlateInfos.LicensePlateInfo;
 import be.kdg.processor.repositories.CameraDAO;
 import be.kdg.processor.services.parsingServices.JSONService;
-import be.kdg.sa.services.CameraNotFoundException;
-import be.kdg.sa.services.CameraServiceProxy;
-import be.kdg.sa.services.LicensePlateNotFoundException;
-import be.kdg.sa.services.LicensePlateServiceProxy;
+import be.kdg.sa.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,13 +28,13 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
     }
 
     @Override
-    public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException {
+    public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException {
         String cameraJson = cameraServiceProxy.get(message.getId());
-        Camera camera = (Camera) JSONService.unmarshal(cameraJson, Camera.class);
         String licenseJson = licensePlateServiceProxy.get(message.getLicensePlate());
+        Camera camera = (Camera) JSONService.unmarshal(cameraJson, Camera.class);
         LicensePlateInfo licensePlateInfo = (LicensePlateInfo) JSONService.unmarshal(licenseJson, LicensePlateInfo.class);
 
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber())
-            System.out.println("fine detected for " + licensePlateInfo.getPlateId() +  " on camera " + camera.getCameraId());
+            System.out.println("fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId());
     }
 }
