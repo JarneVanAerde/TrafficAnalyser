@@ -1,7 +1,6 @@
 package be.kdg.processor.services;
 
 import be.kdg.processor.models.cameras.CameraMessage;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
