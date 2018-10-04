@@ -16,15 +16,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnProperty(name = "messaging.type", havingValue = "queue")
 public class QueueMessenger implements Messenger {
-    private final MessageGenerator messageGenerator;
     private final RabbitTemplate rabbitTemplate;
     private final Queue camQueue;
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class) ;
 
     //Consturctor injection
     @Autowired
-    public QueueMessenger(MessageGenerator messageGenerator, Queue camQueue, RabbitTemplate rabbitTemplate) {
-        this.messageGenerator = messageGenerator;
+    public QueueMessenger(Queue camQueue, RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
         this.camQueue = camQueue;
     }
@@ -35,9 +33,8 @@ public class QueueMessenger implements Messenger {
      * After that, the message is send using a remote proxy.
      */
     @Override
-    public void sendMessage() throws JsonProcessingException {
-        CameraMessage cameraMessage = messageGenerator.generate();
-        rabbitTemplate.convertAndSend(camQueue.getName(), XMLService.marshel(cameraMessage));
-        LOGGER.info("Message with license " + cameraMessage.getLicensePlate() + " has been sent to the queue");
+    public void sendMessage(CameraMessage message) throws JsonProcessingException {
+        rabbitTemplate.convertAndSend(camQueue.getName(), XMLService.marshel(message));
+        LOGGER.info("Message with license " + message.getLicensePlate() + " has been sent to the queue");
     }
 }
