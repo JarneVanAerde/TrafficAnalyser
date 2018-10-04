@@ -1,11 +1,17 @@
 package be.kdg.processor.models.cars;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple POJO that gives us information about a car owner.
+ * A carowner can have multiple cars.
+ */
 @Getter
+@EqualsAndHashCode
 public class CarOwner {
     private String nationalNumber;
     private List<Car> cars;

@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * Simple POJO that gives us information about a specific car.
+ */
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor

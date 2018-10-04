@@ -6,6 +6,10 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to store basic information about Camera's.
+ * Information about a camera comes form the external service CameraServiceProxy.
+ */
 @Getter
 @EqualsAndHashCode
 public class Camera {
@@ -18,14 +22,6 @@ public class Camera {
     public Camera(int id, int euroNorm, Segment segment, Location location) {
         this.cameraId = id;
         this.euroNorm = euroNorm;
-        this.segment = segment;
-        this.location = location;
-        this.cameraMessages = new ArrayList<>();
-    }
-
-    public Camera(int id,  Segment segment, Location location) {
-        this.cameraId = id;
-        this.euroNorm = -1;
         this.segment = segment;
         this.location = location;
         this.cameraMessages = new ArrayList<>();

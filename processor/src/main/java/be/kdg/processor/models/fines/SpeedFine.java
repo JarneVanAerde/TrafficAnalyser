@@ -3,9 +3,11 @@ package be.kdg.processor.models.fines;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * Simple POJO that stores information about an speed fines.
+ */
 @Getter
 @EqualsAndHashCode
-
 public class SpeedFine extends Fine {
     private int ownerSpeed;
     private int legalSpeed;

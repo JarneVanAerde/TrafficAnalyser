@@ -6,6 +6,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * This class configures parsing services that are used for
+ * converting objects -and/or data sets
+ */
 @Configuration
 public class ParsingServiceConfig {
     @Bean

@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * Abstract super class used by al specific fines for inheritance.
+ */
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter

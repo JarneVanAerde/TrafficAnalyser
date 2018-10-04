@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class listens for messages that are on the queue.
+ * If a message is on the queue, then the rabbit handler passes that message to
+ * all rabbit handles methods.
+ */
 @Component
 @RabbitListener(queues = "${messaging.queue.name}")
 @ConditionalOnProperty(name = "receiver.type", havingValue = "queue")
@@ -29,6 +34,12 @@ public class QueueReceiver implements Receiver<CameraMessage> {
         this.messageBuffer = new ArrayList<>();
     }
 
+    /**
+     * This method will periodically be called by the processor
+     * class to process any buffered message.
+     *
+     * @return A list of buffered camera messages.
+     */
     @Override
     public List<CameraMessage> getBufferdObjects() {
         List<CameraMessage> buffer = new ArrayList<>(Collections.unmodifiableList(messageBuffer));
@@ -36,6 +47,13 @@ public class QueueReceiver implements Receiver<CameraMessage> {
         return buffer;
     }
 
+    /**
+     * This class handles all the messages that come from the queue
+     * and adds them to a message buffer.
+     *
+     * @param message The message from the queue.
+     * @throws IOException Throws an exception if the conversion from xml to object failed.
+     */
     @Override
     @RabbitHandler
     public void receiveMessage(String message) throws IOException {

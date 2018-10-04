@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class processes the buffered messages that come from receiver
+ * The type of receiver is mentioned in application.properties.
+ */
 @Component
 public class Processor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Processor.class);
@@ -27,6 +31,10 @@ public class Processor {
         this.detectionServices = detectionServices;
     }
 
+    /**
+     * Every x-number of seconds, this method will take all buffered messages
+     * and pass them through all the detection services to detect fines.
+     */
     @Scheduled(fixedDelayString = "${processor.scheduledtime}")
     public void processMessages() {
         List<CameraMessage> cameraMessages = receiver.getBufferdObjects();

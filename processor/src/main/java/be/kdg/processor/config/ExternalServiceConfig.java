@@ -5,6 +5,9 @@ import be.kdg.sa.services.LicensePlateServiceProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * This class is used to make beans of the external services.
+ */
 @Configuration
 public class ExternalServiceConfig {
     @Bean

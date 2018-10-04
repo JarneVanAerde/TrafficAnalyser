@@ -1,8 +1,11 @@
 package be.kdg.processor.models.licensePlateInfos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+/**
+ * This class is used to store basic information about license plates.
+ * Information about a license plate comes form the external service LicensePlateServiceProxy.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

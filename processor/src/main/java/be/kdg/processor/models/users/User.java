@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * Simple POJO used to store information about a user
+ * All users are admins.
+ */
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
@@ -13,6 +17,6 @@ public class User {
 
     @Override
     public String toString() {
-        return name;
+        return userId + " " + name;
     }
 }
