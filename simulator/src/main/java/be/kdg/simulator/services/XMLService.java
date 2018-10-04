@@ -18,19 +18,19 @@ public class XMLService {
      * Uses a Jackson library to convert objects into xml-format
      * DateTime needs to be converted using a JavaTimeModule.
      *
-     * @param cameraMessage message to convert
+     * @param objectToMarshel message to convert
      * @return converted message
      */
-    public static String marshel(Object cameraMessage) throws JsonProcessingException {
+    public static String marshel(Object objectToMarshel) throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
-        String xml = "";
+        String xml;
 
         try {
             xmlMapper.registerModule(new JavaTimeModule());
             xmlMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            xml =  xmlMapper.writeValueAsString(cameraMessage);
+            xml =  xmlMapper.writeValueAsString(objectToMarshel);
         } catch (IOException ioe) {
-            LOGGER.error("Marsheling of object has failed");
+            LOGGER.error("Marsheling of " + objectToMarshel.getClass().getSimpleName() + " has failed.");
             throw ioe;
         }
 

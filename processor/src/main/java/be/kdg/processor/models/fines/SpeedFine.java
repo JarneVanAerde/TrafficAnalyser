@@ -18,7 +18,7 @@ public class SpeedFine extends Fine {
 
     @Override
     public String toString() {
-        return super.toString() + String.format(" Owner drove %d/h, legal speed was %d/h.",
+        return super.toString() + String.format(" Owner drove %d/h, legal speedLimit was %d/h.",
                 ownerSpeed, legalSpeed);
     }
 }

@@ -1,31 +1,33 @@
 package be.kdg.processor.models.cameras;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @EqualsAndHashCode
 public class Camera {
-    private int id;
-    private double locationLat;
-    private double locationLong;
-    private int secondCamera;
-    private int distance;
-    private int speed;
+    private int cameraId;
     private int euroNorm;
+    private Segment segment;
+    private Location location;
     private final List<CameraMessage> cameraMessages;
 
-    public Camera(int id, double locationLat, double locationLong, int secondCamera, int distance, int speed, int euroNorm) {
-        this.id = id;
-        this.locationLat = locationLat;
-        this.locationLong = locationLong;
-        this.secondCamera = secondCamera;
-        this.distance = distance;
-        this.speed = speed;
+    public Camera(int id, int euroNorm, Segment segment, Location location) {
+        this.cameraId = id;
         this.euroNorm = euroNorm;
+        this.segment = segment;
+        this.location = location;
+        this.cameraMessages = new ArrayList<>();
+    }
+
+    public Camera(int id,  Segment segment, Location location) {
+        this.cameraId = id;
+        this.euroNorm = -1;
+        this.segment = segment;
+        this.location = location;
         this.cameraMessages = new ArrayList<>();
     }
 
@@ -35,13 +37,10 @@ public class Camera {
 
     @Override
     public String toString() {
-        return String.format("Camera %d" +
-                "\nLocation:\n\tLatitude %.2f\n\tLongitude %.2f" +
-                "Second Camera %d" +
-                "Distance in segment %d" +
-                "Max legal speed %d" +
+        return String.format("Camera %d\n" +
+                "%s\n" +
+                "%s\n" +
                 "euroNorm %d",
-                id, locationLat, locationLong, secondCamera,
-                distance, speed, euroNorm);
+                cameraId, location, segment, euroNorm);
     }
 }
