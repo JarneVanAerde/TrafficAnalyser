@@ -1,4 +1,4 @@
-package be.kdg.processor.receivers;
+package be.kdg.processor.receivers.api;
 
 import java.io.IOException;
 import java.util.List;

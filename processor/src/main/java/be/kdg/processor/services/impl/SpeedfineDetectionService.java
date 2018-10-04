@@ -1,6 +1,7 @@
-package be.kdg.processor.services;
+package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.services.api.DetectionService;
 import be.kdg.sa.services.CameraServiceProxy;
 import be.kdg.sa.services.LicensePlateServiceProxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,6 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
 
     @Override
     public void detectFine(CameraMessage message) {
-        System.out.println("test");
        //TODO: detect speedfine
     }
 }

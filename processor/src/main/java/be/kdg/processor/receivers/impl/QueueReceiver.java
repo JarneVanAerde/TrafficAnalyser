@@ -1,6 +1,7 @@
-package be.kdg.processor.receivers;
+package be.kdg.processor.receivers.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.receivers.api.Receiver;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
