@@ -1,10 +1,8 @@
 package be.kdg.simulator.messengers;
 
-import be.kdg.simulator.generators.FileGenerator;
-import be.kdg.simulator.generators.MessageGenerator;
 import be.kdg.simulator.model.CameraMessage;
-import be.kdg.simulator.services.XMLService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
@@ -18,13 +16,15 @@ import org.springframework.stereotype.Component;
 public class QueueMessenger implements Messenger {
     private final RabbitTemplate rabbitTemplate;
     private final Queue camQueue;
+    private final XmlMapper xmlMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class) ;
 
     //Consturctor injection
     @Autowired
-    public QueueMessenger(Queue camQueue, RabbitTemplate rabbitTemplate) {
+    public QueueMessenger(RabbitTemplate rabbitTemplate, Queue camQueue, XmlMapper xmlMapper) {
         this.rabbitTemplate = rabbitTemplate;
         this.camQueue = camQueue;
+        this.xmlMapper = xmlMapper;
     }
 
     /**
@@ -34,7 +34,7 @@ public class QueueMessenger implements Messenger {
      */
     @Override
     public void sendMessage(CameraMessage message) throws JsonProcessingException {
-        rabbitTemplate.convertAndSend(camQueue.getName(), XMLService.marshel(message));
+        rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
         LOGGER.info("Message with license " + message.getLicensePlate() + " has been sent to the queue");
     }
 }

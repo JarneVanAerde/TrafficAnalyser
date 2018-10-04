@@ -1,11 +1,12 @@
 package be.kdg.processor.receivers;
 
 import be.kdg.processor.models.cameras.CameraMessage;
-import be.kdg.processor.services.parsingServices.XMLService;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +20,12 @@ import java.util.List;
 @ConditionalOnProperty(name = "receiver.type", havingValue = "queue")
 public class QueueReceiver implements Receiver<CameraMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueReceiver.class);
+    private final XmlMapper xmlMapper;
     private final List<CameraMessage> messageBuffer;
 
-    public QueueReceiver() {
+    @Autowired
+    public QueueReceiver(XmlMapper xmlMapper) {
+        this.xmlMapper = xmlMapper;
         this.messageBuffer = new ArrayList<>();
     }
 
@@ -35,7 +39,7 @@ public class QueueReceiver implements Receiver<CameraMessage> {
     @Override
     @RabbitHandler
     public void receiveMessage(String message) throws IOException {
-        CameraMessage cameraMessage = (CameraMessage) XMLService.unmarshel(message, CameraMessage.class);
+        CameraMessage cameraMessage = xmlMapper.readValue(message, CameraMessage.class);
         messageBuffer.add(cameraMessage);
         LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
     }
