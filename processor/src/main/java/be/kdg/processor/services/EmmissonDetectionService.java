@@ -4,6 +4,7 @@ import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlateInfos.LicensePlateInfo;
 import be.kdg.processor.repositories.CameraDAO;
+import be.kdg.processor.repositories.LicensePlateInfoDAO;
 import be.kdg.processor.services.parsingServices.JSONService;
 import be.kdg.sa.services.*;
 import org.slf4j.Logger;
@@ -19,12 +20,14 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
     private final CameraServiceProxy cameraServiceProxy;
     private final LicensePlateServiceProxy licensePlateServiceProxy;
     private final CameraDAO cameraDAO;
+    private final LicensePlateInfoDAO licensePlateInfoDAO;
 
     @Autowired
-    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, CameraDAO cameraDAO) {
+    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, CameraDAO cameraDAO, LicensePlateInfoDAO licensePlateInfoDAO) {
         this.cameraServiceProxy = cameraServiceProxy;
         this.licensePlateServiceProxy = licensePlateServiceProxy;
         this.cameraDAO = cameraDAO;
+        this.licensePlateInfoDAO = licensePlateInfoDAO;
     }
 
     @Override
@@ -38,8 +41,5 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber())
             LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
-
-        //Save in repositories
-        //TODO: save in repositories
     }
 }

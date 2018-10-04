@@ -15,17 +15,17 @@ public class CameraDAO implements RepositoryCRUD<Camera> {
     }
 
     @Override
-    public void add(Camera camera) {
+    public void create(Camera camera) {
         cameras.add(camera);
     }
 
     @Override
-    public void remove(Camera camera) {
+    public void delete(Camera camera) {
         cameras.remove(camera);
     }
 
     @Override
-    public Camera get(int id) {
+    public Camera read(int id) {
         return cameras.get(id);
     }
 

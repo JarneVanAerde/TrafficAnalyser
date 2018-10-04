@@ -15,17 +15,17 @@ public class LicensePlateInfoDAO implements RepositoryCRUD<LicensePlateInfo> {
     }
 
     @Override
-    public void add(LicensePlateInfo licensePlateInfo) {
+    public void create(LicensePlateInfo licensePlateInfo) {
         licensePlateInfos.add(licensePlateInfo);
     }
 
     @Override
-    public void remove(LicensePlateInfo licensePlateInfo) {
+    public void delete(LicensePlateInfo licensePlateInfo) {
         licensePlateInfos.remove(licensePlateInfo);
     }
 
     @Override
-    public LicensePlateInfo get(int id) {
+    public LicensePlateInfo read(int id) {
         return licensePlateInfos.get(id);
     }
 
