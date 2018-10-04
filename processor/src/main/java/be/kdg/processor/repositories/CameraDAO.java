@@ -1,12 +1,12 @@
 package be.kdg.processor.repositories;
 
 import be.kdg.processor.models.cameras.Camera;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class CameraDAO implements RepositoryCRUD<Camera> {
     private final List<Camera> cameras;
 
@@ -31,8 +31,6 @@ public class CameraDAO implements RepositoryCRUD<Camera> {
 
     @Override
     public Camera update(Camera camera) {
-        Camera cameraToUpdate = cameras.get(camera.getCameraId());
-        cameraToUpdate = camera;
-        return cameraToUpdate;
+        return null;
     }
 }
