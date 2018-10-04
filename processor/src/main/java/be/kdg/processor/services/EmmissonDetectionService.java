@@ -3,10 +3,8 @@ package be.kdg.processor.services;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlateInfos.LicensePlateInfo;
-import be.kdg.processor.repositories.CameraDAO;
-import be.kdg.processor.repositories.LicensePlateInfoDAO;
-import be.kdg.processor.services.parsingServices.JSONService;
 import be.kdg.sa.services.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +17,13 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
     private static final Logger LOGGER = LoggerFactory.getLogger(EmmissonDetectionService.class);
     private final CameraServiceProxy cameraServiceProxy;
     private final LicensePlateServiceProxy licensePlateServiceProxy;
-    private final CameraDAO cameraDAO;
-    private final LicensePlateInfoDAO licensePlateInfoDAO;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, CameraDAO cameraDAO, LicensePlateInfoDAO licensePlateInfoDAO) {
+    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, ObjectMapper objectMapper) {
         this.cameraServiceProxy = cameraServiceProxy;
         this.licensePlateServiceProxy = licensePlateServiceProxy;
-        this.cameraDAO = cameraDAO;
-        this.licensePlateInfoDAO = licensePlateInfoDAO;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -35,8 +31,8 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
         //Extract JSON
         String cameraJson = cameraServiceProxy.get(message.getId());
         String licenseJson = licensePlateServiceProxy.get(message.getLicensePlate());
-        Camera camera = (Camera) JSONService.unmarshal(cameraJson, Camera.class);
-        LicensePlateInfo licensePlateInfo = (LicensePlateInfo) JSONService.unmarshal(licenseJson, LicensePlateInfo.class);
+        Camera camera = objectMapper.readValue(cameraJson, Camera.class);
+        LicensePlateInfo licensePlateInfo = objectMapper.readValue(licenseJson, LicensePlateInfo.class);
 
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber())
