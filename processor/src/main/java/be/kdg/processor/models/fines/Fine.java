@@ -11,13 +11,13 @@ import lombok.Getter;
 @EqualsAndHashCode
 @Getter
 public abstract class Fine {
-    private final FineType fineType;
-    private String fineOwner;
+    private int fineId;
     private double amount;
+    private FineType fineType;
 
     @Override
     public String toString() {
-        return String.format("%s for %s with an amount of %.2f.",
-                fineType, fineOwner, amount);
+        return String.format("%s (%dà with an amount of %.2f.",
+                fineType, fineId, amount);
     }
 }

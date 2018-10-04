@@ -13,7 +13,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class Segment {
     @JsonProperty("connectedCameraId")
-    private int secondCamera;
+    private int secondCameraId;
     private int distance;
     private int speedLimit;
 
@@ -22,6 +22,6 @@ public class Segment {
         return String.format("Second Camera %d\n" +
                 "Distance in segment %d\n" +
                 "Max legal speedLimit %d",
-                secondCamera, distance, speedLimit);
+                secondCameraId, distance, speedLimit);
     }
 }

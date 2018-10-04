@@ -1,4 +1,4 @@
-package be.kdg.processor.models.licensePlateInfos;
+package be.kdg.processor.models.licensePlates;
 
 import lombok.*;
 

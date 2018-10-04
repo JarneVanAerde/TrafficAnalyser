@@ -1,6 +1,6 @@
 package be.kdg.processor.repositories;
 
-import be.kdg.processor.models.licensePlateInfos.LicensePlateInfo;
+import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
