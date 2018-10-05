@@ -23,7 +23,7 @@ public class EmissionFine extends Fine {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Car has Euro norm of %d, legal Euro norm was %d.",
+        return super.toString() + String.format("Vehicle has Euro norm of %d, legal Euro norm was %d.",
                 carEuroNorm, legalEuroNorm);
     }
 }

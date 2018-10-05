@@ -12,18 +12,18 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
-public class CarOwner {
+public class VehicleOwner {
     private int ownerId;
     private String nationalNumber;
-    private List<Car> cars;
+    private List<Vehicle> cars;
 
-    public CarOwner(int ownerId, String nationalNumber) {
+    public VehicleOwner(int ownerId, String nationalNumber) {
         this.ownerId = ownerId;
         this.nationalNumber = nationalNumber;
         this.cars = new ArrayList<>();
     }
 
-    public void addCar(Car car) {
+    public void addCar(Vehicle car) {
         cars.add(car);
     }
 

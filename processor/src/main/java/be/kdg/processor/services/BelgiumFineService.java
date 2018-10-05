@@ -20,12 +20,12 @@ public class BelgiumFineService implements FineService {
     @Override
     public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage) {
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
-
-        return null;
+        return (EmissionFine) fineDAO.create(emissionFine);
     }
 
     @Override
     public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
-        return null;
+        SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
+        return (SpeedFine) fineDAO.create(speedFine);
     }
 }

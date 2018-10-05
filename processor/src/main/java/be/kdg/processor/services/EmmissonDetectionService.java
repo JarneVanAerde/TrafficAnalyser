@@ -17,12 +17,14 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
     private static final Logger LOGGER = LoggerFactory.getLogger(EmmissonDetectionService.class);
     private final CameraServiceProxy cameraServiceProxy;
     private final LicensePlateServiceProxy licensePlateServiceProxy;
+    private final FineService fineService;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, ObjectMapper objectMapper) {
+    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, FineService fineService, ObjectMapper objectMapper) {
         this.cameraServiceProxy = cameraServiceProxy;
         this.licensePlateServiceProxy = licensePlateServiceProxy;
+        this.fineService = fineService;
         this.objectMapper = objectMapper;
     }
 
@@ -35,7 +37,14 @@ public class EmmissonDetectionService implements DetectionService<CameraMessage>
         LicensePlateInfo licensePlateInfo = objectMapper.readValue(licenseJson, LicensePlateInfo.class);
 
         //Detect fine
-        if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber())
+        if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
             LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
+            fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
+                    licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message);
+        }
+    }
+
+    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) {
+        return (legalEurNumber - vehicleEuroNumber) * 100;
     }
 }

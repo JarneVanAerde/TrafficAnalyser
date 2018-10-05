@@ -13,13 +13,13 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
-public class Car {
+public class Vehicle {
     private int carId;
     private String licensePlate;
     private int euroNorm;
     private final List<Fine> fines;
 
-    public Car(int carId, String licensePlate, int euroNorm) {
+    public Vehicle(int carId, String licensePlate, int euroNorm) {
         this.carId = carId;
         this.licensePlate = licensePlate;
         this.euroNorm = euroNorm;
@@ -28,7 +28,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return String.format("Car %d with license plate %s and Euro standard %d",
+        return String.format("Vehicle %d with license plate %s and Euro standard %d",
                 carId, licensePlate, euroNorm);
     }
 }
