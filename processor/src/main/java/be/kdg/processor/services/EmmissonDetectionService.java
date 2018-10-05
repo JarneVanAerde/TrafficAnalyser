@@ -1,9 +1,8 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.services.api.DetectionService;
 import be.kdg.sa.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

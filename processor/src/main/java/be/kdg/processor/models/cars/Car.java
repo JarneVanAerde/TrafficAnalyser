@@ -14,11 +14,13 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class Car {
+    private int carId;
     private String licensePlate;
     private int euroNorm;
     private final List<Fine> fines;
 
-    public Car(String licensePlate, int euroNorm) {
+    public Car(int carId, String licensePlate, int euroNorm) {
+        this.carId = carId;
         this.licensePlate = licensePlate;
         this.euroNorm = euroNorm;
         this.fines = new ArrayList<>();
@@ -26,7 +28,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return String.format("Car with license plate %s and Euro standard %d",
-                licensePlate, euroNorm);
+        return String.format("Car %d with license plate %s and Euro standard %d",
+                carId, licensePlate, euroNorm);
     }
 }

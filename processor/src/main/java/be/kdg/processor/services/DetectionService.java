@@ -1,4 +1,4 @@
-package be.kdg.processor.services.api;
+package be.kdg.processor.services;
 
 import be.kdg.sa.services.CameraNotFoundException;
 import be.kdg.sa.services.InvalidLicensePlateException;

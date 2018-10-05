@@ -1,8 +1,8 @@
 package be.kdg.processor;
 
 import be.kdg.processor.models.cameras.CameraMessage;
-import be.kdg.processor.receivers.api.Receiver;
-import be.kdg.processor.services.api.DetectionService;
+import be.kdg.processor.receivers.Receiver;
+import be.kdg.processor.services.DetectionService;
 import be.kdg.sa.services.CameraNotFoundException;
 import be.kdg.sa.services.InvalidLicensePlateException;
 import be.kdg.sa.services.LicensePlateNotFoundException;
