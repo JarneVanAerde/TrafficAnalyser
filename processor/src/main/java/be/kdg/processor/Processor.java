@@ -45,7 +45,7 @@ public class Processor {
                     try {
                         service.detectFine(message);
                     } catch (IOException ioe) {
-                        LOGGER.error("Oops, something went wrong while detection fines: " + ioe.getMessage());
+                        LOGGER.error("Oops, something went wrong while detecting fines: " + ioe.getMessage());
                         //TODO: throw exception
                     } catch (LicensePlateNotFoundException | InvalidLicensePlateException | CameraNotFoundException e) {
                         LOGGER.warn(e.getMessage());
