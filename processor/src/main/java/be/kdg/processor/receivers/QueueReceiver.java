@@ -59,6 +59,6 @@ public class QueueReceiver implements Receiver<CameraMessage> {
     public void receiveMessage(String message) throws IOException {
         CameraMessage cameraMessage = xmlMapper.readValue(message, CameraMessage.class);
         messageBuffer.add(cameraMessage);
-        LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " has been received.");
+        LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " from camera " + cameraMessage.getId() + " has been received.");
     }
 }
