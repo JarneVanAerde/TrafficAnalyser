@@ -13,15 +13,10 @@ import javax.persistence.OneToOne;
  */
 @Getter
 @EqualsAndHashCode
-@Entity
 public class SpeedFine extends Fine {
     private double carSpeed;
     private double legalSpeed;
-    @OneToOne
-    @JoinColumn(name = "enter_id")
     private CameraMessage enterCamera;
-    @OneToOne
-    @JoinColumn(name = "exit_id")
     private CameraMessage exitCamera;
 
     public SpeedFine(FineType fineType, double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {

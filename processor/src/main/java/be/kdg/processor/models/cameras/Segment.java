@@ -14,10 +14,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity
 public class Segment {
-    @Id
-    private int segmentId;
     @JsonProperty("connectedCameraId")
     private int secondCameraId;
     private int distance;

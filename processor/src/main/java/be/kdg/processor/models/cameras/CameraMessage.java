@@ -2,7 +2,6 @@ package be.kdg.processor.models.cameras;
 
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,20 +13,15 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "cameraMessages")
 public class CameraMessage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int messageId;
-    private int cameraId;
+    private int id;
     private String licensePlate;
     private LocalDateTime timestamp;
 
     @Override
     public String toString() {
         return String.format("Camera %d spotted car with license plate %s at %s local time",
-                cameraId, licensePlate, timestamp.format(DateTimeFormatter.ofPattern("HH:mm:ss:SSS")));
+                id, licensePlate, timestamp.format(DateTimeFormatter.ofPattern("HH:mm:ss:SSS")));
     }
 }
 

@@ -13,15 +13,9 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
-@Entity
-@Table(name = "vehiclesOwners")
 public class VehicleOwner {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int ownerId;
     private String nationalNumber;
-    @OneToMany
-    @JoinColumn(name = "vehicleId")
     private List<Vehicle> vehicles;
 
     public VehicleOwner(int ownerId, String nationalNumber) {

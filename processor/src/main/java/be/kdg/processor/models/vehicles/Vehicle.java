@@ -13,16 +13,10 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
-@Entity
-@Table(name = "vehicles")
 public class Vehicle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int vehicleId;
     private String licensePlate;
     private int euroNorm;
-    @OneToMany
-    @JoinColumn(name = "fineId")
     private final List<Fine> fines;
 
     public Vehicle(int carId, String licensePlate, int euroNorm) {

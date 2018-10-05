@@ -13,9 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity
 public class Location {
-    @Id
     private int locationId;
     @JsonProperty("lat")
     private double latitude;

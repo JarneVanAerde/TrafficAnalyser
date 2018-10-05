@@ -13,12 +13,9 @@ import javax.persistence.OneToOne;
  */
 @Getter
 @EqualsAndHashCode
-@Entity
 public class EmissionFine extends Fine {
     private int carEuroNorm;
     private int legalEuroNorm;
-    @OneToOne
-    @JoinColumn(name = "id")
     private CameraMessage emmisionMessage;
 
     public EmissionFine(FineType fineType, double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage) {
