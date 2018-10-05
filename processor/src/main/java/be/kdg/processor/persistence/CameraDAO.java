@@ -1,4 +1,4 @@
-package be.kdg.processor.repositories;
+package be.kdg.processor.persistence;
 
 import be.kdg.processor.models.cameras.Camera;
 import org.springframework.stereotype.Repository;

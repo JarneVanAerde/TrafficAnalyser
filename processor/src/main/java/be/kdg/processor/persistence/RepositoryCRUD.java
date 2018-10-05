@@ -1,4 +1,4 @@
-package be.kdg.processor.repositories;
+package be.kdg.processor.persistence;
 
 public interface RepositoryCRUD<T> {
     void create(T object);
