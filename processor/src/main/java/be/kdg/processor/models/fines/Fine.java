@@ -1,6 +1,5 @@
 package be.kdg.processor.models.fines;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -13,6 +12,8 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "fines")
+@DiscriminatorColumn(name = "type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Fine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

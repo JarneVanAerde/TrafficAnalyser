@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  * Simple POJO that stores information about an speed fines.
@@ -15,7 +17,11 @@ import javax.persistence.Entity;
 public class SpeedFine extends Fine {
     private double carSpeed;
     private double legalSpeed;
+    @OneToOne
+    @JoinColumn(name = "enter_id")
     private CameraMessage enterCamera;
+    @OneToOne
+    @JoinColumn(name = "exit_id")
     private CameraMessage exitCamera;
 
     public SpeedFine(FineType fineType, double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {

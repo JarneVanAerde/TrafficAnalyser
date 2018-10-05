@@ -3,6 +3,9 @@ package be.kdg.processor.models.cameras;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Simple POJO used to store the location of a specific camera.
  */
@@ -10,7 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Entity
 public class Location {
+    @Id
+    private int locationId;
     @JsonProperty("lat")
     private double latitude;
     @JsonProperty("long")

@@ -33,7 +33,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     @Override
     public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException {
         //Extract JSON
-        String cameraJson = cameraServiceProxy.get(message.getId());
+        String cameraJson = cameraServiceProxy.get(message.getCameraId());
         String licenseJson = licensePlateServiceProxy.get(message.getLicensePlate());
         Camera camera = objectMapper.readValue(cameraJson, Camera.class);
         LicensePlateInfo licensePlateInfo = objectMapper.readValue(licenseJson, LicensePlateInfo.class);

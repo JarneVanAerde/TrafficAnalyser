@@ -3,6 +3,7 @@ package be.kdg.processor.models.cameras;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,17 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
+@Entity
+@Table(name = "cameras")
 public class Camera {
+    @Id
     private int cameraId;
     private int euroNorm;
+    @OneToOne
     private Segment segment;
+    @OneToOne
     private Location location;
+    @OneToMany
     private final List<CameraMessage> cameraMessages;
 
     public Camera(int id, int euroNorm, Segment segment, Location location) {
