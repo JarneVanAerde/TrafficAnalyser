@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CameraDAO implements RepositoryCRUD<Camera> {
+public class CameraRepository implements RepositoryCRUD<Camera> {
     private final List<Camera> cameras;
 
-    public CameraDAO() {
+    public CameraRepository() {
         this.cameras = new ArrayList<>();
     }
 
     @Override
-    public void create(Camera camera) {
+    public Camera create(Camera camera) {
         cameras.add(camera);
+        return camera;
     }
 
     @Override

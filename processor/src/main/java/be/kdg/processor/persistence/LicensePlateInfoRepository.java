@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class LicensePlateInfoDAO implements RepositoryCRUD<LicensePlateInfo> {
+public class LicensePlateInfoRepository implements RepositoryCRUD<LicensePlateInfo> {
     private final List<LicensePlateInfo> licensePlateInfos;
 
-    public LicensePlateInfoDAO() {
+    public LicensePlateInfoRepository() {
         this.licensePlateInfos = new ArrayList<>();
     }
 
     @Override
-    public void create(LicensePlateInfo licensePlateInfo) {
+    public LicensePlateInfo create(LicensePlateInfo licensePlateInfo) {
         licensePlateInfos.add(licensePlateInfo);
+        return licensePlateInfo;
     }
 
     @Override

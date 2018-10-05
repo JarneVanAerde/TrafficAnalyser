@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class FineDAO implements RepositoryCRUD<Fine> {
+public class FineRepository implements RepositoryCRUD<Fine> {
     private final List<Fine> fines;
 
-    public FineDAO() {
+    public FineRepository() {
         this.fines = new ArrayList<>();
     }
 
     @Override
-    public void create(Fine fine) {
+    public Fine create(Fine fine) {
         fines.add(fine);
+        return fine;
     }
 
     @Override
