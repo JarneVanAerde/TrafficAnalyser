@@ -1,8 +1,8 @@
-package be.kdg.processor;
+package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
-import be.kdg.processor.receivers.Receiver;
-import be.kdg.processor.services.DetectionService;
+import be.kdg.processor.utils.api.Receiver;
+import be.kdg.processor.services.api.DetectionService;
 import be.kdg.sa.services.CameraNotFoundException;
 import be.kdg.sa.services.InvalidLicensePlateException;
 import be.kdg.sa.services.LicensePlateNotFoundException;
@@ -20,13 +20,13 @@ import java.util.List;
  * The type of receiver is mentioned in application.properties.
  */
 @Component
-public class Processor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Processor.class);
+public class ProcessorService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessorService.class);
     private final Receiver<CameraMessage> receiver;
     private final List<DetectionService<CameraMessage>> detectionServices;
 
     @Autowired
-    public Processor(Receiver<CameraMessage> receiver, List<DetectionService<CameraMessage>> detectionServices) {
+    public ProcessorService(Receiver<CameraMessage> receiver, List<DetectionService<CameraMessage>> detectionServices) {
         this.receiver = receiver;
         this.detectionServices = detectionServices;
     }

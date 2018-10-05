@@ -1,8 +1,10 @@
-package be.kdg.processor.services;
+package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.services.api.DetectionService;
+import be.kdg.processor.services.api.FineService;
 import be.kdg.sa.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -13,19 +15,19 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
+public class EmmissonDetectionService implements DetectionService<CameraMessage> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmmissonDetectionService.class);
     private final CameraServiceProxy cameraServiceProxy;
     private final LicensePlateServiceProxy licensePlateServiceProxy;
-    private final ObjectMapper objectMapper;
     private final FineService fineService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public SpeedfineDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, ObjectMapper objectMapper, FineService fineService) {
+    public EmmissonDetectionService(CameraServiceProxy cameraServiceProxy, LicensePlateServiceProxy licensePlateServiceProxy, FineService fineService, ObjectMapper objectMapper) {
         this.cameraServiceProxy = cameraServiceProxy;
         this.licensePlateServiceProxy = licensePlateServiceProxy;
-        this.objectMapper = objectMapper;
         this.fineService = fineService;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -37,16 +39,14 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfo licensePlateInfo = objectMapper.readValue(licenseJson, LicensePlateInfo.class);
 
         //Detect fine
-        //TODO: detect speedfine
+        if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
+            LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
+            fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
+                    licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message);
+        }
     }
 
-    private double calculateFine() {
-        //TODO: calculate fine
-        return 1000.0;
-    }
-
-    private double calculateSpeed() {
-        //TODO: calculate speed
-        return 100.0;
+    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) {
+        return (legalEurNumber - vehicleEuroNumber) * 100;
     }
 }

@@ -1,10 +1,11 @@
-package be.kdg.processor.services;
+package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.fines.FineType;
 import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.persistence.FineRepository;
+import be.kdg.processor.services.api.FineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
