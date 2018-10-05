@@ -13,10 +13,12 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class CarOwner {
+    private int ownerId;
     private String nationalNumber;
     private List<Car> cars;
 
-    public CarOwner(String nationalNumber) {
+    public CarOwner(int ownerId, String nationalNumber) {
+        this.ownerId = ownerId;
         this.nationalNumber = nationalNumber;
         this.cars = new ArrayList<>();
     }
@@ -28,7 +30,7 @@ public class CarOwner {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Person with national number %s has %d cars\n", nationalNumber, cars.size()));
+        builder.append(String.format("Person %d with national number %s has %d cars\n", ownerId, nationalNumber, cars.size()));
         cars.forEach(car -> builder.append(car).append("\n"));
         return builder.toString();
     }

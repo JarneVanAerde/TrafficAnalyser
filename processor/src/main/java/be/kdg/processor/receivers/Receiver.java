@@ -3,7 +3,7 @@ package be.kdg.processor.receivers;
 import java.io.IOException;
 import java.util.List;
 
-public interface Receiver<E> {
+public interface Receiver<T> {
     void receiveMessage(String message) throws IOException;
-    List<E> getBufferdObjects();
+    List<T> getBufferdObjects();
 }

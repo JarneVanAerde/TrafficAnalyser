@@ -17,7 +17,7 @@ public class QueueMessenger implements Messenger {
     private final RabbitTemplate rabbitTemplate;
     private final Queue camQueue;
     private final XmlMapper xmlMapper;
-    private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class) ;
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class);
 
     @Autowired
     public QueueMessenger(RabbitTemplate rabbitTemplate, Queue camQueue, XmlMapper xmlMapper) {
@@ -34,6 +34,6 @@ public class QueueMessenger implements Messenger {
     @Override
     public void sendMessage(CameraMessage message) throws JsonProcessingException {
         rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
-        LOGGER.info("Message with license " + message.getLicensePlate() + " has been sent to the queue");
+        LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getId() + " has been sent to the queue");
     }
 }
