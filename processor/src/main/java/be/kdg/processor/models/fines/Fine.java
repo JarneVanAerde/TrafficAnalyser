@@ -10,6 +10,7 @@ import lombok.Getter;
 @EqualsAndHashCode
 @Getter
 public abstract class Fine {
+
     private int fineId;
     private double amount;
     private FineType fineType;
