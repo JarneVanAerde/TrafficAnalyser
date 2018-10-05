@@ -1,4 +1,4 @@
-package be.kdg.processor.models.cars;
+package be.kdg.processor.models.vehicles;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

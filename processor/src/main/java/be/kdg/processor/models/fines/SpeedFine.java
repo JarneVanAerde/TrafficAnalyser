@@ -4,11 +4,14 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.Entity;
+
 /**
  * Simple POJO that stores information about an speed fines.
  */
 @Getter
 @EqualsAndHashCode
+@Entity
 public class SpeedFine extends Fine {
     private double carSpeed;
     private double legalSpeed;

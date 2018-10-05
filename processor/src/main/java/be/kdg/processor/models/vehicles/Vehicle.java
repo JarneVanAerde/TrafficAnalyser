@@ -1,7 +1,6 @@
-package be.kdg.processor.models.cars;
+package be.kdg.processor.models.vehicles;
 
 import be.kdg.processor.models.fines.Fine;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

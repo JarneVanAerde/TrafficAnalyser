@@ -4,11 +4,14 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.Entity;
+
 /**
  * Simple POJO that stores information about an emission fines.
  */
 @Getter
 @EqualsAndHashCode
+@Entity
 public class EmissionFine extends Fine {
     private int carEuroNorm;
     private int legalEuroNorm;

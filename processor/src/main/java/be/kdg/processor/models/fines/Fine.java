@@ -4,13 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.*;
+
 /**
  * Abstract super class used by al specific fines for inheritance.
  */
 @EqualsAndHashCode
 @Getter
+@Entity
+@Table(name = "fines")
 public abstract class Fine {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int fineId;
     private double amount;
     private FineType fineType;
