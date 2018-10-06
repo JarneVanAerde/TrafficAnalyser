@@ -12,7 +12,9 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "fines")
-public class Fine {
+@DiscriminatorColumn(name = "type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Fine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int fineId;
