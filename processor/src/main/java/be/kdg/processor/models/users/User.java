@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.*;
+
 /**
  * Simple POJO used to store information about a user
  * All users are admins.

@@ -1,7 +1,9 @@
 package be.kdg.processor.models.cameras;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,7 +15,12 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "cameramessages")
 public class CameraMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int messageId;
     private int id;
     private String licensePlate;
     private LocalDateTime timestamp;

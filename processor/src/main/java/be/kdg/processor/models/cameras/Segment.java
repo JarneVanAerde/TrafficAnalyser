@@ -3,6 +3,9 @@ package be.kdg.processor.models.cameras;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Simple POJO used to store information about a segment
  * A given camera can be part of a segment.

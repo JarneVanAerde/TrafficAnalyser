@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BelgiumFineService implements FineService {
-    private final FineRepository fineDAO;
+    private final FineRepository fineRepo;
 
     @Autowired
-    public BelgiumFineService(FineRepository fineDAO) {
-        this.fineDAO = fineDAO;
+    public BelgiumFineService(FineRepository finrRepo) {
+        this.fineRepo = finrRepo;
     }
 
     @Override
     public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage) {
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
-        return (EmissionFine) fineDAO.create(emissionFine);
+        return fineRepo.save(emissionFine);
     }
 
     @Override
     public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
-        return (SpeedFine) fineDAO.create(speedFine);
+        return fineRepo.save(speedFine);
     }
 }

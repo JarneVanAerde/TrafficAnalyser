@@ -1,16 +1,22 @@
 package be.kdg.processor.models.fines;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import javax.persistence.*;
 
 /**
  * Abstract super class used by al specific fines for inheritance.
  */
 @EqualsAndHashCode
 @Getter
+@Entity
+@Table(name = "fines")
+@DiscriminatorColumn(name = "type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Fine {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int fineId;
     private double amount;
     private FineType fineType;
