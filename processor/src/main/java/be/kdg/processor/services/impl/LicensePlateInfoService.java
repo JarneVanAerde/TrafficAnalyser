@@ -1,6 +1,5 @@
 package be.kdg.processor.services.impl;
 
-import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.LicensePlateServiceAdatpter;
 import be.kdg.sa.services.InvalidLicensePlateException;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+/**
+ * Adapter used for the LicensePlateServiceProxy.
+ */
 @Service
 public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
     private final LicensePlateServiceProxy licensePlateServiceProxy;

@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+/**
+ * This class is used for the detection of illegal emissions.
+ * All messages will pass through here to check for illegal emissions.
+ */
 @Service
 public class EmissonDetectionService implements DetectionService<CameraMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmissonDetectionService.class);
@@ -29,6 +33,16 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         this.fineService = fineService;
     }
 
+    /**
+     * The external service are behind an adapter and are used to
+     * determine the fines.
+     *
+     * @param message the message that will be used to detect possible emission fines.
+     * @throws IOException is thrown when a communication error occurs.
+     * @throws LicensePlateNotFoundException is thrown when a license plate wasn't found in the external database.
+     * @throws CameraNotFoundException is thrown when a camera wasn't found in the external database.
+     * @throws InvalidLicensePlateException is thrown when a license plate was invalid.
+     */
     @Override
     public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException {
         //Call adapter
@@ -43,6 +57,14 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         }
     }
 
+    /**
+     * Calculates the difference between the two euro numbers
+     * and multiples that difference times 100.
+     *
+     * @param legalEurNumber the legal euro number of the area.
+     * @param vehicleEuroNumber the euro number of the vehicle.
+     * @return the calculated fine.
+     */
     private double calculateFine(int legalEurNumber, int vehicleEuroNumber) {
         return (legalEurNumber - vehicleEuroNumber) * 100;
     }

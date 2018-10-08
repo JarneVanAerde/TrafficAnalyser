@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+/**
+ * Adapter used for the CameraServiceProxy.
+ */
 @Service
 public class CameraInfoService implements CameraServiceAdapter {
     private final CameraServiceProxy cameraServiceProxy;
