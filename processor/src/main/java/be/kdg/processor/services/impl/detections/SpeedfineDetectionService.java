@@ -1,14 +1,14 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services.impl.detections;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
-import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.services.api.CameraServiceAdapter;
+import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.api.LicensePlateServiceAdatpter;
+import be.kdg.processor.services.impl.adapters.CameraInfoService;
+import be.kdg.processor.services.impl.CameraMessageService;
+import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
 import be.kdg.sa.services.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException {
         //Call adapter
         Camera camera = cameraInfoService.get(message.getId());
-        LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
+        LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
         //TODO: detect speedfine
