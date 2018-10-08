@@ -1,6 +1,5 @@
 package be.kdg.processor.services.impl;
 
-import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.persistence.CameraMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
