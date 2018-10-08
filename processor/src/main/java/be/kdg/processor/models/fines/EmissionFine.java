@@ -17,6 +17,7 @@ public class EmissionFine extends Fine {
     private int carEuroNorm;
     private int legalEuroNorm;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "emission_message")
     private CameraMessage emmisionMessage;
 
     public EmissionFine(FineType fineType, double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage) {
