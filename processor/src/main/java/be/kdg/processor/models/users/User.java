@@ -13,7 +13,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int userId;
     private String name;
 

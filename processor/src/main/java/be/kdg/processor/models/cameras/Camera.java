@@ -13,11 +13,20 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
+@Entity
+@Table(name = "cameras")
 public class Camera {
+    @Id
     private int cameraId;
     private int euroNorm;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "camera_id")
     private Segment segment;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "camera_id")
     private Location location;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "camera_id")
     private final List<CameraMessage> cameraMessages;
 
     public Camera(int id, int euroNorm, Segment segment, Location location) {
