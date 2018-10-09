@@ -1,4 +1,4 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.persistence.CameraMessageRepository;

@@ -26,7 +26,7 @@ public class Camera {
     @JoinColumn(name = "location_id")
     private Location location;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id")
+    @JoinColumn
     private final List<CameraMessage> cameraMessages;
 
     public Camera(int id, int euroNorm, Segment segment, Location location) {

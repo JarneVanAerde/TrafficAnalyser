@@ -1,4 +1,4 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.EmissionFine;
@@ -36,7 +36,7 @@ public class BelgiumFineService implements FineService {
     /**
      * Creates a speed fine and saves that to the database
      *
-     * @return
+     * @return a newly inserted speed fine.
      */
     @Override
     public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {

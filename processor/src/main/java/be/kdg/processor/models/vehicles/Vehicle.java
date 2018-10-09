@@ -25,8 +25,7 @@ public class Vehicle {
     @JoinColumn(name = "vehicle_id")
     private final List<Fine> fines;
 
-    public Vehicle(int carId, String licensePlate, int euroNorm) {
-        this.vehicleId = carId;
+    public Vehicle(String licensePlate, int euroNorm) {
         this.licensePlate = licensePlate;
         this.euroNorm = euroNorm;
         this.fines = new ArrayList<>();

@@ -6,7 +6,7 @@ import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
-import be.kdg.processor.services.impl.CameraMessageService;
+import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
 import be.kdg.sa.services.*;
 import org.slf4j.Logger;

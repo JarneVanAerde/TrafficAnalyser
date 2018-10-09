@@ -24,14 +24,13 @@ public class VehicleOwner {
     @JoinColumn(name = "owner_id")
     private List<Vehicle> vehicles;
 
-    public VehicleOwner(int ownerId, String nationalNumber) {
-        this.ownerId = ownerId;
+    public VehicleOwner(String nationalNumber) {
         this.nationalNumber = nationalNumber;
         this.vehicles = new ArrayList<>();
     }
 
-    public void addCar(Vehicle car) {
-        vehicles.add(car);
+    public void addVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
     }
 
     @Override
