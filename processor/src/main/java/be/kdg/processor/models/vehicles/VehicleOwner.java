@@ -20,7 +20,7 @@ public class VehicleOwner {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int ownerId;
     private String nationalNumber;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private List<Vehicle> vehicles;
 

@@ -8,7 +8,7 @@ import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.LicensePlateService;
+import be.kdg.processor.services.impl.modelservices.VehicleService;
 import be.kdg.sa.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +28,11 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
-    private final LicensePlateService licensePlateService;
+    private final VehicleService licensePlateService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, CameraMessageService cameraMessageService, LicensePlateService licensePlateService) {
+                                   FineService fineService, CameraMessageService cameraMessageService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
@@ -61,7 +61,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
             LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
-            licensePlateService.extractInformation(licensePlateInfo);
+            licensePlateService.extractPlateInfo(licensePlateInfo);
             fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
                     licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message);
         } //else cameraMessageService.createCameraMessage(message);
