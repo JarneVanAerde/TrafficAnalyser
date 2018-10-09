@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LicensePlateService {
+public class VehicleService {
     private final VehicleOwnerRepository vehicleOwnerRepository;
 
     @Autowired
-    public LicensePlateService(VehicleOwnerRepository vehicleOwnerRepository) {
+    public VehicleService(VehicleOwnerRepository vehicleOwnerRepository) {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractInformation(LicensePlateInfoDTO licensePlateInfoDTO) {
+    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) {
         Vehicle vehicle = new Vehicle(licensePlateInfoDTO.getPlateId(), licensePlateInfoDTO.getEuroNumber());
         VehicleOwner vehicleOwner = new VehicleOwner(licensePlateInfoDTO.getNationalNumber());
         vehicleOwner.addVehicle(vehicle);
         vehicleOwnerRepository.save(vehicleOwner);
     }
+
+    public Vehicle getVehicle()
 }
