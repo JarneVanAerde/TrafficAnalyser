@@ -1,6 +1,6 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services.impl.adapters;
 
-import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
 import be.kdg.processor.services.api.LicensePlateServiceAdatpter;
 import be.kdg.sa.services.InvalidLicensePlateException;
 import be.kdg.sa.services.LicensePlateNotFoundException;
@@ -26,8 +26,8 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
     }
 
     @Override
-    public LicensePlateInfo get(String plateId) throws IOException, LicensePlateNotFoundException, InvalidLicensePlateException {
+    public LicensePlateInfoDTO get(String plateId) throws IOException, LicensePlateNotFoundException, InvalidLicensePlateException {
         String licenseJson = licensePlateServiceProxy.get(plateId);
-        return objectMapper.readValue(licenseJson, LicensePlateInfo.class);
+        return objectMapper.readValue(licenseJson, LicensePlateInfoDTO.class);
     }
 }

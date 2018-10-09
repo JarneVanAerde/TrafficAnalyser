@@ -1,4 +1,4 @@
-package be.kdg.processor.services.impl;
+package be.kdg.processor.services.impl.adapters;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.services.api.CameraServiceAdapter;

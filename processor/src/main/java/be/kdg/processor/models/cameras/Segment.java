@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -14,7 +16,11 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Entity
 public class Segment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int segmentId;
     @JsonProperty("connectedCameraId")
     private int secondCameraId;
     private int distance;

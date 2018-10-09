@@ -4,10 +4,7 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Simple POJO that stores information about an speed fines.
@@ -20,16 +17,18 @@ public class SpeedFine extends Fine {
     private double carSpeed;
     private double legalSpeed;
     @OneToOne(cascade = CascadeType.ALL)
-    private CameraMessage enterCamera;
+    @JoinColumn(name = "enter_message")
+    private CameraMessage enterMessage;
     @OneToOne(cascade = CascadeType.ALL)
-    private CameraMessage exitCamera;
+    @JoinColumn(name = "exit_message")
+    private CameraMessage exitMessage;
 
     public SpeedFine(FineType fineType, double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
         super(amount, fineType);
         this.carSpeed = carSpeed;
         this.legalSpeed = legalSpeed;
-        this.enterCamera = enterCamera;
-        this.exitCamera = exitCamera;
+        this.enterMessage = enterCamera;
+        this.exitMessage = exitCamera;
     }
 
     @Override

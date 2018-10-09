@@ -13,9 +13,15 @@ import java.util.List;
  */
 @Getter
 @EqualsAndHashCode
+@Entity
+@Table(name = "vehicle_owners")
 public class VehicleOwner {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int ownerId;
     private String nationalNumber;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private List<Vehicle> vehicles;
 
     public VehicleOwner(int ownerId, String nationalNumber) {
