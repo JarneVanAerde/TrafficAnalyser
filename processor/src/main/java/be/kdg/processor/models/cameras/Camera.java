@@ -20,13 +20,13 @@ public class Camera {
     private int cameraId;
     private int euroNorm;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "camera_id")
+    @JoinColumn(name = "segment_id")
     private Segment segment;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "camera_id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "location_id")
     private Location location;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "camera_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
     private final List<CameraMessage> cameraMessages;
 
     public Camera(int id, int euroNorm, Segment segment, Location location) {
