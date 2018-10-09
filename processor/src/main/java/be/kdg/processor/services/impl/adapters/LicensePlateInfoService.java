@@ -7,6 +7,7 @@ import be.kdg.sa.services.LicensePlateNotFoundException;
 import be.kdg.sa.services.LicensePlateServiceProxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
         this.objectMapper = objectMapper;
     }
 
+    @Cacheable(value = "licensePlates")
     @Override
     public LicensePlateInfoDTO get(String plateId) throws IOException, LicensePlateNotFoundException, InvalidLicensePlateException {
         String licenseJson = licensePlateServiceProxy.get(plateId);

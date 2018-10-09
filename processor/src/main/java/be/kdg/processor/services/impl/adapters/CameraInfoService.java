@@ -6,6 +6,7 @@ import be.kdg.sa.services.CameraNotFoundException;
 import be.kdg.sa.services.CameraServiceProxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class CameraInfoService implements CameraServiceAdapter {
         this.objectMapper = objectMapper;
     }
 
+    @Cacheable(value = "cameras")
     @Override
     public Camera get(int id) throws IOException, CameraNotFoundException {
         String cameraJson = cameraServiceProxy.get(id);
