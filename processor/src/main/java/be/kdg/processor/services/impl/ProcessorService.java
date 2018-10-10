@@ -1,6 +1,7 @@
 package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.services.exceptions.ObjectNotFoundException;
 import be.kdg.processor.utils.api.Receiver;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.sa.services.CameraNotFoundException;
@@ -49,6 +50,9 @@ public class ProcessorService {
                         //TODO: throw exception
                     } catch (LicensePlateNotFoundException | InvalidLicensePlateException | CameraNotFoundException e) {
                         LOGGER.warn(e.getMessage());
+                    } catch (ObjectNotFoundException e) {
+                        LOGGER.error(e.getMessage());
+                        //TODO: throw exception
                     }
                 })
         );

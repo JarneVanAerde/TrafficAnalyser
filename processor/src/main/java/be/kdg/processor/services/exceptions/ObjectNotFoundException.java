@@ -1,6 +1,6 @@
 package be.kdg.processor.services.exceptions;
 
-public class ObjectNotFoundException extends RuntimeException {
+public class ObjectNotFoundException extends Exception {
     public ObjectNotFoundException(String message) {
         super(message);
     }

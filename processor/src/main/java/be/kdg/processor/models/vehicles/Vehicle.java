@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Simple POJO that gives us information about a specific car.
  */
-@Getter
 @EqualsAndHashCode
 @Entity
 @Table(name = "vehicles")
@@ -32,6 +32,10 @@ public class Vehicle {
 
     public Vehicle() {
         fines = new ArrayList<>();
+    }
+
+    public List<Fine> getFines() {
+        return Collections.unmodifiableList(fines);
     }
 
     public void addFine(Fine fine) {

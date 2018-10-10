@@ -23,7 +23,7 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) {
+    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) throws ObjectNotFoundException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
         boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfoDTO.getNationalNumber());
