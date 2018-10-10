@@ -5,6 +5,7 @@ import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.fines.SpeedFine;
 
 public interface FineService {
-    EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage);
+    EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId);
+
     SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera);
 }

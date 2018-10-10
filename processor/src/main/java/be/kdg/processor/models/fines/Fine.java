@@ -1,7 +1,9 @@
 package be.kdg.processor.models.fines;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "fines")
 @DiscriminatorColumn(name = "type")

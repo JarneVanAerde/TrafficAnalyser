@@ -3,6 +3,7 @@ package be.kdg.processor.models.vehicles;
 import be.kdg.processor.models.fines.Fine;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,8 +18,6 @@ import java.util.List;
 @Table(name = "vehicles")
 public class Vehicle {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int vehicleId;
     private String licensePlate;
     private int euroNorm;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -31,9 +30,17 @@ public class Vehicle {
         this.fines = new ArrayList<>();
     }
 
+    public Vehicle() {
+        fines = new ArrayList<>();
+    }
+
+    public void addFine(Fine fine) {
+        fines.add(fine);
+    }
+
     @Override
     public String toString() {
-        return String.format("Vehicle %d with license plate %s and Euro standard %d",
-                vehicleId, licensePlate, euroNorm);
+        return String.format("Vehicle with license plate %s and Euro standard %d",
+                licensePlate, euroNorm);
     }
 }

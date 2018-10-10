@@ -63,7 +63,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
             LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
             licensePlateService.extractPlateInfo(licensePlateInfo);
             fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
-                    licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message);
+                    licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
         } //else cameraMessageService.createCameraMessage(message);
     }
 

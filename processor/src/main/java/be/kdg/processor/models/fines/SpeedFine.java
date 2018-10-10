@@ -3,6 +3,7 @@ package be.kdg.processor.models.fines;
 import be.kdg.processor.models.cameras.CameraMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @Getter
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 @Entity
 @DiscriminatorValue(value = "speed")
 public class SpeedFine extends Fine {
