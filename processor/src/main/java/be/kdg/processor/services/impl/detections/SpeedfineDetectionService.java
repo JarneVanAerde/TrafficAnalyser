@@ -5,17 +5,19 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
+import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.sa.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is used for the detection of illegal speed.
@@ -53,16 +55,17 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
-        cameraMessageService.getMessagesFerVehicle(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
+        Optional<CameraMessage> connectedMessage = Optional.empty();
+        if (camera.getSegment() != null) connectedMessage = cameraMessageService.getConnectedMessage(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
+        if (connectedMessage.isPresent()) {
+            double vehicleSpeed = (double) camera.getSegment().getDistance() / ChronoUnit.HOURS.between(message.getTimestamp(), connectedMessage.get().getTimestamp());
+            System.out.println(vehicleSpeed);
+        }
+        cameraMessageService.saveCameraMessage(message);
     }
 
     private double calculateFine() {
         //TODO: calculate fine
         return 1000.0;
-    }
-
-    private double calculateSpeed() {
-        //TODO: calculate speed
-        return 100.0;
     }
 }

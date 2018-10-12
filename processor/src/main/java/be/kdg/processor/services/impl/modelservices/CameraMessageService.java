@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +26,10 @@ public class CameraMessageService {
         return cameraMessageRepository.save(message);
     }
 
-    public List<CameraMessage> getMessagesFerVehicle(String plateId, int segmentCameraId) {
-        //TODO: delete messages after 30 min.
-
-        return cameraMessageRepository.findAllMessagesByPlate(plateId)
+    public Optional<CameraMessage> getConnectedMessage(String plateId, int segmentCameraId) throws PersistenceException {
+        return cameraMessageRepository.findAllMessagesByLicensePlate(plateId)
                 .stream()
                 .filter(msg -> msg.getId() == segmentCameraId)
-                .collect(Collectors.toList());
+                .min(Comparator.comparing(CameraMessage::getTimestamp));
     }
 }

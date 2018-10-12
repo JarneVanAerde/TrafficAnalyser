@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CameraMessageRepository extends JpaRepository<CameraMessage, Integer> {
-    List<CameraMessage> findAllMessagesByPlate(String licensePlate);
+    List<CameraMessage> findAllMessagesByLicensePlate(String licensePlate);
 }
