@@ -2,6 +2,7 @@ package be.kdg.processor.services.impl.adapters;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.services.api.CameraServiceAdapter;
+import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.sa.services.CameraNotFoundException;
 import be.kdg.sa.services.CameraServiceProxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,13 @@ public class CameraInfoService implements CameraServiceAdapter {
 
     @Cacheable(value = "cameras")
     @Override
-    public Camera get(int id) throws IOException, CameraNotFoundException {
-        String cameraJson = cameraServiceProxy.get(id);
-        return objectMapper.readValue(cameraJson, Camera.class);
+    public Camera get(int id) throws ServiceException {
+        try {
+            String cameraJson = cameraServiceProxy.get(id);
+            return objectMapper.readValue(cameraJson, Camera.class);
+        } catch (IOException | CameraNotFoundException e) {
+           throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
+        }
+
     }
 }

@@ -8,17 +8,12 @@ import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.ObjectNotFoundException;
-import org.apache.commons.lang3.time.DateUtils;
-import org.h2.util.DateTimeUtils;
+import be.kdg.processor.services.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -43,7 +38,7 @@ public class BelgiumFineService implements FineService {
      * @return a newly inserted emission fine.
      */
     @Override
-    public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ObjectNotFoundException {
+    public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         fineRepo.saveAndFlush(emissionFine);
 
@@ -70,10 +65,9 @@ public class BelgiumFineService implements FineService {
      *
      * @param plateId used to retrieve the vehicle.
      * @return true if their is already an emission fine created for today, and false if the opposite is true
-     * @throws ObjectNotFoundException if the vehicle wasn't found in the database, than an exception will be thrown
      */
     @Override
-    public boolean checkIfAlreadyHasEmissionfine(String plateId) throws ObjectNotFoundException {
+    public boolean checkIfAlreadyHasEmissionfine(String plateId) throws PersistenceException {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 

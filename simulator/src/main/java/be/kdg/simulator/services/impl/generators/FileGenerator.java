@@ -1,7 +1,9 @@
-package be.kdg.simulator.generators;
+package be.kdg.simulator.services.impl.generators;
 
 import be.kdg.simulator.configs.GeneratorConfig;
-import be.kdg.simulator.model.CameraMessage;
+import be.kdg.simulator.models.CameraMessage;
+import be.kdg.simulator.services.api.MessageGenerator;
+import be.kdg.simulator.services.exceptions.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class FileGenerator implements MessageGenerator {
     private int counter;
 
     @Autowired
-    public FileGenerator(GeneratorConfig generatorConfig) throws IOException {
+    public FileGenerator(GeneratorConfig generatorConfig) throws ServiceException {
         this.generatorConfig = generatorConfig;
         this.cameraMessages = extractdata();
         this.counter = 0;
@@ -40,7 +42,7 @@ public class FileGenerator implements MessageGenerator {
      *
      * @return A list of Camera messages
      */
-    private List<CameraMessage> extractdata() throws IOException {
+    private List<CameraMessage> extractdata() throws ServiceException {
         List<CameraMessage> cameraMessages = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(generatorConfig.getFilePath())) {
@@ -64,8 +66,7 @@ public class FileGenerator implements MessageGenerator {
                 }
             }
         } catch (IOException ioe) {
-            LOGGER.error("Extraction of file data failed. " + ioe.getMessage());
-            throw ioe;
+            throw new ServiceException(getClass().getSimpleName() + ": " + ioe.getMessage());
         }
 
         LOGGER.info("Extraction file succeeded.");

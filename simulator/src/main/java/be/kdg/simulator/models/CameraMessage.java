@@ -1,4 +1,4 @@
-package be.kdg.simulator.model;
+package be.kdg.simulator.models;
 
 import lombok.*;
 

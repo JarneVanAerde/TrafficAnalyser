@@ -1,6 +1,7 @@
-package be.kdg.simulator.messengers;
+package be.kdg.simulator.services.impl.messengers;
 
-import be.kdg.simulator.model.CameraMessage;
+import be.kdg.simulator.models.CameraMessage;
+import be.kdg.simulator.services.api.Messenger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 

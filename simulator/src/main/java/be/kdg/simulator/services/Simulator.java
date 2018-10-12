@@ -1,7 +1,8 @@
-package be.kdg.simulator;
+package be.kdg.simulator.services;
 
-import be.kdg.simulator.generators.MessageGenerator;
-import be.kdg.simulator.messengers.Messenger;
+import be.kdg.simulator.services.api.MessageGenerator;
+import be.kdg.simulator.services.api.Messenger;
+import be.kdg.simulator.services.exceptions.ServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class Simulator {
     public void GenerateMessages() {
         try {
             messenger.sendMessage(generator.generate());
-        } catch (JsonProcessingException e) {
+        } catch (ServiceException e) {
             LOGGER.error("Something went wrong while parsing an object to another data format " + e.getMessage());
         }
     }

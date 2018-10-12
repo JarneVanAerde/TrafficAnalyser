@@ -5,9 +5,9 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.ObjectNotFoundException;
+import be.kdg.processor.services.exceptions.PersistenceException;
+import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
-import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import be.kdg.sa.services.*;
@@ -46,25 +46,25 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
      * saved to the database.
      *
      * @param message the message that will be used to detect possible emission fines.
-     * @throws IOException                   is thrown when a communication error occurs.
-     * @throws LicensePlateNotFoundException is thrown when a license plate wasn't found in the external database.
-     * @throws CameraNotFoundException       is thrown when a camera wasn't found in the external database.
-     * @throws InvalidLicensePlateException  is thrown when a license plate was invalid.
      */
     @Override
-    public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException, ObjectNotFoundException {
+    public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
         Camera camera = cameraInfoService.get(message.getId());
         LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
-        if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
-            licensePlateService.extractPlateInfo(licensePlateInfo);
-            if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
-                LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
-                fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
-                        licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
+        try {
+            if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
+                licensePlateService.extractPlateInfo(licensePlateInfo);
+                if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
+                    LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
+                    fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
+                            licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
+                }
             }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 

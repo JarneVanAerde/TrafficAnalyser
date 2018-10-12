@@ -1,6 +1,8 @@
-package be.kdg.simulator.messengers;
+package be.kdg.simulator.services.impl.messengers;
 
-import be.kdg.simulator.model.CameraMessage;
+import be.kdg.simulator.models.CameraMessage;
+import be.kdg.simulator.services.api.Messenger;
+import be.kdg.simulator.services.exceptions.ServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
@@ -32,8 +34,12 @@ public class QueueMessenger implements Messenger {
      * After that, the message is send using the rabbit template.
      */
     @Override
-    public void sendMessage(CameraMessage message) throws JsonProcessingException {
-        rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
-        LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getId() + " has been sent to the queue");
+    public void sendMessage(CameraMessage message) throws ServiceException {
+        try {
+            rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
+            LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getId() + " has been sent to the queue");
+        } catch (JsonProcessingException e) {
+            throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
+        }
     }
 }
