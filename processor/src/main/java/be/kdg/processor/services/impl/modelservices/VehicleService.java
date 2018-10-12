@@ -8,10 +8,10 @@ import be.kdg.processor.persistence.VehicleRepository;
 import be.kdg.processor.services.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleOwnerRepository vehicleOwnerRepository;
@@ -42,19 +42,16 @@ public class VehicleService {
     }
 
     public Vehicle getVehicle(String plateId) throws PersistenceException {
-        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(plateId);
-        if (optionalVehicle.isPresent()) return optionalVehicle.get();
-        else throw new PersistenceException("Vehicle with plate id " + plateId + " wasn't found in the database");
+        return vehicleRepository.findById(plateId)
+                .orElseThrow(() -> new PersistenceException("Vehicle with plate id " + plateId + " wasn't found in the database"));
     }
 
     public VehicleOwner getOwner(String nationalId) throws PersistenceException {
-        Optional<VehicleOwner> optionalVehicleOwner = vehicleOwnerRepository.findById(nationalId);
-        if (optionalVehicleOwner.isPresent()) return optionalVehicleOwner.get();
-        else throw new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database");
-
+        return vehicleOwnerRepository.findById(nationalId)
+                .orElseThrow(() -> new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
-        return vehicleRepository.saveAndFlush(vehicle);
+        return vehicleRepository.save(vehicle);
     }
 }
