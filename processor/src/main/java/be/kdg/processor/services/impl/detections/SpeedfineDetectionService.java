@@ -6,6 +6,7 @@ import be.kdg.processor.models.cameras.Segment;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
+import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
@@ -63,16 +64,23 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         }
 
         if (optionalCameraMessage.isPresent()) {
-            LOGGER.info("Calculation distance for " + camera.getCameraId() + " and " + cameraInfoService.get(optionalCameraMessage.get().getId()).getCameraId());
+            CameraMessage exitMessage = optionalCameraMessage.get();
             Segment segment;
             if (camera.getSegment() != null) segment = camera.getSegment();
-            else segment = cameraInfoService.get(optionalCameraMessage.get().getId()).getSegment();
+            else segment = cameraInfoService.get(exitMessage.getId()).getSegment();
+            LOGGER.info("Calculation distance for " + exitMessage.getId() + " and " + camera.getCameraId());
 
-            double vehicleSpeed = calculateSpeed(segment, message, optionalCameraMessage.get());
+            double vehicleSpeed = calculateSpeed(segment, message, exitMessage);
             if (vehicleSpeed > segment.getSpeedLimit()) {
                 LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
                         optionalCameraMessage.get().getId() + " " + camera.getCameraId());
                 double fineAmount = calculateFine();
+                /*try {
+                    fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
+                            exitMessage, message, licensePlateInfo.getPlateId());
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
 

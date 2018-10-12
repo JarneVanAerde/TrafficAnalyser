@@ -11,6 +11,7 @@ import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,7 @@ import java.util.Optional;
  * The fines are bound to laws of Belgium.
  */
 @Service
+@Transactional
 public class BelgiumFineService implements FineService {
     private final FineRepository fineRepo;
     private final VehicleService vehicleService;
@@ -40,7 +42,7 @@ public class BelgiumFineService implements FineService {
     @Override
     public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
-        fineRepo.saveAndFlush(emissionFine);
+        fineRepo.save(emissionFine);
 
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(emissionFine);
@@ -54,9 +56,14 @@ public class BelgiumFineService implements FineService {
      * @return a newly inserted speed fine.
      */
     @Override
-    public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
+    public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
-        return fineRepo.saveAndFlush(speedFine);
+        fineRepo.saveAndFlush(speedFine);
+
+        Vehicle vehicle = vehicleService.getVehicle(plateId);
+        vehicle.addFine(speedFine);
+        vehicleService.saveVehicle(vehicle);
+        return speedFine;
     }
 
     /**
