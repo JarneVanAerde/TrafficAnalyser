@@ -50,10 +50,8 @@ public class VehicleService {
     public VehicleOwner getOwner(String nationalId) throws PersistenceException {
         Optional<VehicleOwner> optionalVehicleOwner = vehicleOwnerRepository.findById(nationalId);
         if (optionalVehicleOwner.isPresent()) return optionalVehicleOwner.get();
-        else {
+        else throw new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database");
 
-            throw new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database");
-        }
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {

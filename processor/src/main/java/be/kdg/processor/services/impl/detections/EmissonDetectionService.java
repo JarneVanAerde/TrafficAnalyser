@@ -64,7 +64,6 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
                 }
             }
         } catch (PersistenceException e) {
-            LOGGER.warn(e.getMessage());
             throw new ServiceException(e.getMessage());
         }
     }

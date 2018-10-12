@@ -8,5 +8,5 @@ import be.kdg.sa.services.LicensePlateNotFoundException;
 import java.io.IOException;
 
 public interface DetectionService<T> {
-    void detectFine(T message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException, ObjectNotFoundException, ServiceException;
+    void detectFine(T message) throws ServiceException;
 }

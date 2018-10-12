@@ -1,6 +1,7 @@
 package be.kdg.processor.services.impl;
 
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.utils.api.Receiver;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.sa.services.CameraNotFoundException;
@@ -40,18 +41,12 @@ public class ProcessorService {
         List<CameraMessage> cameraMessages = receiver.getBufferdObjects();
         LOGGER.info("Processing " + cameraMessages.size() + " messages.");
 
-        cameraMessages.forEach(
-                message -> detectionServices.forEach(service -> {
+        cameraMessages.forEach(message ->
+                detectionServices.forEach(service -> {
                     try {
                         service.detectFine(message);
-                    } catch (IOException ioe) {
-                        LOGGER.error("Oops, something went wrong while detecting fines: " + ioe.getMessage());
-                        //TODO: throw exception
-                    } catch (LicensePlateNotFoundException | InvalidLicensePlateException | CameraNotFoundException e) {
-                        LOGGER.warn(e.getMessage());
-                    } catch (ObjectNotFoundException e) {
+                    } catch (ServiceException e) {
                         LOGGER.error(e.getMessage());
-                        //TODO: throw exception
                     }
                 })
         );
