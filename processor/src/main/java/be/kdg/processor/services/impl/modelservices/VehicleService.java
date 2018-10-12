@@ -5,10 +5,9 @@ import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.models.vehicles.VehicleOwner;
 import be.kdg.processor.persistence.VehicleOwnerRepository;
 import be.kdg.processor.persistence.VehicleRepository;
-import be.kdg.processor.services.exceptions.ObjectNotFoundException;
+import be.kdg.processor.services.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.css.ViewCSS;
 
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) throws ObjectNotFoundException {
+    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) throws PersistenceException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
         boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfoDTO.getNationalNumber());
@@ -42,16 +41,17 @@ public class VehicleService {
         }
     }
 
-    public Vehicle getVehicle(String plateId) throws ObjectNotFoundException {
+    public Vehicle getVehicle(String plateId) throws PersistenceException {
         Optional<Vehicle> optionalVehicle = vehicleRepository.findById(plateId);
         if (optionalVehicle.isPresent()) return optionalVehicle.get();
-        else throw new ObjectNotFoundException("Vehicle with plate id " + plateId + " wasn't found in the database");
+        else throw new PersistenceException("Vehicle with plate id " + plateId + " wasn't found in the database");
     }
 
-    public VehicleOwner getOwner(String nationalId) throws ObjectNotFoundException {
+    public VehicleOwner getOwner(String nationalId) throws PersistenceException {
         Optional<VehicleOwner> optionalVehicleOwner = vehicleOwnerRepository.findById(nationalId);
         if (optionalVehicleOwner.isPresent()) return optionalVehicleOwner.get();
-        else throw new ObjectNotFoundException("VehicleOwner with plate id " + nationalId + " wasn't found in the database");
+        else
+            throw new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database");
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
