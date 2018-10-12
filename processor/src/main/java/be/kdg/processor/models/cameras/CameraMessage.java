@@ -21,7 +21,6 @@ public class CameraMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int messageId;
-
     private int id;
     private String licensePlate;
     private LocalDateTime timestamp;

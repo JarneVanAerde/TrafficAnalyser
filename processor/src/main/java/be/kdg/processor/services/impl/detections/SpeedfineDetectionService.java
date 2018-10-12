@@ -53,7 +53,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
-        //TODO: detect fine
+        cameraMessageService.getMessagesFerVehicle(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
     }
 
     private double calculateFine() {

@@ -34,7 +34,7 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
             String licenseJson = licensePlateServiceProxy.get(plateId);
             return objectMapper.readValue(licenseJson, LicensePlateInfoDTO.class);
         } catch (IOException | LicensePlateNotFoundException | InvalidLicensePlateException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 }

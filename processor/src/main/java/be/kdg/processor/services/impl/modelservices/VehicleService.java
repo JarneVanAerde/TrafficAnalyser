@@ -22,20 +22,20 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfoDTO) throws PersistenceException {
+    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfo) throws PersistenceException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
-        boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfoDTO.getNationalNumber());
-        boolean vehicleEx = vehicleRepository.existsById(licensePlateInfoDTO.getPlateId());
+        boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfo.getNationalNumber());
+        boolean vehicleEx = vehicleRepository.existsById(licensePlateInfo.getPlateId());
 
         if (!ownerEx && !vehicleEx) {
-            vehicle = new Vehicle(licensePlateInfoDTO.getPlateId(), licensePlateInfoDTO.getEuroNumber());
-            vehicleOwner = new VehicleOwner(licensePlateInfoDTO.getNationalNumber());
+            vehicle = new Vehicle(licensePlateInfo.getPlateId(), licensePlateInfo.getEuroNumber());
+            vehicleOwner = new VehicleOwner(licensePlateInfo.getNationalNumber());
             vehicleOwner.addVehicle(vehicle);
             vehicleOwnerRepository.save(vehicleOwner);
         } else if (ownerEx && !vehicleEx) {
-            vehicle = new Vehicle(licensePlateInfoDTO.getPlateId(), licensePlateInfoDTO.getEuroNumber());
-            vehicleOwner = getOwner(licensePlateInfoDTO.getNationalNumber());
+            vehicle = new Vehicle(licensePlateInfo.getPlateId(), licensePlateInfo.getEuroNumber());
+            vehicleOwner = getOwner(licensePlateInfo.getNationalNumber());
             vehicleOwner.addVehicle(vehicle);
             vehicleOwnerRepository.save(vehicleOwner);
         }
@@ -43,12 +43,12 @@ public class VehicleService {
 
     public Vehicle getVehicle(String plateId) throws PersistenceException {
         return vehicleRepository.findById(plateId)
-                .orElseThrow(() -> new PersistenceException("Vehicle with plate id " + plateId + " wasn't found in the database"));
+                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": Vehicle with plate id " + plateId + " wasn't found in the database"));
     }
 
     public VehicleOwner getOwner(String nationalId) throws PersistenceException {
         return vehicleOwnerRepository.findById(nationalId)
-                .orElseThrow(() -> new PersistenceException("VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
+                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
