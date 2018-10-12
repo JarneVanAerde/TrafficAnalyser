@@ -1,6 +1,6 @@
 package be.kdg.processor.services.impl.modelservices;
 
-import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
+import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.models.vehicles.VehicleOwner;
 import be.kdg.processor.persistence.VehicleOwnerRepository;
@@ -22,7 +22,7 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractPlateInfo(LicensePlateInfoDTO licensePlateInfo) throws PersistenceException {
+    public void extractPlateInfo(LicensePlateInfo licensePlateInfo) throws PersistenceException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
         boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfo.getNationalNumber());

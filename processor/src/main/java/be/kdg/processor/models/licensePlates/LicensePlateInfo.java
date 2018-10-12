@@ -15,7 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class LicensePlateInfoDTO {
+public class LicensePlateInfo {
     private String plateId;
     private String nationalNumber;
     private int euroNumber;
