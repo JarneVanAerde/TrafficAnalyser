@@ -27,9 +27,9 @@ public class CameraMessageService {
     }
 
     public Optional<CameraMessage> getConnectedMessage(String plateId, int segmentCameraId) throws PersistenceException {
-        return cameraMessageRepository.findAllMessagesByLicensePlate(plateId)
-                .stream()
-                .filter(msg -> msg.getId() == segmentCameraId)
+        List<CameraMessage> cameraMessages = cameraMessageRepository.findAll();
+                return cameraMessages.stream()
+                .filter(msg -> msg.getId() == segmentCameraId && msg.getLicensePlate().equalsIgnoreCase(plateId))
                 .min(Comparator.comparing(CameraMessage::getTimestamp));
     }
 }
