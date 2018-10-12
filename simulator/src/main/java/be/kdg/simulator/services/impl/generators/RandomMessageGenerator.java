@@ -1,7 +1,8 @@
-package be.kdg.simulator.generators;
+package be.kdg.simulator.services.impl.generators;
 
 import be.kdg.simulator.configs.GeneratorConfig;
-import be.kdg.simulator.model.CameraMessage;
+import be.kdg.simulator.models.CameraMessage;
+import be.kdg.simulator.services.api.MessageGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
