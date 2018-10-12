@@ -16,13 +16,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity
 public class Segment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int segmentId;
-    @JsonProperty("connectedCameraId")
-    private int secondCameraId;
+    private int connectedCameraId;
     private int distance;
     private int speedLimit;
 
@@ -31,6 +27,6 @@ public class Segment {
         return String.format("Second Camera %d\n" +
                 "Distance in segment %d\n" +
                 "Max legal speedLimit %d",
-                secondCameraId, distance, speedLimit);
+                connectedCameraId, distance, speedLimit);
     }
 }

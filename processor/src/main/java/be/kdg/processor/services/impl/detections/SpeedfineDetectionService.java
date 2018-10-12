@@ -44,10 +44,10 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
      * saved to the database.
      *
      * @param message the message that will be used to detect possible emission fines.
-     * @throws IOException is thrown when a communication error occurs.
+     * @throws IOException                   is thrown when a communication error occurs.
      * @throws LicensePlateNotFoundException is thrown when a license plate wasn't found in the external database.
-     * @throws CameraNotFoundException is thrown when a camera wasn't found in the external database.
-     * @throws InvalidLicensePlateException is thrown when a license plate was invalid.
+     * @throws CameraNotFoundException       is thrown when a camera wasn't found in the external database.
+     * @throws InvalidLicensePlateException  is thrown when a license plate was invalid.
      */
     @Override
     public void detectFine(CameraMessage message) throws IOException, LicensePlateNotFoundException, CameraNotFoundException, InvalidLicensePlateException {
@@ -56,7 +56,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
-        //TODO: detect speedfine
+        //TODO: detect fine
     }
 
     private double calculateFine() {

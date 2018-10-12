@@ -15,10 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity
 public class Location {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int locationId;
     @JsonProperty("lat")
     private double latitude;

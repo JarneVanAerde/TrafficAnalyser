@@ -28,16 +28,14 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
-    private final CameraMessageService cameraMessageService;
     private final VehicleService licensePlateService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, CameraMessageService cameraMessageService, VehicleService licensePlateService) {
+                                   FineService fineService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
-        this.cameraMessageService = cameraMessageService;
         this.licensePlateService = licensePlateService;
     }
 
