@@ -1,7 +1,6 @@
 package be.kdg.processor.models.fines;
 
 import be.kdg.processor.models.cameras.CameraMessage;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +14,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(value = "emission")
+@DiscriminatorValue(value = "EMISSION")
 public class EmissionFine extends Fine {
-    private int carEuroNorm;
+    private int vehicleEuroNorm;
     private int legalEuroNorm;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "emission_message")
@@ -25,7 +24,7 @@ public class EmissionFine extends Fine {
 
     public EmissionFine(FineType fineType, double amount, int carEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage) {
         super(amount, fineType);
-        this.carEuroNorm = carEuroNorm;
+        this.vehicleEuroNorm = carEuroNorm;
         this.legalEuroNorm = legalEuroNorm;
         this.emmisionMessage = emmisionMessage;
     }
@@ -33,6 +32,6 @@ public class EmissionFine extends Fine {
     @Override
     public String toString() {
         return super.toString() + String.format("Vehicle has Euro norm of %d, legal Euro norm was %d.",
-                carEuroNorm, legalEuroNorm);
+                vehicleEuroNorm, legalEuroNorm);
     }
 }

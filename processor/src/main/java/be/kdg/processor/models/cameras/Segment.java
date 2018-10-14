@@ -17,7 +17,6 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Segment {
-    private int segmentId;
     private int connectedCameraId;
     private int distance;
     private int speedLimit;

@@ -16,7 +16,6 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Location {
-    private int locationId;
     @JsonProperty("lat")
     private double latitude;
     @JsonProperty("long")

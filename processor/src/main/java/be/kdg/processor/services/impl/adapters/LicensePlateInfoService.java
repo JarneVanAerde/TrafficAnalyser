@@ -1,6 +1,6 @@
 package be.kdg.processor.services.impl.adapters;
 
-import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
+import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.LicensePlateServiceAdatpter;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.sa.services.InvalidLicensePlateException;
@@ -29,12 +29,12 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
 
     @Cacheable(value = "licensePlates")
     @Override
-    public LicensePlateInfoDTO get(String plateId) throws ServiceException {
+    public LicensePlateInfo get(String plateId) throws ServiceException {
         try {
             String licenseJson = licensePlateServiceProxy.get(plateId);
-            return objectMapper.readValue(licenseJson, LicensePlateInfoDTO.class);
+            return objectMapper.readValue(licenseJson, LicensePlateInfo.class);
         } catch (IOException | LicensePlateNotFoundException | InvalidLicensePlateException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 }

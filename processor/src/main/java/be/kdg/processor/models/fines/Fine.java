@@ -1,11 +1,11 @@
 package be.kdg.processor.models.fines;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Abstract super class used by al specific fines for inheritance.
@@ -23,10 +23,12 @@ public abstract class Fine {
     private int fineId;
     private double amount;
     private FineType fineType;
+    private LocalDateTime creationDate;
 
     public Fine(double amount, FineType fineType) {
         this.amount = amount;
         this.fineType = fineType;
+        this.creationDate = LocalDateTime.now();
     }
 
     @Override

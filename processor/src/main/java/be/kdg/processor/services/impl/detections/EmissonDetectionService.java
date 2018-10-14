@@ -2,7 +2,7 @@ package be.kdg.processor.services.impl.detections;
 
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
-import be.kdg.processor.models.licensePlates.LicensePlateInfoDTO;
+import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
@@ -10,13 +10,10 @@ import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
-import be.kdg.sa.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 /**
  * This class is used for the detection of illegal emissions.
@@ -28,7 +25,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
-    private final VehicleService licensePlateService;
+    private final VehicleService vehicleService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
@@ -36,7 +33,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
-        this.licensePlateService = licensePlateService;
+        this.vehicleService = licensePlateService;
     }
 
     /**
@@ -51,14 +48,14 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
         Camera camera = cameraInfoService.get(message.getId());
-        LicensePlateInfoDTO licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
+        LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
         try {
             if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
-                licensePlateService.extractPlateInfo(licensePlateInfo);
+                vehicleService.extractPlateInfo(licensePlateInfo);
                 if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
-                    LOGGER.info("Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
+                    LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
                     fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
                             licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
                 }

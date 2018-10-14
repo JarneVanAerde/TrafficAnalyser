@@ -11,6 +11,7 @@ import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,14 +22,17 @@ import java.util.Optional;
  * The fines are bound to laws of Belgium.
  */
 @Service
+@Transactional
 public class BelgiumFineService implements FineService {
     private final FineRepository fineRepo;
     private final VehicleService vehicleService;
+    private final CameraMessageService cameraMessageService;
 
     @Autowired
-    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService) {
+    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService, CameraMessageService cameraMessageService) {
         this.fineRepo = finrRepo;
         this.vehicleService = vehicleService;
+        this.cameraMessageService = cameraMessageService;
     }
 
     /**
@@ -39,8 +43,9 @@ public class BelgiumFineService implements FineService {
      */
     @Override
     public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
+        emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
-        fineRepo.saveAndFlush(emissionFine);
+        fineRepo.save(emissionFine);
 
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(emissionFine);
@@ -54,9 +59,16 @@ public class BelgiumFineService implements FineService {
      * @return a newly inserted speed fine.
      */
     @Override
-    public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
+    public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
+        enterCamera = cameraMessageService.saveMessage(enterCamera);
+        exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
-        return fineRepo.saveAndFlush(speedFine);
+        fineRepo.saveAndFlush(speedFine);
+
+        Vehicle vehicle = vehicleService.getVehicle(plateId);
+        vehicle.addFine(speedFine);
+        vehicleService.saveVehicle(vehicle);
+        return speedFine;
     }
 
     /**
@@ -72,9 +84,9 @@ public class BelgiumFineService implements FineService {
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         Optional<Fine> optionalFine = vehicle.getFines().stream()
-                .filter(f -> f instanceof EmissionFine)
-                .filter(f -> ((EmissionFine) f).getEmmisionMessage().getTimestamp()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equalsIgnoreCase(today))
+                .filter(f -> f.getFineType() == FineType.EMISSiON_FINE)
+                .filter(f -> f.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .equalsIgnoreCase(today))
                 .findAny();
 
         return optionalFine.isPresent();
