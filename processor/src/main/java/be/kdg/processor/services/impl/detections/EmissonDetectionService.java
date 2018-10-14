@@ -9,7 +9,6 @@ import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,17 +25,15 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
-    private final VehicleService licensePlateService;
-    private final CameraMessageService cameraMessageService;
+    private final VehicleService vehicleService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, VehicleService licensePlateService, CameraMessageService cameraMessageService) {
+                                   FineService fineService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
-        this.licensePlateService = licensePlateService;
-        this.cameraMessageService = cameraMessageService;
+        this.vehicleService = licensePlateService;
     }
 
     /**
@@ -56,7 +53,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         //Detect fine
         try {
             if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
-                licensePlateService.extractPlateInfo(licensePlateInfo);
+                vehicleService.extractPlateInfo(licensePlateInfo);
                 if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
                     LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
                     fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),

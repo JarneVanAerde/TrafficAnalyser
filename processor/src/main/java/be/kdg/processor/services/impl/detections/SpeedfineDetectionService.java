@@ -11,16 +11,13 @@ import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -34,14 +31,16 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
+    private final VehicleService vehicleService;
 
     @Autowired
     public SpeedfineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                     FineService fineService, CameraMessageService cameraMessageService) {
+                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.cameraMessageService = cameraMessageService;
+        this.vehicleService = vehicleService;
     }
 
     /**
@@ -58,7 +57,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         Camera camera = cameraInfoService.get(message.getId());
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
-        //Detect fine
+        //Collect corresponding message
         Optional<CameraMessage> optionalCameraMessage;
         if (camera.getSegment() == null) {
             optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
@@ -66,8 +65,11 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
             optionalCameraMessage = cameraMessageService.getConnectedMessage(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
         }
 
+        //detect fine
         try {
             if (optionalCameraMessage.isPresent()) {
+                vehicleService.extractPlateInfo(licensePlateInfo);
+
                 CameraMessage enterMessage = optionalCameraMessage.get();
                 Segment segment;
                 if (camera.getSegment() != null) segment = camera.getSegment();

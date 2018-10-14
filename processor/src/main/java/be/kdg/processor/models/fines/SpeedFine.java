@@ -14,9 +14,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(value = "speed")
+@DiscriminatorValue(value = "SPEED")
 public class SpeedFine extends Fine {
-    private double carSpeed;
+    private double vehicleSpeed;
     private double legalSpeed;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "enter_message")
@@ -27,7 +27,7 @@ public class SpeedFine extends Fine {
 
     public SpeedFine(FineType fineType, double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera) {
         super(amount, fineType);
-        this.carSpeed = carSpeed;
+        this.vehicleSpeed = carSpeed;
         this.legalSpeed = legalSpeed;
         this.enterMessage = enterCamera;
         this.exitMessage = exitCamera;
@@ -36,6 +36,6 @@ public class SpeedFine extends Fine {
     @Override
     public String toString() {
         return super.toString() + String.format("Owner drove %.1f/h, legal speedLimit was %.1f/h.",
-                carSpeed, legalSpeed);
+                vehicleSpeed, legalSpeed);
     }
 }
