@@ -26,11 +26,13 @@ import java.util.Optional;
 public class BelgiumFineService implements FineService {
     private final FineRepository fineRepo;
     private final VehicleService vehicleService;
+    private final CameraMessageService cameraMessageService;
 
     @Autowired
-    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService) {
+    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService, CameraMessageService cameraMessageService) {
         this.fineRepo = finrRepo;
         this.vehicleService = vehicleService;
+        this.cameraMessageService = cameraMessageService;
     }
 
     /**
@@ -41,6 +43,7 @@ public class BelgiumFineService implements FineService {
      */
     @Override
     public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
+        emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         fineRepo.save(emissionFine);
 
@@ -57,6 +60,8 @@ public class BelgiumFineService implements FineService {
      */
     @Override
     public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
+        enterCamera = cameraMessageService.saveMessage(enterCamera);
+        exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
         fineRepo.saveAndFlush(speedFine);
 

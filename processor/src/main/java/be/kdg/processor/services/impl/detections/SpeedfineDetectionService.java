@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -25,7 +28,7 @@ import java.util.Optional;
  * All messages will pass through here to check for illegal emissions.
  */
 @Service
-public class SpeedfineDetectionService {
+public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
@@ -49,7 +52,7 @@ public class SpeedfineDetectionService {
      *
      * @param message the message that will be used to detect possible emission fines.
      */
-    //@Override
+    @Override
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
         Camera camera = cameraInfoService.get(message.getId());
@@ -58,33 +61,34 @@ public class SpeedfineDetectionService {
         //Detect fine
         Optional<CameraMessage> optionalCameraMessage;
         if (camera.getSegment() == null) {
-           optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
+            optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
         } else {
             optionalCameraMessage = cameraMessageService.getConnectedMessage(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
         }
 
-        if (optionalCameraMessage.isPresent()) {
-            CameraMessage exitMessage = optionalCameraMessage.get();
-            Segment segment;
-            if (camera.getSegment() != null) segment = camera.getSegment();
-            else segment = cameraInfoService.get(exitMessage.getId()).getSegment();
-            LOGGER.info("Calculation distance for " + exitMessage.getId() + " and " + camera.getCameraId());
+        try {
+            if (optionalCameraMessage.isPresent()) {
+                CameraMessage enterMessage = optionalCameraMessage.get();
+                Segment segment;
+                if (camera.getSegment() != null) segment = camera.getSegment();
+                else segment = cameraInfoService.get(enterMessage.getId()).getSegment();
 
-            double vehicleSpeed = calculateSpeed(segment, message, exitMessage);
-            if (vehicleSpeed > segment.getSpeedLimit()) {
-                LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
-                        optionalCameraMessage.get().getId() + " " + camera.getCameraId());
-                double fineAmount = calculateFine();
-                /*try {
+                LOGGER.info("Calculation distance for " + enterMessage.getId() + " and " + camera.getCameraId());
+                double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
+
+                if (vehicleSpeed > segment.getSpeedLimit()) {
+                    LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
+                            optionalCameraMessage.get().getId() + " " + camera.getCameraId());
+                    double fineAmount = calculateFine();
                     fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
-                            exitMessage, message, licensePlateInfo.getPlateId());
-                } catch (PersistenceException e) {
-                    e.printStackTrace();
-                }*/
+                            enterMessage, message, licensePlateInfo.getPlateId());
+                }
             }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
 
-        cameraMessageService.saveCameraMessage(message);
+        cameraMessageService.addToBuffer(message);
     }
 
     private double calculateSpeed(Segment segment, CameraMessage cameraMessageOne, CameraMessage cameraMessageTwo) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -20,28 +21,31 @@ import java.util.stream.Collectors;
 public class CameraMessageService {
     private final CameraMessageRepository cameraMessageRepository;
     private final CameraInfoService cameraInfoService;
+    private final List<CameraMessage> messageBuffer;
 
     @Autowired
     public CameraMessageService(CameraMessageRepository cameraMessageRepository, CameraInfoService cameraInfoService) {
         this.cameraMessageRepository = cameraMessageRepository;
         this.cameraInfoService = cameraInfoService;
+        this.messageBuffer = new ArrayList<>();
     }
 
-    public CameraMessage saveCameraMessage(CameraMessage message) {
+    public CameraMessage saveMessage(CameraMessage message) {
         return cameraMessageRepository.save(message);
     }
 
+    public void addToBuffer(CameraMessage message) {
+        messageBuffer.add(message);
+    }
+
     public Optional<CameraMessage> getConnectedMessage(String plateId, int cameraSegmentId) throws PersistenceException {
-        return cameraMessageRepository.findAll()
-                .stream()
+        return messageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId) && cm.getId() == cameraSegmentId)
-                .sorted(Comparator.comparing(CameraMessage::getTimestamp))
-                .findAny();
+                .min(Comparator.comparing(CameraMessage::getTimestamp));
     }
 
     public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) {
-        List<CameraMessage> cameraMessages = cameraMessageRepository.findAll()
-                .stream()
+        List<CameraMessage> cameraMessages = messageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId))
                 .collect(Collectors.toList());
 
