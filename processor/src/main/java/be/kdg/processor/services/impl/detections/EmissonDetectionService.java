@@ -3,6 +3,7 @@ package be.kdg.processor.services.impl.detections;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.Options;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
@@ -26,14 +27,16 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final VehicleService vehicleService;
+    private final Options options;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, VehicleService licensePlateService) {
+                                   FineService fineService, VehicleService licensePlateService, Options options) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.vehicleService = licensePlateService;
+        this.options = options;
     }
 
     /**
@@ -74,6 +77,6 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
      * @return the calculated fine.
      */
     private double calculateFine(int legalEurNumber, int vehicleEuroNumber) {
-        return (legalEurNumber - vehicleEuroNumber) * 100;
+        return (legalEurNumber - vehicleEuroNumber) * options.getEmissionFactor();
     }
 }

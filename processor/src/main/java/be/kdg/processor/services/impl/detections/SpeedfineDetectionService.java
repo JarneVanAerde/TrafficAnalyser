@@ -26,7 +26,10 @@ import java.util.Optional;
  */
 @Service
 public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
+    public static final double SECONDS_IN_HOUR = 3600.0;
+    public static final double METERS_IN_KM = 1000.0;
     private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
+
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
@@ -95,7 +98,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
 
     private double calculateSpeed(Segment segment, CameraMessage cameraMessageOne, CameraMessage cameraMessageTwo) {
         Duration duration = Duration.between(cameraMessageTwo.getTimestamp(), cameraMessageOne.getTimestamp());
-        return (segment.getDistance() / 1000.0) / (duration.getSeconds() / 3600.0);
+        return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
 
     private double calculateFine() {
