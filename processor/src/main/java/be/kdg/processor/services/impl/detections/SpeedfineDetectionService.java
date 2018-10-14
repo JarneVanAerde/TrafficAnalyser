@@ -25,7 +25,7 @@ import java.util.Optional;
  * All messages will pass through here to check for illegal emissions.
  */
 @Service
-public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
+public class SpeedfineDetectionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
@@ -49,7 +49,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
      *
      * @param message the message that will be used to detect possible emission fines.
      */
-    @Override
+    //@Override
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
         Camera camera = cameraInfoService.get(message.getId());

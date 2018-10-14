@@ -79,9 +79,9 @@ public class BelgiumFineService implements FineService {
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         Optional<Fine> optionalFine = vehicle.getFines().stream()
-                .filter(f -> f instanceof EmissionFine)
-                .filter(f -> ((EmissionFine) f).getEmmisionMessage().getTimestamp()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equalsIgnoreCase(today))
+                .filter(f -> f.getFineType() == FineType.EMISSiON_FINE)
+                .filter(f -> f.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .equalsIgnoreCase(today))
                 .findAny();
 
         return optionalFine.isPresent();
