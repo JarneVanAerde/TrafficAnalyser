@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class userDTO {
     private int userId;
     private String name;
+    private String password;
+    private boolean deleted;
 }

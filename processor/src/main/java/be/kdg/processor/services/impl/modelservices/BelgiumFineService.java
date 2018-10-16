@@ -6,6 +6,7 @@ import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.models.fines.FineType;
 import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.models.options.OptionKey;
+import be.kdg.processor.models.users.User;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
