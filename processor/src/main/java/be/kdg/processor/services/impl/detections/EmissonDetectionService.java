@@ -28,16 +28,14 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final VehicleService vehicleService;
-    private final OptionService optionService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, VehicleService licensePlateService, OptionService optionService) {
+                                   FineService fineService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.vehicleService = licensePlateService;
-        this.optionService = optionService;
     }
 
     /**
@@ -59,21 +57,9 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
             vehicleService.extractPlateInfo(licensePlateInfo);
             if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
                 LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
-                fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
-                        licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
+                fineService.createEmissionFine(licensePlateInfo.getEuroNumber(), camera.getEuroNorm(),
+                        message, licensePlateInfo.getPlateId());
             }
         }
-    }
-
-    /**
-     * Calculates the difference between the two euro numbers
-     * and multiples that difference times 100.
-     *
-     * @param legalEurNumber    the legal euro number of the area.
-     * @param vehicleEuroNumber the euro number of the vehicle.
-     * @return the calculated fine.
-     */
-    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) throws ServiceException {
-        return (legalEurNumber - vehicleEuroNumber) * optionService.getOptionValue(OptionKey.EMISSION_FAC);
     }
 }

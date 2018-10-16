@@ -5,6 +5,7 @@ import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.models.fines.FineType;
 import be.kdg.processor.models.fines.SpeedFine;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
@@ -28,12 +29,14 @@ public class BelgiumFineService implements FineService {
     private final FineRepository fineRepo;
     private final VehicleService vehicleService;
     private final CameraMessageService cameraMessageService;
+    private final OptionService optionService;
 
     @Autowired
-    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService, CameraMessageService cameraMessageService) {
+    public BelgiumFineService(FineRepository finrRepo, VehicleService vehicleService, CameraMessageService cameraMessageService, OptionService optionService) {
         this.fineRepo = finrRepo;
         this.vehicleService = vehicleService;
         this.cameraMessageService = cameraMessageService;
+        this.optionService = optionService;
     }
 
     /**
@@ -41,7 +44,8 @@ public class BelgiumFineService implements FineService {
      * After the fine is created it is linked to a vehicle
      */
     @Override
-    public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
+    public void createEmissionFine(int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
+        double amount = caculateFine(FineType.EMISSiON_FINE, legalEuroNorm, ownerEuroNorm);
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         saveFine(emissionFine);
@@ -55,7 +59,8 @@ public class BelgiumFineService implements FineService {
      * Creates a speed fine and saves that to the database
      */
     @Override
-    public void createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
+    public void createSpeedFine(double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
+        double amount = caculateFine(FineType.SPEED_FINE, legalSpeed, carSpeed);
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
@@ -64,6 +69,17 @@ public class BelgiumFineService implements FineService {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(speedFine);
         vehicleService.saveVehicle(vehicle);
+    }
+
+    private double caculateFine(FineType fineType, double legal, double actual) throws ServiceException {
+        switch (fineType) {
+            case EMISSiON_FINE:
+                return (legal - actual) * optionService.getOptionValue(OptionKey.EMISSION_FAC);
+            case SPEED_FINE:
+                return (actual - legal) * optionService.getOptionValue(OptionKey.SPEED_FAC);
+            default:
+                return 200.0;
+        }
     }
 
     public Fine saveFine(Fine fine) {
