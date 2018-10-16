@@ -3,7 +3,7 @@ package be.kdg.processor.services.impl.modelservices;
 import be.kdg.processor.models.options.Option;
 import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.persistence.OptionRepository;
-import be.kdg.processor.services.exceptions.PersistenceException;
+import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +28,9 @@ public class OptionService {
         optionsRepository.save(option);
     }
 
-    public double getOptionValue(OptionKey key) throws PersistenceException {
+    public double getOptionValue(OptionKey key) throws ServiceException {
         return optionsRepository.findById(key)
-                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": value for key + " + key + " was not found in the database"))
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": value for key + " + key + " was not found in the database"))
                 .getValue();
     }
 }

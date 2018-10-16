@@ -6,7 +6,6 @@ import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
@@ -56,17 +55,13 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine
-        try {
-            if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
-                vehicleService.extractPlateInfo(licensePlateInfo);
-                if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
-                    LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
-                    fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
-                            licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
-                }
+        if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
+            vehicleService.extractPlateInfo(licensePlateInfo);
+            if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
+                LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
+                fineService.createEmissionFine(calculateFine(camera.getEuroNorm(), licensePlateInfo.getEuroNumber()),
+                        licensePlateInfo.getEuroNumber(), camera.getEuroNorm(), message, licensePlateInfo.getPlateId());
             }
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -78,7 +73,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
      * @param vehicleEuroNumber the euro number of the vehicle.
      * @return the calculated fine.
      */
-    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) throws PersistenceException {
+    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) throws ServiceException {
         return (legalEurNumber - vehicleEuroNumber) * optionService.getOptionValue(OptionKey.EMISSION_FAC);
     }
 }

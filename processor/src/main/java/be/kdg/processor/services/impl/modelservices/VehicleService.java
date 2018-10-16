@@ -5,7 +5,7 @@ import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.models.vehicles.VehicleOwner;
 import be.kdg.processor.persistence.VehicleOwnerRepository;
 import be.kdg.processor.persistence.VehicleRepository;
-import be.kdg.processor.services.exceptions.PersistenceException;
+import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
-    public void extractPlateInfo(LicensePlateInfo licensePlateInfo) throws PersistenceException {
+    public void extractPlateInfo(LicensePlateInfo licensePlateInfo) throws ServiceException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
         boolean ownerEx = vehicleOwnerRepository.existsById(licensePlateInfo.getNationalNumber());
@@ -41,14 +41,14 @@ public class VehicleService {
         }
     }
 
-    public Vehicle getVehicle(String plateId) throws PersistenceException {
+    public Vehicle getVehicle(String plateId) throws ServiceException {
         return vehicleRepository.findById(plateId)
-                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": Vehicle with plate id " + plateId + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Vehicle with plate id " + plateId + " wasn't found in the database"));
     }
 
-    public VehicleOwner getOwner(String nationalId) throws PersistenceException {
+    public VehicleOwner getOwner(String nationalId) throws ServiceException {
         return vehicleOwnerRepository.findById(nationalId)
-                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
