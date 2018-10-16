@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class FineRestController {
+public class FineApiController {
     private final FineService fineService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public FineRestController(FineService fineService, ModelMapper modelMapper) {
+    public FineApiController(FineService fineService, ModelMapper modelMapper) {
         this.fineService = fineService;
         this.modelMapper = modelMapper;
     }
