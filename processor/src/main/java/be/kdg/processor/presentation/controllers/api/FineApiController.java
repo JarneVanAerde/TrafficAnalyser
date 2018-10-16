@@ -45,10 +45,9 @@ public class FineApiController {
         return new ResponseEntity<>(modelMapper.map(approvedFine, FineDTO.class), HttpStatus.OK);
     }
 
-    @PutMapping("/updateAmount")
-    public ResponseEntity<FineDTO> updateAmount(@RequestBody @Valid FineDTO fineDTO) throws ServiceException {
-        Fine updatedFine = fineService.changeAmount(fineDTO.getFineId(),
-                fineDTO.getAmount(), fineDTO.getChangeAmountMotivation());
+    @PutMapping("/updateFineAmount/{id}")
+    public ResponseEntity<FineDTO> updateAmount(@PathVariable int id, @RequestBody @Valid FineDTO fineDTO) throws ServiceException {
+        Fine updatedFine = fineService.changeAmount(id, fineDTO.getAmount(), fineDTO.getMotivation());
         return new ResponseEntity<>(modelMapper.map(updatedFine, FineDTO.class), HttpStatus.OK);
     }
 }

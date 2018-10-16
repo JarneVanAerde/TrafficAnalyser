@@ -16,12 +16,10 @@ public class FineDTO {
     private int fineId;
     @NotNull
     private double amount;
-    @NotNull
     private FineType fineType;
     private LocalDateTime creationDate;
     @NotNull
-    private String changeAmountMotivation;
-    @NotNull
+    private String motivation;
     private boolean approved;
 
     //EMISSION SPECIFIC
