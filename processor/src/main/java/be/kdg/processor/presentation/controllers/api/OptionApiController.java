@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class OptionApiController {
@@ -25,7 +27,7 @@ public class OptionApiController {
     }
 
     @PutMapping("/updateOption")
-    public ResponseEntity<OptionDTO> updateOption(@RequestBody OptionDTO optionDTO) {
+    public ResponseEntity<OptionDTO> updateOption(@RequestBody @Valid OptionDTO optionDTO) {
         Option optionToUpdate = optionService.saveOption(modelMapper.map(optionDTO, Option.class));
         return new ResponseEntity<>(modelMapper.map(optionToUpdate, OptionDTO.class), HttpStatus.OK);
     }

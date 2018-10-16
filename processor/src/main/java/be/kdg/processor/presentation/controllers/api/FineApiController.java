@@ -24,7 +24,7 @@ public class FineApiController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/fines/")
+    @GetMapping("/fines")
     public ResponseEntity<FineDTO[]> loadFines() throws ServiceException {
         List<Fine> fines = fineService.getFines();
         if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);

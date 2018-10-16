@@ -37,24 +37,15 @@ public class UserApiController {
         return new ResponseEntity<>(modelMapper.map(user, UserDTO.class), HttpStatus.OK);
     }
 
-    @PostMapping("/createUser")
+    @PostMapping("/saveUser")
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
-        return saveUser(userDTO);
-    }
-
-    @PostMapping("/updateUser")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO userDTO) {
-        return saveUser(userDTO);
+        User createdUser = userService.saveUser(modelMapper.map(userDTO, User.class));
+        return new ResponseEntity<>(modelMapper.map(createdUser, UserDTO.class), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable int id) throws ServiceException {
         User userToDelete = userService.deleteUser(id);
         return new ResponseEntity<>(modelMapper.map(userToDelete, UserDTO.class), HttpStatus.CREATED);
-    }
-
-    private ResponseEntity<UserDTO> saveUser(UserDTO userDTO) {
-        User createdUser = userService.saveUser(modelMapper.map(userDTO, User.class));
-        return new ResponseEntity<>(modelMapper.map(createdUser, UserDTO.class), HttpStatus.CREATED);
     }
 }
