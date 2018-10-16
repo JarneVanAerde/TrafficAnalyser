@@ -16,7 +16,7 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceExceptionHandler.class);
 
     @ExceptionHandler(value = ServiceException.class)
-    protected ResponseEntity<?> handleGreetingsNotFound(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<?> handleServiceExcpetion(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         LOGGER.error(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
                 HttpStatus.NOT_FOUND, request);

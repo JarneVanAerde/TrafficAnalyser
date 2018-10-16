@@ -20,7 +20,7 @@ public class Vehicle {
     @Id
     private String licensePlate;
     private int euroNorm;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private final List<Fine> fines;
 

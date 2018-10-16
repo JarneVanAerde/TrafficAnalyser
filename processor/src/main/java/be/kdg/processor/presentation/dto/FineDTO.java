@@ -5,16 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class FineDTO {
+    @NotNull
     private int fineId;
+    @NotNull
     private double amount;
+    @NotNull
     private FineType fineType;
     private LocalDateTime creationDate;
+    @NotNull
+    private String changeAmountMotivation;
+    @NotNull
+    private boolean approved;
 
     //EMISSION SPECIFIC
     private int vehicleEuroNorm;

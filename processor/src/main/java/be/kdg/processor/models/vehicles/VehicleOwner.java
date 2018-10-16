@@ -20,7 +20,7 @@ import java.util.List;
 public class VehicleOwner {
     @Id
     private String nationalNumber;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
     private List<Vehicle> vehicles;
 

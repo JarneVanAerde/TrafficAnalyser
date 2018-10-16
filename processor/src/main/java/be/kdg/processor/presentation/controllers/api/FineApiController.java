@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,5 +43,12 @@ public class FineApiController {
     public ResponseEntity<FineDTO> approveFine(@PathVariable int id) throws ServiceException {
         Fine approvedFine = fineService.approveFine(id);
         return new ResponseEntity<>(modelMapper.map(approvedFine, FineDTO.class), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateAmount")
+    public ResponseEntity<FineDTO> updateAmount(@RequestBody @Valid FineDTO fineDTO) throws ServiceException {
+        Fine updatedFine = fineService.changeAmount(fineDTO.getFineId(),
+                fineDTO.getAmount(), fineDTO.getChangeAmountMotivation());
+        return new ResponseEntity<>(modelMapper.map(updatedFine, FineDTO.class), HttpStatus.OK);
     }
 }

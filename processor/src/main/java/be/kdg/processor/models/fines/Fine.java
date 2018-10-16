@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract super class used by al specific fines for inheritance.
@@ -21,9 +23,12 @@ public abstract class Fine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int fineId;
+    @Setter
     private double amount;
     private FineType fineType;
     private LocalDateTime creationDate;
+    @Setter
+    private String changeAmountMotivation;
     @Setter
     private boolean approved;
 
@@ -32,6 +37,7 @@ public abstract class Fine {
         this.fineType = fineType;
         this.creationDate = LocalDateTime.now();
         this.approved = false;
+        this.changeAmountMotivation = "Default";
     }
 
     public Fine() {

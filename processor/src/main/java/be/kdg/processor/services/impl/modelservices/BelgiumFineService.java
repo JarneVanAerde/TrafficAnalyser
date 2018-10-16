@@ -6,7 +6,6 @@ import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.models.fines.FineType;
 import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.models.options.OptionKey;
-import be.kdg.processor.models.users.User;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
@@ -123,6 +122,13 @@ public class BelgiumFineService implements FineService {
     public Fine approveFine(int id) throws ServiceException {
         Fine fineToUpdate = getFine(id);
         fineToUpdate.setApproved(true);
+        return saveFine(fineToUpdate);
+    }
+
+    public Fine changeAmount(int id, double amount, String motivation) throws ServiceException {
+        Fine fineToUpdate = getFine(id);
+        fineToUpdate.setAmount(amount);
+        fineToUpdate.setChangeAmountMotivation(motivation);
         return saveFine(fineToUpdate);
     }
 }

@@ -31,7 +31,7 @@ public class UserApiController {
         return new ResponseEntity<>(modelMapper.map(users, UserDTO[].class), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> loadUser(@PathVariable int id) throws ServiceException {
         User user = userService.getUser(id);
         return new ResponseEntity<>(modelMapper.map(user, UserDTO.class), HttpStatus.OK);
