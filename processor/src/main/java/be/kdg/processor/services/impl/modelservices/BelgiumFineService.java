@@ -8,7 +8,7 @@ import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.models.vehicles.Vehicle;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.PersistenceException;
+import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +41,7 @@ public class BelgiumFineService implements FineService {
      * After the fine is created it is linked to a vehicle
      */
     @Override
-    public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
+    public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         fineRepo.save(emissionFine);
@@ -55,7 +55,7 @@ public class BelgiumFineService implements FineService {
      * Creates a speed fine and saves that to the database
      */
     @Override
-    public void createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
+    public void createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
@@ -74,7 +74,7 @@ public class BelgiumFineService implements FineService {
      * @return true if their is already an emission fine created for today, and false if the opposite is true
      */
     @Override
-    public boolean checkIfAlreadyHasEmissionfine(String plateId) throws PersistenceException {
+    public boolean checkIfAlreadyHasEmissionfine(String plateId) throws ServiceException {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
@@ -93,8 +93,8 @@ public class BelgiumFineService implements FineService {
     }
 
     @Override
-    public Fine getFine(int id) throws PersistenceException {
+    public Fine getFine(int id) throws ServiceException {
         return fineRepo.findById(id)
-                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": fine with id " + id + " was not found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": fine with id " + id + " was not found in the database"));
     }
 }

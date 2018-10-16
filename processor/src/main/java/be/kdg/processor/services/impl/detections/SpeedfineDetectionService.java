@@ -7,7 +7,6 @@ import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
@@ -71,28 +70,24 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         }
 
         //detect fine
-        try {
-            if (optionalCameraMessage.isPresent()) {
-                vehicleService.extractPlateInfo(licensePlateInfo);
+        if (optionalCameraMessage.isPresent()) {
+            vehicleService.extractPlateInfo(licensePlateInfo);
 
-                CameraMessage enterMessage = optionalCameraMessage.get();
-                Segment segment;
-                if (camera.getSegment() != null) segment = camera.getSegment();
-                else segment = cameraInfoService.get(enterMessage.getId()).getSegment();
+            CameraMessage enterMessage = optionalCameraMessage.get();
+            Segment segment;
+            if (camera.getSegment() != null) segment = camera.getSegment();
+            else segment = cameraInfoService.get(enterMessage.getId()).getSegment();
 
-                LOGGER.info("Calculation distance for " + enterMessage.getId() + " and " + camera.getCameraId());
-                double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
+            LOGGER.info("Calculation distance for " + enterMessage.getId() + " and " + camera.getCameraId());
+            double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
 
-                if (vehicleSpeed > segment.getSpeedLimit()) {
-                    LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
-                            optionalCameraMessage.get().getId() + " " + camera.getCameraId());
-                    double fineAmount = calculateFine(vehicleSpeed, segment.getSpeedLimit());
-                    fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
-                            enterMessage, message, licensePlateInfo.getPlateId());
-                }
+            if (vehicleSpeed > segment.getSpeedLimit()) {
+                LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
+                        optionalCameraMessage.get().getId() + " " + camera.getCameraId());
+                double fineAmount = calculateFine(vehicleSpeed, segment.getSpeedLimit());
+                fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
+                        enterMessage, message, licensePlateInfo.getPlateId());
             }
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
         }
 
         cameraMessageService.addToBuffer(message);
@@ -103,7 +98,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
 
-    private double calculateFine(double vehicleSpped, double legalSpeed) throws PersistenceException {
+    private double calculateFine(double vehicleSpped, double legalSpeed) throws ServiceException {
         return (vehicleSpped - legalSpeed) * optionService.getOptionValue(OptionKey.SPEED_FAC);
     }
 

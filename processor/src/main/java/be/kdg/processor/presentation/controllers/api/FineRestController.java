@@ -3,7 +3,7 @@ package be.kdg.processor.presentation.controllers.api;
 import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.presentation.dto.FineDTO;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.PersistenceException;
+import be.kdg.processor.services.exceptions.ServiceException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class FineRestController {
     }
 
     @GetMapping("/fines")
-    public ResponseEntity<FineDTO[]> loadFines() {
+    public ResponseEntity<FineDTO[]> loadFines() throws ServiceException {
         List<Fine> fines = fineService.getFines();
         if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -36,7 +36,7 @@ public class FineRestController {
     }
 
     @GetMapping("/fines/{id}")
-    public ResponseEntity<FineDTO> loadFineDetails(@PathVariable int id) throws PersistenceException {
+    public ResponseEntity<FineDTO> loadFineDetails(@PathVariable int id) throws ServiceException {
         Fine fine = fineService.getFine(id);
         return new ResponseEntity<>(modelMapper.map(fine, FineDTO.class), HttpStatus.OK);
     }
