@@ -8,21 +8,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class FineRestController {
+public class FineApiController {
     private final FineService fineService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public FineRestController(FineService fineService, ModelMapper modelMapper) {
+    public FineApiController(FineService fineService, ModelMapper modelMapper) {
         this.fineService = fineService;
         this.modelMapper = modelMapper;
     }
@@ -39,5 +36,11 @@ public class FineRestController {
     public ResponseEntity<FineDTO> loadFineDetails(@PathVariable int id) throws ServiceException {
         Fine fine = fineService.getFine(id);
         return new ResponseEntity<>(modelMapper.map(fine, FineDTO.class), HttpStatus.OK);
+    }
+
+    @PutMapping("/approveFine/{id}")
+    public ResponseEntity<FineDTO> approveFine(@PathVariable int id) throws ServiceException {
+        Fine approvedFine = fineService.approveFine(id);
+        return new ResponseEntity<>(modelMapper.map(approvedFine, FineDTO.class), HttpStatus.OK);
     }
 }

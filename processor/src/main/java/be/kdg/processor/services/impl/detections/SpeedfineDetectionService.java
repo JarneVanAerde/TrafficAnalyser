@@ -36,17 +36,15 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
     private final VehicleService vehicleService;
-    private final OptionService optionService;
 
     @Autowired
     public SpeedfineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService, OptionService optionService) {
+                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.cameraMessageService = cameraMessageService;
         this.vehicleService = vehicleService;
-        this.optionService = optionService;
     }
 
     /**
@@ -84,8 +82,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
             if (vehicleSpeed > segment.getSpeedLimit()) {
                 LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
                         optionalCameraMessage.get().getId() + " " + camera.getCameraId());
-                double fineAmount = calculateFine(vehicleSpeed, segment.getSpeedLimit());
-                fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
+                fineService.createSpeedFine(vehicleSpeed, segment.getSpeedLimit(),
                         enterMessage, message, licensePlateInfo.getPlateId());
             }
         }
@@ -97,9 +94,4 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         Duration duration = Duration.between(cameraMessageTwo.getTimestamp(), cameraMessageOne.getTimestamp());
         return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
-
-    private double calculateFine(double vehicleSpped, double legalSpeed) throws ServiceException {
-        return (vehicleSpped - legalSpeed) * optionService.getOptionValue(OptionKey.SPEED_FAC);
-    }
-
 }

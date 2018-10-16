@@ -24,8 +24,8 @@ public class OptionService {
         saveOption(new Option(OptionKey.EMISSION_FAC, 100));
     }
 
-    private void saveOption(Option option) {
-        optionsRepository.save(option);
+    public Option saveOption(Option option) {
+        return optionsRepository.save(option);
     }
 
     public double getOptionValue(OptionKey key) throws ServiceException {
