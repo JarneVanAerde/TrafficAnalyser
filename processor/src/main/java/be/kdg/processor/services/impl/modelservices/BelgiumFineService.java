@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,7 +43,7 @@ public class BelgiumFineService implements FineService {
      * @return a newly inserted emission fine.
      */
     @Override
-    public EmissionFine createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
+    public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         fineRepo.save(emissionFine);
@@ -50,7 +51,6 @@ public class BelgiumFineService implements FineService {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(emissionFine);
         vehicleService.saveVehicle(vehicle);
-        return emissionFine;
     }
 
     /**
@@ -59,7 +59,7 @@ public class BelgiumFineService implements FineService {
      * @return a newly inserted speed fine.
      */
     @Override
-    public SpeedFine createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
+    public void createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
@@ -68,7 +68,6 @@ public class BelgiumFineService implements FineService {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(speedFine);
         vehicleService.saveVehicle(vehicle);
-        return speedFine;
     }
 
     /**
@@ -90,5 +89,10 @@ public class BelgiumFineService implements FineService {
                 .findAny();
 
         return optionalFine.isPresent();
+    }
+
+    @Override
+    public List<Fine> getFines() {
+        return fineRepo.findAll();
     }
 }
