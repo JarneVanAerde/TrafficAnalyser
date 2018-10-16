@@ -1,6 +1,5 @@
 package be.kdg.processor.presentation.dto;
 
-import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.FineType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

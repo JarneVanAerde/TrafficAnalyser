@@ -38,9 +38,7 @@ public class BelgiumFineService implements FineService {
 
     /**
      * Creates an emission fine and saves that to the database.
-     * After the fine is created it is linked to a vehicle.
-     *
-     * @return a newly inserted emission fine.
+     * After the fine is created it is linked to a vehicle
      */
     @Override
     public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws PersistenceException {
@@ -55,8 +53,6 @@ public class BelgiumFineService implements FineService {
 
     /**
      * Creates a speed fine and saves that to the database
-     *
-     * @return a newly inserted speed fine.
      */
     @Override
     public void createSpeedFine(double amount, double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws PersistenceException {
@@ -94,5 +90,11 @@ public class BelgiumFineService implements FineService {
     @Override
     public List<Fine> getFines() {
         return fineRepo.findAll();
+    }
+
+    @Override
+    public Fine getFine(int id) throws PersistenceException {
+        return fineRepo.findById(id)
+                .orElseThrow(() -> new PersistenceException(getClass().getSimpleName() + ": fine with id " + id + " was not found in the database"));
     }
 }

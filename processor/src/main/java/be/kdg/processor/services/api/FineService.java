@@ -17,5 +17,5 @@ public interface FineService {
 
     List<Fine> getFines();
 
-    Fine getFine(int id);
+    Fine getFine(int id) throws PersistenceException;
 }
