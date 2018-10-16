@@ -26,8 +26,8 @@ import java.util.Optional;
  */
 @Service
 public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
-    public static final double SECONDS_IN_HOUR = 3600.0;
-    public static final double METERS_IN_KM = 1000.0;
+    private static final double SECONDS_IN_HOUR = 3600.0;
+    private static final double METERS_IN_KM = 1000.0;
     private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
 
     private final CameraInfoService cameraInfoService;
@@ -61,11 +61,9 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Collect corresponding message
-        Optional<CameraMessage> optionalCameraMessage;
+        Optional<CameraMessage> optionalCameraMessage = Optional.empty();
         if (camera.getSegment() == null) {
             optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
-        } else {
-            optionalCameraMessage = cameraMessageService.getConnectedMessage(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
         }
 
         //detect fine
@@ -84,7 +82,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
                 if (vehicleSpeed > segment.getSpeedLimit()) {
                     LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
                             optionalCameraMessage.get().getId() + " " + camera.getCameraId());
-                    double fineAmount = calculateFine();
+                    double fineAmount = calculateFine(vehicleSpeed, segment.getSpeedLimit());
                     fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
                             enterMessage, message, licensePlateInfo.getPlateId());
                 }
@@ -101,9 +99,8 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
 
-    private double calculateFine() {
-        //TODO: calculate fine
-        return 1000.0;
+    private double calculateFine(double vehicleSpped, double legalSpeed) {
+        return (vehicleSpped - legalSpeed) * 2;
     }
 
 }
