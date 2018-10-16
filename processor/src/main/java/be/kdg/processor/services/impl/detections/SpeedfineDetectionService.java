@@ -4,6 +4,7 @@ import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.cameras.Segment;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
@@ -11,6 +12,7 @@ import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,8 @@ import java.util.Optional;
  */
 @Service
 public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
-    public static final double SECONDS_IN_HOUR = 3600.0;
-    public static final double METERS_IN_KM = 1000.0;
+    private static final double SECONDS_IN_HOUR = 3600.0;
+    private static final double METERS_IN_KM = 1000.0;
     private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
 
     private final CameraInfoService cameraInfoService;
@@ -35,15 +37,17 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
     private final VehicleService vehicleService;
+    private final OptionService optionService;
 
     @Autowired
     public SpeedfineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
+                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService, OptionService optionService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.cameraMessageService = cameraMessageService;
         this.vehicleService = vehicleService;
+        this.optionService = optionService;
     }
 
     /**
@@ -61,11 +65,9 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Collect corresponding message
-        Optional<CameraMessage> optionalCameraMessage;
+        Optional<CameraMessage> optionalCameraMessage = Optional.empty();
         if (camera.getSegment() == null) {
             optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
-        } else {
-            optionalCameraMessage = cameraMessageService.getConnectedMessage(licensePlateInfo.getPlateId(), camera.getSegment().getConnectedCameraId());
         }
 
         //detect fine
@@ -84,7 +86,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
                 if (vehicleSpeed > segment.getSpeedLimit()) {
                     LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + "On camera " +
                             optionalCameraMessage.get().getId() + " " + camera.getCameraId());
-                    double fineAmount = calculateFine();
+                    double fineAmount = calculateFine(vehicleSpeed, segment.getSpeedLimit());
                     fineService.createSpeedFine(fineAmount, vehicleSpeed, segment.getSpeedLimit(),
                             enterMessage, message, licensePlateInfo.getPlateId());
                 }
@@ -101,9 +103,8 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
         return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
 
-    private double calculateFine() {
-        //TODO: calculate fine
-        return 1000.0;
+    private double calculateFine(double vehicleSpped, double legalSpeed) throws PersistenceException {
+        return (vehicleSpped - legalSpeed) * optionService.getOptionValue(OptionKey.SPEED_FAC);
     }
 
 }
