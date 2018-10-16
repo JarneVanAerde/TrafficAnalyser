@@ -44,7 +44,7 @@ public class BelgiumFineService implements FineService {
     public void createEmissionFine(double amount, int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSiON_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
-        fineRepo.save(emissionFine);
+        saveFine(emissionFine);
 
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(emissionFine);
@@ -59,11 +59,15 @@ public class BelgiumFineService implements FineService {
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
-        fineRepo.saveAndFlush(speedFine);
+        saveFine(speedFine);
 
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         vehicle.addFine(speedFine);
         vehicleService.saveVehicle(vehicle);
+    }
+
+    public Fine saveFine(Fine fine) {
+        return fineRepo.save(fine);
     }
 
     /**
@@ -96,5 +100,12 @@ public class BelgiumFineService implements FineService {
     public Fine getFine(int id) throws ServiceException {
         return fineRepo.findById(id)
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": fine with id " + id + " was not found in the database"));
+    }
+
+    @Override
+    public Fine approveFine(int id) throws ServiceException {
+        Fine fineToUpdate = getFine(id);
+        fineToUpdate.setApproved(true);
+        return saveFine(fineToUpdate);
     }
 }
