@@ -3,12 +3,14 @@ package be.kdg.processor.services.impl.detections;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.PersistenceException;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +24,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmissonDetectionService implements DetectionService<CameraMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmissonDetectionService.class);
+
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final VehicleService vehicleService;
+    private final OptionService optionService;
 
     @Autowired
     public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, VehicleService licensePlateService) {
+                                   FineService fineService, VehicleService licensePlateService, OptionService optionService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.vehicleService = licensePlateService;
+        this.optionService = optionService;
     }
 
     /**
@@ -73,7 +78,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
      * @param vehicleEuroNumber the euro number of the vehicle.
      * @return the calculated fine.
      */
-    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) {
-        return (legalEurNumber - vehicleEuroNumber) * 1000.0;
+    private double calculateFine(int legalEurNumber, int vehicleEuroNumber) throws PersistenceException {
+        return (legalEurNumber - vehicleEuroNumber) * optionService.getOptionValue(OptionKey.EMISSION_FAC);
     }
 }

@@ -1,24 +1,18 @@
 package be.kdg.processor.models.options;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "options")
 public class Option {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int optionId;
-    @Setter
-    private int emissionFactor;
-    @Setter
-    private int speedFactor;
-
-    public Option() {
-        emissionFactor = 100;
-        speedFactor = 2;
-    }
+    private OptionKey key;
+    private double value;
 }
