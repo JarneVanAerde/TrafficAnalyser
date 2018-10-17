@@ -35,6 +35,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.5.RELEASE'
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile 'org.modelmapper.extensions:modelmapper-spring:2.3.0'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compileOnly('org.projectlombok:lombok:1.18.2')
