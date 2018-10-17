@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 public class EmissonDetectionServiceTest {
     @Autowired
     private EmissonDetectionService emissonDetectionService;
-    private FineService f
     private CameraMessage cm1;
     private CameraMessage cm2;
 

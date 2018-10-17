@@ -36,18 +36,14 @@ public class CameraMessageService {
         messageBuffer.add(message);
     }
 
-    public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) {
+    public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) throws ServiceException {
         List<CameraMessage> cameraMessages = messageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId))
                 .collect(Collectors.toList());
 
-        try {
-            for (CameraMessage cm : cameraMessages) {
-                Segment cameraSegment = cameraInfoService.get(cm.getCameraId()).getSegment();
-                if (cameraSegment != null && cameraSegment.getConnectedCameraId() == cameraId) return Optional.of(cm);
-            }
-        } catch (ServiceException e) {
-            e.printStackTrace();
+        for (CameraMessage cm : cameraMessages) {
+            Segment cameraSegment = cameraInfoService.get(cm.getCameraId()).getSegment();
+            if (cameraSegment != null && cameraSegment.getConnectedCameraId() == cameraId) return Optional.of(cm);
         }
 
         return Optional.empty();

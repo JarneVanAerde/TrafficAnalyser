@@ -37,13 +37,13 @@ public class UserApiController {
         return new ResponseEntity<>(modelMapper.map(user, UserDTO.class), HttpStatus.OK);
     }
 
-    @PostMapping("/saveUser")
+    @PostMapping("/users/save")
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
         User createdUser = userService.saveUser(modelMapper.map(userDTO, User.class));
         return new ResponseEntity<>(modelMapper.map(createdUser, UserDTO.class), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/users/delete/{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable int id) throws ServiceException {
         User userToDelete = userService.deleteUser(id);
         return new ResponseEntity<>(modelMapper.map(userToDelete, UserDTO.class), HttpStatus.CREATED);

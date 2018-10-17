@@ -7,10 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,8 +23,8 @@ public class OptionApiController {
         this.modelMapper = modelMapper;
     }
 
-    @PutMapping("/updateOption")
-    public ResponseEntity<OptionDTO> updateOption(@RequestBody @Valid OptionDTO optionDTO) {
+    @PutMapping("/options/update/{id}")
+    public ResponseEntity<OptionDTO> updateOption(@PathVariable int id, @RequestBody @Valid OptionDTO optionDTO) {
         Option optionToUpdate = optionService.saveOption(modelMapper.map(optionDTO, Option.class));
         return new ResponseEntity<>(modelMapper.map(optionToUpdate, OptionDTO.class), HttpStatus.OK);
     }
