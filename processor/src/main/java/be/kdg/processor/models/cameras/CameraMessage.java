@@ -24,6 +24,12 @@ public class CameraMessage {
     private String licensePlate;
     private LocalDateTime timestamp;
 
+    public CameraMessage(int cameraId, String licensePlate, LocalDateTime timestamp) {
+        this.cameraId = cameraId;
+        this.licensePlate = licensePlate;
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return String.format("Camera %d spotted car with license plate %s at %s local time",
