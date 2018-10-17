@@ -4,14 +4,12 @@ import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.cameras.Segment;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +56,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
-        Camera camera = cameraInfoService.get(message.getId());
+        Camera camera = cameraInfoService.get(message.getCameraId());
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Collect corresponding message
@@ -74,14 +72,14 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
             CameraMessage enterMessage = optionalCameraMessage.get();
             Segment segment;
             if (camera.getSegment() != null) segment = camera.getSegment();
-            else segment = cameraInfoService.get(enterMessage.getId()).getSegment();
+            else segment = cameraInfoService.get(enterMessage.getCameraId()).getSegment();
 
-            LOGGER.info("Calculation distance for " + enterMessage.getId() + " and " + camera.getCameraId());
+            LOGGER.info("Calculation distance for " + enterMessage.getCameraId() + " and " + camera.getCameraId());
             double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
 
             if (vehicleSpeed > segment.getSpeedLimit()) {
                 LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + " On camera " +
-                        optionalCameraMessage.get().getId() + " " + camera.getCameraId());
+                        optionalCameraMessage.get().getCameraId() + " " + camera.getCameraId());
                 fineService.createSpeedFine(vehicleSpeed, segment.getSpeedLimit(),
                         enterMessage, message, licensePlateInfo.getPlateId());
             }

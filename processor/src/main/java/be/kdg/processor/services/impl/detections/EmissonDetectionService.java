@@ -3,13 +3,11 @@ package be.kdg.processor.services.impl.detections;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +47,7 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
-        Camera camera = cameraInfoService.get(message.getId());
+        Camera camera = cameraInfoService.get(message.getCameraId());
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
         //Detect fine

@@ -43,12 +43,12 @@ public class VehicleService {
 
     public Vehicle getVehicle(String plateId) throws ServiceException {
         return vehicleRepository.findById(plateId)
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Vehicle with plate id " + plateId + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Vehicle with plate cameraId " + plateId + " wasn't found in the database"));
     }
 
     public VehicleOwner getOwner(String nationalId) throws ServiceException {
         return vehicleOwnerRepository.findById(nationalId)
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": VehicleOwner with plate id " + nationalId + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": VehicleOwner with plate cameraId " + nationalId + " wasn't found in the database"));
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {

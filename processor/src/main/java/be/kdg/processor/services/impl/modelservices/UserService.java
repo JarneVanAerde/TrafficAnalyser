@@ -30,7 +30,7 @@ public class UserService {
     public User getUser(int id) throws ServiceException {
         return userRepository.findById(id)
                 //.filter(user -> !user.isDeleted())
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": user with id " + id + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": user with cameraId " + id + " wasn't found in the database"));
     }
 
     public User deleteUser(int id) throws ServiceException {

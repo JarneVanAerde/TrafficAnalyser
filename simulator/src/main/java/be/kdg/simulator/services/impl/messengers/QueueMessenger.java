@@ -37,7 +37,7 @@ public class QueueMessenger implements Messenger {
     public void sendMessage(CameraMessage message) throws ServiceException {
         try {
             rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
-            LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getId() + " has been sent to the queue");
+            LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getCameraId() + " has been sent to the queue");
         } catch (JsonProcessingException e) {
             throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
         }

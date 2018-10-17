@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PersistenceException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +43,7 @@ public class CameraMessageService {
 
         try {
             for (CameraMessage cm : cameraMessages) {
-                Segment cameraSegment = cameraInfoService.get(cm.getId()).getSegment();
+                Segment cameraSegment = cameraInfoService.get(cm.getCameraId()).getSegment();
                 if (cameraSegment != null && cameraSegment.getConnectedCameraId() == cameraId) return Optional.of(cm);
             }
         } catch (ServiceException e) {

@@ -26,12 +26,12 @@ public class CameraServiceTest {
     @Test(expected = IOException.class)
     public void testCommunicationError() throws IOException {
         cameraServiceProxy.get(101);
-        Assert.fail("Camera id needs to force a communication error");
+        Assert.fail("Camera cameraId needs to force a communication error");
     }
 
     @Test(expected = CameraNotFoundException.class)
     public void testCameraNotFound() throws CameraNotFoundException, IOException {
         cameraServiceProxy.get(235);
-        Assert.fail("Camera id needs to throw an CameraNotFoundException");
+        Assert.fail("Camera cameraId needs to throw an CameraNotFoundException");
     }
 }

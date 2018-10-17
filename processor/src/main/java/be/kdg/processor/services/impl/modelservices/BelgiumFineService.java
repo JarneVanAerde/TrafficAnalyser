@@ -115,7 +115,7 @@ public class BelgiumFineService implements FineService {
     @Override
     public Fine getFine(int id) throws ServiceException {
         return fineRepo.findById(id)
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": fine with id " + id + " was not found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": fine with cameraId " + id + " was not found in the database"));
     }
 
     @Override
