@@ -131,4 +131,11 @@ public class BelgiumFineService implements FineService {
         fineToUpdate.setChangeAmountMotivation(motivation);
         return saveFine(fineToUpdate);
     }
+
+    @Override
+    public Fine deleteFine(int id) throws ServiceException {
+        Fine fineToRemove = getFine(id);
+        fineRepo.delete(fineToRemove);
+        return fineToRemove;
+    }
 }

@@ -22,4 +22,6 @@ public interface FineService {
     Fine approveFine(int id) throws ServiceException;
 
     Fine changeAmount(int id, double amount, String motivation) throws ServiceException;
+
+    Fine deleteFine(int id) throws ServiceException;
 }
