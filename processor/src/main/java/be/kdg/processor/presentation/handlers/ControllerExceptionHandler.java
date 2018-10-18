@@ -20,6 +20,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleControllerExcpetion(Exception ex, WebRequest request) {
         LOGGER.error(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
-                HttpStatus.NOT_FOUND, request);
+                HttpStatus.BAD_REQUEST, request);
     }
 }
