@@ -1,5 +1,6 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" href="../static/images/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="/css/index.css" media="screen"/>
     <noscript>
@@ -19,10 +20,10 @@
         <form method="post" action="/user/menu" th:object="${userDTO}">
             <div class="fields">
                 <div class="field">
-                    <input type="text" name="name" id="nameLogin" placeholder="Name"/>
+                    <input th:field="*{name}" type="text" name="name" id="nameLogin" placeholder="Name"/>
                 </div>
                 <div class="field">
-                    <input type="password" name="password" id="passwordLogin" placeholder="password"/>
+                    <input th:field="*{password}" type="password" name="password" id="passwordLogin" placeholder="password"/>
                 </div>
             </div>
             <ul class="actions special">
