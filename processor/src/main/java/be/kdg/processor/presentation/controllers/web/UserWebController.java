@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/user")
@@ -24,19 +26,20 @@ public class UserWebController {
     }
 
     @GetMapping("/login")
-    public ModelAndView showGreetingsForm(UserDTO userDTO) {
+    public ModelAndView showLogin(UserDTO userDTO) {
         return new ModelAndView("login", "userDTO", userDTO);
     }
 
-    @GetMapping("/")
-    public ModelAndView showGreetingsForm() {
-        return new ModelAndView("index");
+    @PostMapping("/create")
+    public RedirectView makeUser(@ModelAttribute UserDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        userService.makeNewUserIfNeeded(user);
+        return new RedirectView("menu");
     }
 
     @GetMapping("/menu")
-    public ModelAndView showMenu(@ModelAttribute UserDTO userDTO) {
-        User user = modelMapper.map(userDTO, User.class);
-        userService.makeNewUserIfNeeded(user);
+    public ModelAndView showMenu() {
         return new ModelAndView("menu");
     }
+
 }
