@@ -24,10 +24,10 @@ import java.util.Optional;
  * All messages will pass through here to check for illegal emissions.
  */
 @Service
-public class SpeedfineDetectionService implements DetectionService<CameraMessage> {
+public class SpeedFineDetectionService implements DetectionService<CameraMessage> {
     private static final double SECONDS_IN_HOUR = 3600.0;
     private static final double METERS_IN_KM = 1000.0;
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedfineDetectionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedFineDetectionService.class);
 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
@@ -36,7 +36,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     private final VehicleService vehicleService;
 
     @Autowired
-    public SpeedfineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
+    public SpeedFineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
                                      FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
@@ -46,7 +46,7 @@ public class SpeedfineDetectionService implements DetectionService<CameraMessage
     }
 
     /**
-     * The external service are behind an adapter and are used to
+     * The external services are behind an adapter and are used to
      * determine the fines.
      * If the message can't be linked to a fine, then it is
      * saved to the database.

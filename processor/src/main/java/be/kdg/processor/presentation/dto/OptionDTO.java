@@ -1,6 +1,5 @@
 package be.kdg.processor.presentation.dto;
 
-import be.kdg.processor.models.options.OptionKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

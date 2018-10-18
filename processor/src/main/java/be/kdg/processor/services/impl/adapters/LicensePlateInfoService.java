@@ -27,6 +27,11 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * @param plateId for the requested license plate
+     * @return a license plate form the service
+     * @throws ServiceException wrapper-exception
+     */
     @Cacheable(value = "licensePlates")
     @Override
     public LicensePlateInfo get(String plateId) throws ServiceException {

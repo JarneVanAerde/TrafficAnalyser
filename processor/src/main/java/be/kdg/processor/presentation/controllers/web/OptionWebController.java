@@ -3,7 +3,6 @@ package be.kdg.processor.presentation.controllers.web;
 import be.kdg.processor.models.options.Option;
 import be.kdg.processor.presentation.dto.OptionDTO;
 import be.kdg.processor.services.exceptions.ControllerException;
-import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.modelservices.OptionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+/**
+ * web controller used for the option related views
+ */
 @Controller
 @RequestMapping("/option")
 public class OptionWebController {
@@ -26,6 +28,10 @@ public class OptionWebController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * @return all the options of the application
+     * @throws ControllerException is handled by the ControllerExceptionHandler
+     */
     @GetMapping("/settings")
     public ModelAndView showOptions() throws ControllerException {
         List<Option> options = optionService.getOptions();

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * This api controller is used for
+ * CRUD REST class thar are related to options.
+ */
 @RestController
 @RequestMapping("/api")
 public class OptionApiController {
@@ -23,8 +27,12 @@ public class OptionApiController {
         this.modelMapper = modelMapper;
     }
 
-    @PutMapping("/options/update/{id}")
-    public ResponseEntity<OptionDTO> updateOption(@PathVariable int id, @RequestBody @Valid OptionDTO optionDTO) {
+    /**
+     * @param optionDTO the option that needs to be updated
+     * @return the updated option0
+     */
+    @PutMapping("/options/update")
+    public ResponseEntity<OptionDTO> updateOption(@RequestBody @Valid OptionDTO optionDTO) {
         Option optionToUpdate = optionService.saveOption(modelMapper.map(optionDTO, Option.class));
         return new ResponseEntity<>(modelMapper.map(optionToUpdate, OptionDTO.class), HttpStatus.OK);
     }
