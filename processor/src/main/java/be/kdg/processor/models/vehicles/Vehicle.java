@@ -14,6 +14,7 @@ import java.util.List;
  * Simple POJO that gives us information about a specific car.
  */
 @EqualsAndHashCode
+@Getter
 @Entity
 @Table(name = "vehicles")
 public class Vehicle {

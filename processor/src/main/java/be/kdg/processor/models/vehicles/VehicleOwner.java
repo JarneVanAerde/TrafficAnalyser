@@ -6,21 +6,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Simple POJO that gives us information about a car owner.
  * A carowner can have multiple vehicles.
  */
-@Getter
+
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "vehicle_owners")
 public class VehicleOwner {
+    @Getter
     @Id
     private String nationalNumber;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private List<Vehicle> vehicles;
 
@@ -31,6 +33,10 @@ public class VehicleOwner {
 
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+    }
+
+    public List<Vehicle> getVehicles() {
+        return Collections.unmodifiableList(vehicles);
     }
 
     @Override
