@@ -9,22 +9,9 @@
     <title>Option Settings</title>
 </head>
 <body>
-<form method="post" th:object="${optionDTO}">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <input type="text"
-                       th:field="${optionDTO.value}" class="form-control input-sm"
-                       placeholder="Enter greeting here" tabindex="1">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <input type="submit" value="Verstuur" class="btn btn-primary btn-block btn-sm"
-                   tabindex="2">
-        </div>
-    </div>
-</form>
-</body>
+<div class="container">
+    <form th:method="post" th:each="option : ${optionsDTO}">
+        <li th:text="${option.value}"></li>
+    </form>
+</div>
 </html>
