@@ -1,0 +1,49 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" href="../static/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="/css/index.css" media="screen"/>
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
+    </noscript>
+
+    <title>Traffic Analyser</title>
+    <meta charset="utf-8"/>
+</head>
+<body class="is-preload">
+<div id="wrapper">
+    <section id="main">
+        <header>
+            <h1>Welcome Jarne!</h1>
+            <h2>Choose an option</h2>
+        </header>
+        <ul class="actions special">
+            <a class="button">View fines</a>
+        </ul>
+        <ul class="actions special">
+            <a href="/option/settings" class="button">View options</a>
+        </ul>
+        <ul class="actions special">
+            <a href="/" class="button">Log out</a>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="copyright">
+            <li>&copy; Karel de Grote Hogeschool</li>
+            <li>Design: Jarne Van Aerde</li>
+        </ul>
+    </footer>
+</div>
+
+<script>
+    if ('addEventListener' in window) {
+        window.addEventListener('load', function () {
+            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+        });
+        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+    }
+</script>
+</body>
+</html>

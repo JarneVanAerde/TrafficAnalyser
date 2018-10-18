@@ -10,6 +10,7 @@ import javax.persistence.*;
  * All users are admins.
  */
 @EqualsAndHashCode
+@NoArgsConstructor
 @Getter
 @ToString
 @Entity

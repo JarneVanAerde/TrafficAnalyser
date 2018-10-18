@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,11 +34,21 @@ public class FineApiController {
         return new ResponseEntity<>(modelMapper.map(fines, FineDTO[].class), HttpStatus.OK);
     }
 
+    @GetMapping("/fines/}{date1}/{date2}")
+    public ResponseEntity<FineDTO[]> getFinesBetweenDates(@PathVariable LocalDateTime date1, @PathVariable LocalDateTime date2) {
+        List<Fine> fines = fineService.getFinesBetweenDates(date1, date2);
+        if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity<>(modelMapper.map(fines, FineDTO[].class), HttpStatus.OK);
+    }
+
     @GetMapping("/fines/{id}")
     public ResponseEntity<FineDTO> loadFineDetails(@PathVariable int id) throws ServiceException {
         Fine fine = fineService.getFine(id);
         return new ResponseEntity<>(modelMapper.map(fine, FineDTO.class), HttpStatus.OK);
     }
+
+
 
     @PutMapping("/fines/approve/{id}")
     public ResponseEntity<FineDTO> approveFine(@PathVariable int id) throws ServiceException {

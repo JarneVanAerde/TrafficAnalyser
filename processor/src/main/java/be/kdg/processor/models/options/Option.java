@@ -13,6 +13,6 @@ import javax.persistence.*;
 @Table(name = "options")
 public class Option {
     @Id
-    private OptionKey key;
+    private String key;
     private double value;
 }

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service to create fines.
@@ -125,6 +126,7 @@ public class BelgiumFineService implements FineService {
         return saveFine(fineToUpdate);
     }
 
+    @Override
     public Fine changeAmount(int id, double amount, String motivation) throws ServiceException {
         Fine fineToUpdate = getFine(id);
         fineToUpdate.setAmount(amount);
@@ -137,5 +139,13 @@ public class BelgiumFineService implements FineService {
         Fine fineToRemove = getFine(id);
         fineRepo.delete(fineToRemove);
         return fineToRemove;
+    }
+
+    @Override
+    public List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate) {
+        return getFines().stream()
+                .filter(f -> f.getCreationDate().isAfter(beforeDate) &&
+                        f.getCreationDate().isBefore(afterDate))
+                .collect(Collectors.toList());
     }
 }

@@ -4,6 +4,7 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.services.exceptions.ServiceException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FineService {
@@ -24,4 +25,6 @@ public interface FineService {
     Fine changeAmount(int id, double amount, String motivation) throws ServiceException;
 
     Fine deleteFine(int id) throws ServiceException;
+
+    List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate);
 }

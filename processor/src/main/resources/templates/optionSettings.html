@@ -1,0 +1,55 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" href="../static/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="/css/index.css" media="screen"/>
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
+    </noscript>
+
+    <meta charset="UTF-8">
+    <title>Option Settings</title>
+</head>
+<body class="is-preload">
+<div id="wrapper">
+    <section id="main">
+        <header>
+            <h1>Options</h1>
+        </header>
+        <form th:each="option : ${optionsDTO}" th:method="post" action="#">
+            <div class="fields">
+                <div class="field">
+                    <label th:text="${option.key}"></label>
+                    <label th:text="${option.value}"></label>
+                </div>
+            </div>
+        </form>
+        <button><a href="/user/menu">Go back</a></button>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="copyright">
+            <li>&copy; Karel de Grote Hogeschool</li>
+            <li>Design: Jarne Van Aerde</li>
+        </ul>
+    </footer>
+</div>
+
+<form th:method="post" th:each="option : ${optionsDTO}">
+    <ul>
+        <li th:text="${option.key}"></li>
+        <li th:text="${option.value}"></li>
+    </ul>
+</form>
+
+<script>
+    if ('addEventListener' in window) {
+        window.addEventListener('load', function () {
+            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+        });
+        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+    }
+</script>
+</body>
+</html>

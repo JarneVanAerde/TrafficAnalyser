@@ -38,4 +38,9 @@ public class UserService {
         userToDelete.setDeleted(true);
         return saveUser(userToDelete);
     }
+
+    public User makeNewUserIfNeeded(User user) {
+        if (!userRepository.existsById(user.getUserId())) return saveUser(user);
+        else return user;
+    }
 }
