@@ -41,6 +41,15 @@
                 <div class="field">
                     <input th:field="*{password}" type="password" placeholder="password"/>
                 </div>
+                <div class="field">
+                    <select name="department" id="department">
+                        <option value="">Admin</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <input type="checkbox" id="human" name="human"/><label for="human">Accept terms and
+                    conditions</label>
+                </div>
             </div>
             <a type="submit" href="/user/menu" class="button">Get Started</a>
         </form>
