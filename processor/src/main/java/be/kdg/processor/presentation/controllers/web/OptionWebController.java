@@ -27,7 +27,7 @@ public class OptionWebController {
     }
 
     @GetMapping("/settings")
-    public ModelAndView showOptions() throws ServiceException, ControllerException {
+    public ModelAndView showOptions() throws ControllerException {
         List<Option> options = optionService.getOptions();
         if (options.isEmpty())
             throw new ControllerException(getClass().getSimpleName() + ": Requested list was empty");
