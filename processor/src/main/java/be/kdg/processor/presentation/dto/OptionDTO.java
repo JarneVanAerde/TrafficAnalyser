@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class OptionDTO {
     @NotNull
-    private OptionKey key;
+    private String key;
     @NotNull
     private double value;
 }
