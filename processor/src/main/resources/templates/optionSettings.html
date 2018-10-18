@@ -2,44 +2,53 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="/css/index.css" media="screen"/>
-    <noscript><link rel="stylesheet" href="/css/noscript.css" media="screen" /></noscript>
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
+    </noscript>
 
     <meta charset="UTF-8">
     <title>Option Settings</title>
 </head>
-<body>
 <body class="is-preload">
 <div id="wrapper">
     <section id="main">
         <header>
-            <span class="avatar"><img src="images/avatar.jpg" alt="" /></span>
-            <h1>Traffic Analyser</h1>
-            <p>Get in touch</p>
+            <h1>Options</h1>
         </header>
-        <Button><a href="/user/login">Login</a></Button>
+        <form th:each="option : ${optionsDTO}" th:method="post" action="#">
+            <div class="fields">
+                <div class="field">
+                    <label th:text="${option.key}"></label>
+                    <input th:type="text" th:text="${option.value}"/>
+                </div>
+            </div>
+        </form>
+        <button><a href="/user/">Go back</a></button>
     </section>
 
     <!-- Footer -->
     <footer id="footer">
         <ul class="copyright">
-            <li>&copy; Karel de Grote Hogeschool</li><li>Design: Jarne Van Aerde</li>
+            <li>&copy; Karel de Grote Hogeschool</li>
+            <li>Design: Jarne Van Aerde</li>
         </ul>
     </footer>
 </div>
 
+<form th:method="post" th:each="option : ${optionsDTO}">
+    <ul>
+        <li th:text="${option.key}"></li>
+        <li th:text="${option.value}"></li>
+    </ul>
+</form>
+
 <script>
     if ('addEventListener' in window) {
-        window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+        window.addEventListener('load', function () {
+            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+        });
         document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
     }
 </script>
-
-<div class="container">
-    <form th:method="post" th:each="option : ${optionsDTO}">
-        <ul>
-            <li th:text="${option.key}"></li>
-            <li th:text="${option.value}"></li>
-        </ul>
-    </form>
-</div>
+</body>
 </html>
