@@ -6,24 +6,18 @@
         <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
     </noscript>
 
-    <meta charset="UTF-8">
-    <title>Option Settings</title>
+    <title>Traffic Analyser</title>
+    <meta charset="utf-8"/>
 </head>
 <body class="is-preload">
 <div id="wrapper">
     <section id="main">
         <header>
-            <h1>Options</h1>
+            <h1>Welcome Jarne!</h1>
+            <h2>Choose an option</h2>
         </header>
-        <form th:each="option : ${optionsDTO}" th:method="post" action="#">
-            <div class="fields">
-                <div class="field">
-                    <label th:text="${option.key}"></label>
-                    <label th:text="${option.value}"></label>
-                </div>
-            </div>
-        </form>
-        <button><a href="/">Go back</a></button>
+        <a>View fines</a>
+        <a>View options</a>
     </section>
 
     <!-- Footer -->
@@ -34,13 +28,6 @@
         </ul>
     </footer>
 </div>
-
-<form th:method="post" th:each="option : ${optionsDTO}">
-    <ul>
-        <li th:text="${option.key}"></li>
-        <li th:text="${option.value}"></li>
-    </ul>
-</form>
 
 <script>
     if ('addEventListener' in window) {

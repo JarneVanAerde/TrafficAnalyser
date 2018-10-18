@@ -7,10 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
@@ -35,9 +34,9 @@ public class UserWebController {
     }
 
     @GetMapping("/menu")
-    public ModelAndView showMenu(@Valid UserDTO userDTO) {
+    public ModelAndView showMenu(@ModelAttribute UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
         userService.makeNewUserIfNeeded(user);
-        return null;
+        return new ModelAndView("menu");
     }
 }
