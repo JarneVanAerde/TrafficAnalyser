@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 @Transactional
 public class OptionService {
@@ -37,5 +40,9 @@ public class OptionService {
     public Option getOption(OptionKey key) throws ServiceException {
         return optionsRepository.findById(key.toString())
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Option with key " + key + " was not found in the database"));
+    }
+
+    public List<Option> getOptions() {
+        return Collections.unmodifiableList(optionsRepository.findAll());
     }
 }
