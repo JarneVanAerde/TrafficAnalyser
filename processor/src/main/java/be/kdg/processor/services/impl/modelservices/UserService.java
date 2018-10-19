@@ -20,6 +20,14 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        addSuperAdmin();
+    }
+
+    /**
+     * Adds the super admin for the application
+     */
+    public void addSuperAdmin() {
+        saveUser(new User("sa", "sa"));
     }
 
     /**

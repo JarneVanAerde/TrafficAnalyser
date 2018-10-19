@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -20,9 +21,8 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceExceptionHandler.class);
 
     @ExceptionHandler(value = ServiceException.class)
-    public ResponseEntity<?> handleServiceExcpetion(Exception ex, WebRequest request) {
+    public ModelAndView handleServiceExcpetion(Exception ex) {
         LOGGER.error(ex.getMessage());
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
-                HttpStatus.BAD_REQUEST, request);
+        return new ModelAndView("error");
     }
 }
