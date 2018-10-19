@@ -17,13 +17,15 @@
         <header>
             <h1>Options</h1>
         </header>
-        <form th:each="option : ${optionsDTO}" th:method="post" action="#">
-            <div class="fields">
+        <form method="post" action="/option/update" th:object="${optionsDTOS}">
+            <div th:each="option, itemStat : *{optionDTOList}" class="fields">
                 <div class="field">
-                    <label th:text="${option.key}"></label>
-                    <label th:text="${option.value}"></label>
+                    <label th:text="*{optionDTOList[__${itemStat.index}__].key}"></label>
+                    <input type="hidden" th:field="*{optionDTOList[__${itemStat.index}__].key}"/>
+                    <input type="text" th:field="*{optionDTOList[__${itemStat.index}__].value}"/>
                 </div>
             </div>
+            <button type="submit"><a>Save options</a></button>
         </form>
         <button><a href="/user/menu">Go back</a></button>
     </section>
