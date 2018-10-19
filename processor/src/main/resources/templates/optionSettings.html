@@ -6,6 +6,7 @@
     <noscript>
         <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
     </noscript>
+    <script src="/js/vendor.js"></script>
 
     <meta charset="UTF-8">
     <title>Option Settings</title>
@@ -42,14 +43,5 @@
         <li th:text="${option.value}"></li>
     </ul>
 </form>
-
-<script>
-    if ('addEventListener' in window) {
-        window.addEventListener('load', function () {
-            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
-        });
-        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
-    }
-</script>
 </body>
 </html>
