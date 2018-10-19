@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * This service is used for user CRUD.
+ */
 @Service
 @Transactional
 public class UserService {
@@ -19,26 +22,49 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param user user to save
+     * @return a user with an id
+     */
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
+    /**
+     * @param deleted decides if the methods returns active or deleted users
+     * @return all the requested users
+     */
     public List<User> getUsers(boolean deleted) {
         return userRepository.findAllByDeleted(deleted);
     }
 
+    /**
+     * @param id user id
+     * @return the requested user
+     * @throws ServiceException wrapper-exception
+     */
     public User getUser(int id) throws ServiceException {
         return userRepository.findById(id)
-                //.filter(user -> !user.isDeleted())
+                .filter(user -> !user.isDeleted())
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": user with cameraId " + id + " wasn't found in the database"));
     }
 
+    /**
+     * @param id user id that needs to be deleted
+     * @return the deteled user
+     * @throws ServiceException wrapper-exception
+     */
     public User deleteUser(int id) throws ServiceException {
         User userToDelete = getUser(id);
         userToDelete.setDeleted(true);
         return saveUser(userToDelete);
     }
 
+
+    /**
+     * @param user user from login page
+     * @return a new or existing user.
+     */
     public User makeNewUserIfNeeded(User user) {
         if (!userRepository.existsById(user.getUserId())) return saveUser(user);
         else return user;

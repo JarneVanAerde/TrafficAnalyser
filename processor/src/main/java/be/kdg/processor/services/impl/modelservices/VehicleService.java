@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * This service is used for vehicle CRUD.
+ */
 @Service
 @Transactional
 public class VehicleService {
@@ -22,6 +25,10 @@ public class VehicleService {
         this.vehicleOwnerRepository = vehicleOwnerRepository;
     }
 
+    /**
+     * @param licensePlateInfo info that needs to be extracted
+     * @throws ServiceException wrapper-exception
+     */
     public void extractPlateInfo(LicensePlateInfo licensePlateInfo) throws ServiceException {
         Vehicle vehicle;
         VehicleOwner vehicleOwner;
@@ -41,16 +48,30 @@ public class VehicleService {
         }
     }
 
+    /**
+     * @param plateId the plateId of the vehicle
+     * @return the requested vehicle
+     * @throws ServiceException wrapper-exception
+     */
     public Vehicle getVehicle(String plateId) throws ServiceException {
         return vehicleRepository.findById(plateId)
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Vehicle with plate cameraId " + plateId + " wasn't found in the database"));
     }
 
+    /**
+     * @param nationalId the nationalId of the owner
+     * @return the requested vehciel owner
+     * @throws ServiceException wrapper-exception
+     */
     public VehicleOwner getOwner(String nationalId) throws ServiceException {
         return vehicleOwnerRepository.findById(nationalId)
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": VehicleOwner with plate cameraId " + nationalId + " wasn't found in the database"));
     }
 
+    /**
+     * @param vehicle the vehicle that needs to be saved
+     * @return the saved vehicle with id.
+     */
     public Vehicle saveVehicle(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }

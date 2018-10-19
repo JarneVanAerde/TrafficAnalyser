@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * This class processes the buffered messages that come from receiver
+ * This class processes the messages of the receiver
  * The type of receiver is mentioned in application.properties.
  */
 @Component
@@ -27,6 +27,10 @@ public class CameraMessageProcessorService implements ProcessorService<CameraMes
         this.detectionServices = detectionServices;
     }
 
+    /**
+     * processes messages through all the detection services
+     * @param message the message that needs to be processed
+     */
     @Override
     public void processMessage(CameraMessage message) {
         detectionServices.forEach(service -> {
