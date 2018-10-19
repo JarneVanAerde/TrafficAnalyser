@@ -49,6 +49,7 @@ public class OptionWebController {
         OptionDTO[] optionDTOArray = modelMapper.map(options, OptionDTO[].class);
         OptionDTOS optionDTOS = new OptionDTOS();
         Arrays.stream(optionDTOArray).forEach(optionDTOS::addOptionDTO);
+
         return new ModelAndView("optionSettings", "optionsDTOS", optionDTOS);
     }
 
