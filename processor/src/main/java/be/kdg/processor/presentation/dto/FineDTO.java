@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+/**
+ * FineDTO is used for emission fines and speed fines.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

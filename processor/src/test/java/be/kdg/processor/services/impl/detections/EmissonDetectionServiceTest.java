@@ -2,12 +2,9 @@ package be.kdg.processor.services.impl.detections;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.models.vehicles.Vehicle;
-import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
-import org.apache.tomcat.jni.Local;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,7 @@ import java.time.LocalDateTime;
 @SpringBootTest
 public class EmissonDetectionServiceTest {
     @Autowired
-    private EmissonDetectionService emissonDetectionService;
+    private EmissionFineDetectionService emissonDetectionService;
     @Autowired
     private VehicleService vehicleService;
     @Autowired

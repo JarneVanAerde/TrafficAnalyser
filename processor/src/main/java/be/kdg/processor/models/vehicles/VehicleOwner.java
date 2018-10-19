@@ -11,9 +11,8 @@ import java.util.List;
 
 /**
  * Simple POJO that gives us information about a car owner.
- * A carowner can have multiple vehicles.
+ * A vehicle owner can have multiple vehicles.
  */
-
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity

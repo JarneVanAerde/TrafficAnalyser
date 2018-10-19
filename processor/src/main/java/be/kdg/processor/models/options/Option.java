@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Simple POJO used to store an option.
+ * Key-value pairs are chosen to dynamically create new options
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

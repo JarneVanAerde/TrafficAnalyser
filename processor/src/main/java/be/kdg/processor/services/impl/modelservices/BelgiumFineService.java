@@ -42,7 +42,7 @@ public class BelgiumFineService implements FineService {
 
     /**
      * Creates an emission fine and saves that to the database.
-     * After the fine is created it is linked to a vehicle
+     * After the fine is created it is linked to a vehicle.
      */
     @Override
     public void createEmissionFine(int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
@@ -57,7 +57,8 @@ public class BelgiumFineService implements FineService {
     }
 
     /**
-     * Creates a speed fine and saves that to the database
+     * Creates a speed fine and saves that to the database.
+     * After the fine is created it is linked to a vehicle.
      */
     @Override
     public void createSpeedFine(double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
@@ -72,6 +73,15 @@ public class BelgiumFineService implements FineService {
         vehicleService.saveVehicle(vehicle);
     }
 
+    /**
+     * Calculates a fine amount based on the parameters below.
+     *
+     * @param fineType type of the fine
+     * @param legal    legal value
+     * @param actual   actual value from the vehicle
+     * @return the calculated amount
+     * @throws ServiceException wrapper-exception
+     */
     private double caculateFine(FineType fineType, double legal, double actual) throws ServiceException {
         switch (fineType) {
             case EMISSiON_FINE:
@@ -83,6 +93,10 @@ public class BelgiumFineService implements FineService {
         }
     }
 
+    /**
+     * @param fine fine to save.
+     * @return saved fine with id.
+     */
     public Fine saveFine(Fine fine) {
         return fineRepo.save(fine);
     }
@@ -108,6 +122,9 @@ public class BelgiumFineService implements FineService {
         return optionalFine.isPresent();
     }
 
+    /**
+     * @return all the fines from the database.
+     */
     @Override
     public List<Fine> getFines() {
         return fineRepo.findAll();

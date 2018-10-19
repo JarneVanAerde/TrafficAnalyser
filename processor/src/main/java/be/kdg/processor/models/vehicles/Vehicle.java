@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Simple POJO that gives us information about a specific car.
+ * Simple POJO that gives us information about a specific vehicle.
  */
 @EqualsAndHashCode
 @Getter

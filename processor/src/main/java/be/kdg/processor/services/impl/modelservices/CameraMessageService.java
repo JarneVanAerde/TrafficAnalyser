@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * This service is used to buffer camera messages for calculating
+ * speed fines. is the message is corresponding with a segment,
+ * then a fine will be created
+ */
 @Service
 @Transactional
 public class CameraMessageService {
@@ -28,14 +33,29 @@ public class CameraMessageService {
         this.messageBuffer = new ArrayList<>();
     }
 
+    /**
+     * @param message message to save
+     * @return the saved camera messages.
+     */
     public CameraMessage saveMessage(CameraMessage message) {
         return cameraMessageRepository.save(message);
     }
 
+    /**
+     * Adds the message to the buffer
+     * @param message message to buffer
+     */
     public void addToBuffer(CameraMessage message) {
         messageBuffer.add(message);
     }
 
+    /**
+     *
+     * @param plateId the plate id of the connected message
+     * @param cameraId the camera id of the segment
+     * @return the connected camera-message if there is one present.
+     * @throws ServiceException wrapper-exception
+     */
     public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) throws ServiceException {
         List<CameraMessage> cameraMessages = messageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId))

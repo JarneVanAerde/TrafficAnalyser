@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
  * All messages will pass through here to check for illegal emissions.
  */
 @Service
-public class EmissonDetectionService implements DetectionService<CameraMessage> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmissonDetectionService.class);
+public class EmissionFineDetectionService implements DetectionService<CameraMessage> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmissionFineDetectionService.class);
 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
@@ -28,8 +28,8 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     private final VehicleService vehicleService;
 
     @Autowired
-    public EmissonDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                   FineService fineService, VehicleService licensePlateService) {
+    public EmissionFineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
+                                        FineService fineService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
@@ -37,10 +37,10 @@ public class EmissonDetectionService implements DetectionService<CameraMessage> 
     }
 
     /**
-     * The external service are behind an adapter and are used to
+     * The external services are behind an adapter and are used to
      * determine the fines.
      * If the message can't be linked to a fine, then it is
-     * saved to the database.
+     * thrown away.
      *
      * @param message the message that will be used to detect possible emission fines.
      */

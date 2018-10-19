@@ -26,6 +26,11 @@ public class CameraInfoService implements CameraServiceAdapter {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * @param id for the requested camera
+     * @return a camera from the proxy service
+     * @throws ServiceException wrapper-exception
+     */
     @Cacheable(value = "cameras")
     @Override
     public Camera get(int id) throws ServiceException {
