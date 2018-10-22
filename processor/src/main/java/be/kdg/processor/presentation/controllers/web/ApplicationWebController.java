@@ -15,6 +15,6 @@ public class ApplicationWebController {
 
     @GetMapping("/run")
     public ModelAndView showShutDown() {
-        return new ModelAndView("appRunning");
+        return new ModelAndView("appRunnin");
     }
 }
