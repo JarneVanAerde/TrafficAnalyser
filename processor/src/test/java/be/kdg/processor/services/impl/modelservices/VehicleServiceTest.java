@@ -18,12 +18,12 @@ public class VehicleServiceTest {
 
     @Test
     public void testExtractPlateInfo() throws ServiceException {
-        LicensePlateInfo licensePlateInfo1 = new LicensePlateInfo("4-ABC-123", "NaNa", 1);
+        LicensePlateInfo licensePlateInfo1 = new LicensePlateInfo("6-ABC-123", "NaNa", 1);
         vehicleService.extractPlateInfo(licensePlateInfo1);
-        LicensePlateInfo licensePlateInfo2 = new LicensePlateInfo("4-ABC-123", "NaNa", 1);
+        LicensePlateInfo licensePlateInfo2 = new LicensePlateInfo("6-ABC-123", "NaNa", 1);
         vehicleService.extractPlateInfo(licensePlateInfo2);
 
-        assertTrue(vehicleService.getVehicle("4-ABC-123").getLicensePlate().equalsIgnoreCase("4-ABC-123"));
+        assertTrue(vehicleService.getVehicle("6-ABC-123").getLicensePlate().equalsIgnoreCase("6-ABC-123"));
         assertEquals(1, vehicleService.getOwner("NaNa").getVehicles().size());
     }
 }
