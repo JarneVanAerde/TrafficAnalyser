@@ -24,8 +24,6 @@ public interface FineService {
 
     Fine changeAmount(int id, double amount, String motivation) throws ServiceException;
 
-    Fine deleteFine(int id) throws ServiceException;
-
     void deleteAllFines();
 
     List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate);

@@ -3,6 +3,7 @@ package be.kdg.simulator.services.impl.messengers;
 import be.kdg.simulator.models.CameraMessage;
 import be.kdg.simulator.services.api.Messenger;
 import be.kdg.simulator.services.exceptions.ServiceException;
+import be.kdg.simulator.services.impl.utils.MessageWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public class QueueMessenger implements Messenger {
     @Override
     public void sendMessage(CameraMessage message) throws ServiceException {
         try {
+            MessageWriter.writeMessage(message);
             rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
             LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getCameraId() + " has been sent to the queue");
         } catch (JsonProcessingException e) {

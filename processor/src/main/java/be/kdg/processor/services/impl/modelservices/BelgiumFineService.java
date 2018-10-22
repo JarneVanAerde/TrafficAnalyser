@@ -153,13 +153,6 @@ public class BelgiumFineService implements FineService {
     }
 
     @Override
-    public Fine deleteFine(int id) throws ServiceException {
-        Fine fineToRemove = getFine(id);
-        fineRepo.delete(fineToRemove);
-        return fineToRemove;
-    }
-
-    @Override
     public List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate) {
         return getFines().stream()
                 .filter(f -> f.getCreationDate().isAfter(beforeDate) &&
