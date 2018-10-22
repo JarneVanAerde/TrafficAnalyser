@@ -4,7 +4,8 @@ package be.kdg.processor.models.options;
  * Enum-key to make searching for options in the database easier.
  */
 public enum OptionKey {
-    EMISSION_FAC("Emission faculty"), SPEED_FAC("Speed faculty"), TIMEFRAME_EMISSION("Time buffer emission fines");
+    EMISSION_FAC("Emission faculty"), SPEED_FAC("Speed faculty"), TIME_FRAME_EMISSION("Time-buffer emission fines (hours)"),
+    TIME_FRAME_SPEED_MESSAGE("Time-buffer speed messages (minutes)");
 
     private String name;
 

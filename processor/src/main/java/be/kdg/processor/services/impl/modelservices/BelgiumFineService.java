@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -113,7 +112,7 @@ public class BelgiumFineService implements FineService {
     @Override
     public boolean checkIfAlreadyHasEmissionfine(String plateId) throws ServiceException {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
-        double timeFrame = optionService.getOptionValue(OptionKey.TIMEFRAME_EMISSION);
+        double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_EMISSION);
 
         Optional<Fine> optionalFine = vehicle.getFines().stream()
                 .filter(f -> f.getFineType() == FineType.EMISSiON_FINE)

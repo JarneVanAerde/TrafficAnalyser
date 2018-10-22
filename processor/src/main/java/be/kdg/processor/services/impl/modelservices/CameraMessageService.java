@@ -2,6 +2,7 @@ package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.cameras.Segment;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.persistence.CameraMessageRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,13 +28,15 @@ import java.util.stream.Collectors;
 public class CameraMessageService {
     private final CameraMessageRepository cameraMessageRepository;
     private final CameraInfoService cameraInfoService;
-    private final List<CameraMessage> messageBuffer;
+    private final OptionService optionService;
+    private final List<CameraMessage> speedMessageBuffer;
 
     @Autowired
-    public CameraMessageService(CameraMessageRepository cameraMessageRepository, CameraInfoService cameraInfoService) {
+    public CameraMessageService(CameraMessageRepository cameraMessageRepository, CameraInfoService cameraInfoService, OptionService optionService) {
         this.cameraMessageRepository = cameraMessageRepository;
         this.cameraInfoService = cameraInfoService;
-        this.messageBuffer = new ArrayList<>();
+        this.optionService = optionService;
+        this.speedMessageBuffer = new ArrayList<>();
     }
 
     /**
@@ -46,10 +52,11 @@ public class CameraMessageService {
      * @param message message to buffer
      */
     public void addToBuffer(CameraMessage message) {
-        messageBuffer.add(message);
+        speedMessageBuffer.add(message);
     }
 
     /**
+     * Messages that are out of the fimeframe
      *
      * @param plateId the plate id of the connected message
      * @param cameraId the camera id of the segment
@@ -57,7 +64,9 @@ public class CameraMessageService {
      * @throws ServiceException wrapper-exception
      */
     public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) throws ServiceException {
-        List<CameraMessage> cameraMessages = messageBuffer.stream()
+        deleteMessageOutOfTimeFrame();
+
+        List<CameraMessage> cameraMessages = speedMessageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId))
                 .collect(Collectors.toList());
 
@@ -69,6 +78,15 @@ public class CameraMessageService {
         return Optional.empty();
     }
 
+    public void deleteMessageOutOfTimeFrame() throws ServiceException {
+        double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_SPEED_MESSAGE);
+        speedMessageBuffer.removeIf(message ->
+                ChronoUnit.MINUTES.between(message.getTimestamp(), LocalDateTime.now()) > timeFrame);
+    }
+
+    /**
+     * deletes all messages in the repository
+     */
     public void deleteAllMessage() {
         cameraMessageRepository.deleteAll();
     }

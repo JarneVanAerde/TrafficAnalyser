@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +31,8 @@ public class OptionService {
     private void addDefaultOptions() {
         saveOption(new Option(OptionKey.SPEED_FAC.toString(), 2));
         saveOption(new Option(OptionKey.EMISSION_FAC.toString(), 100));
-        saveOption(new Option(OptionKey.TIMEFRAME_EMISSION.toString(), 24));
+        saveOption(new Option(OptionKey.TIME_FRAME_EMISSION.toString(), 24));
+        saveOption(new Option(OptionKey.TIME_FRAME_SPEED_MESSAGE.toString(), 15));
     }
 
     /**
