@@ -1,6 +1,5 @@
 package be.kdg.processor.services.impl.modelservices;
 
-import be.kdg.processor.models.options.Option;
 import be.kdg.processor.models.users.User;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
@@ -37,7 +36,7 @@ public class UserService {
      * @return a user with an id
      */
     public User saveUser(User user) throws ServiceException {
-        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException("User already exists");
+        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException(getClass().getSimpleName() + ": User already exists");
         return userRepository.save(user);
     }
 
