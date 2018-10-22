@@ -20,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) throws ServiceException {
         this.userRepository = userRepository;
         addSuperAdmin();
     }
@@ -28,7 +28,7 @@ public class UserService {
     /**
      * Adds the super admin for the application
      */
-    private void addSuperAdmin() {
+    private void addSuperAdmin() throws ServiceException {
         saveUser(new User("sa", "sa"));
     }
 
@@ -36,7 +36,8 @@ public class UserService {
      * @param user user to save
      * @return a user with an id
      */
-    public User saveUser(User user) {
+    public User saveUser(User user) throws ServiceException {
+        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException("User already exists");
         return userRepository.save(user);
     }
 

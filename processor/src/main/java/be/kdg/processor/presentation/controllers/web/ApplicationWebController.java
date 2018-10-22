@@ -31,4 +31,10 @@ public class ApplicationWebController {
             return new ModelAndView("queueRunning");
         }
     }
+
+    @GetMapping("/queueStatus")
+    public ModelAndView showCurrentQueueStatus() {
+        if (!isQueuePaused) return new ModelAndView("queueRunning");
+        else return new ModelAndView("queuePaused");
+    }
 }

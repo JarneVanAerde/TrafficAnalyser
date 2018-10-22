@@ -23,13 +23,12 @@ public class UserWebController {
     private final UserService userService;
 
     @Autowired
-    public UserWebController(UserService userService, ModelMapper modelMapper) {
+    public UserWebController(UserService userService) {
         this.userService = userService;
     }
 
     /**
-     * @param userDTO used by the login form
-     * @return a login view with a userDTO
+     * @return a login view with an empty userDTO
      */
     @GetMapping("/login")
     public ModelAndView showLogin(UserDTO userDTO) {
