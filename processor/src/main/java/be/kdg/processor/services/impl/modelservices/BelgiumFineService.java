@@ -167,4 +167,9 @@ public class BelgiumFineService implements FineService {
                         f.getCreationDate().isBefore(afterDate))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteAllFines() {
+        fineRepo.deleteAll();
+    }
 }

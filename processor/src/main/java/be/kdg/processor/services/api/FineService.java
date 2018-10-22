@@ -26,5 +26,7 @@ public interface FineService {
 
     Fine deleteFine(int id) throws ServiceException;
 
+    void deleteAllFines();
+
     List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate);
 }
