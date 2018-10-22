@@ -13,17 +13,19 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class VehicleServiceTest {
+    private static final String PLATE_ID = "7-ABC-123";
+
     @Autowired
     private VehicleService vehicleService;
 
     @Test
     public void testExtractPlateInfo() throws ServiceException {
-        LicensePlateInfo licensePlateInfo1 = new LicensePlateInfo("6-ABC-123", "NaNa", 1);
+        LicensePlateInfo licensePlateInfo1 = new LicensePlateInfo(PLATE_ID, "NaNa", 1);
         vehicleService.extractPlateInfo(licensePlateInfo1);
-        LicensePlateInfo licensePlateInfo2 = new LicensePlateInfo("6-ABC-123", "NaNa", 1);
+        LicensePlateInfo licensePlateInfo2 = new LicensePlateInfo(PLATE_ID, "NaNa", 1);
         vehicleService.extractPlateInfo(licensePlateInfo2);
 
-        assertTrue(vehicleService.getVehicle("6-ABC-123").getLicensePlate().equalsIgnoreCase("6-ABC-123"));
+        assertTrue(vehicleService.getVehicle(PLATE_ID).getLicensePlate().equalsIgnoreCase(PLATE_ID));
         assertEquals(1, vehicleService.getOwner("NaNa").getVehicles().size());
     }
 }
