@@ -71,15 +71,11 @@ public class FineApiControllerTest {
 
     @Test
     public void testUpdateAmount() throws Exception {
-        final String jsonString = "{\n" +
-                "  \"amount\": 1000.0,\n" +
-                "  \"motivation\": \"Changed for now reason :))\"\n" +
-                "}";
-
-        mockMvc.perform(put("/api/fines/updateAmount/" + findFineId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonString))
+        mockMvc.perform(put("/api/fines/updateAmount/" + findFineId() + "/1000.0/because I can")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         assertFalse(fineService.getFine(findFineId()).getChangeAmountMotivation().equalsIgnoreCase("default"));
+        assertEquals(1000.0, fineService.getFine(findFineId()).getAmount(), 0.0);
     }
 
     private int findFineId()  {

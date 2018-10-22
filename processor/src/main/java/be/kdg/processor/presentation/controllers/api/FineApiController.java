@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,10 +31,9 @@ public class FineApiController {
 
     /**
      * @return all the fines.
-     * @throws ServiceException is handled by ServiceExceptionHandler.
      */
     @GetMapping("/fines")
-    public ResponseEntity<FineDTO[]> loadFines() throws ServiceException {
+    public ResponseEntity<FineDTO[]> loadFines() {
         List<Fine> fines = fineService.getFines();
         if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -79,13 +77,16 @@ public class FineApiController {
 
     /**
      * @param id the id of the fine amount that needs to be updated
-     * @param fineDTO that is used to change the amount
+     * @param amount the new amount
+     * @param message message that explains the amount
      * @return updates the amount of a specific fine.
      * @throws ServiceException is handled by ServiceExceptionHandler.
      */
-    @PutMapping("/fines/updateAmount/{id}")
-    public ResponseEntity<FineDTO> updateAmount(@PathVariable int id, @RequestBody @Valid FineDTO fineDTO) throws ServiceException {
-        Fine updatedFine = fineService.changeAmount(id, fineDTO.getAmount(), fineDTO.getMotivation());
+    @PutMapping("/fines/updateAmount/{id}/{amount}/{message}")
+    public ResponseEntity<FineDTO> updateAmount(@PathVariable int id,
+                                                @PathVariable double amount,
+                                                @PathVariable String message) throws ServiceException {
+        Fine updatedFine = fineService.changeAmount(id, amount, message);
         return new ResponseEntity<>(modelMapper.map(updatedFine, FineDTO.class), HttpStatus.OK);
     }
 }
