@@ -28,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class FineApiControllerTest {
+    private static final String PLATE_ID = "1-ABC-123";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -36,7 +38,6 @@ public class FineApiControllerTest {
     private VehicleService vehicleService;
     @Autowired
     private CameraMessageService cameraMessageService;
-    private static final String PLATE_ID = "1-ABC-123";
 
     @Before
     public void setUp() throws ServiceException {
@@ -84,7 +85,7 @@ public class FineApiControllerTest {
     private int findFineId()  {
         return fineService.getFines().stream()
                 .filter(fine -> fine instanceof EmissionFine)
-                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(FineApiControllerTest.PLATE_ID))
+                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(PLATE_ID))
                 .findAny().get().getFineId();
     }
 }

@@ -5,6 +5,7 @@ import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
+import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -17,37 +18,48 @@ import java.time.LocalDateTime;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EmissonDetectionServiceTest {
+    private static final String PLATE_ID = "1-ABC-123";
+
     @Autowired
     private EmissionFineDetectionService emissonDetectionService;
     @Autowired
     private VehicleService vehicleService;
     @Autowired
     private FineService fineService;
+    @Autowired
+    private CameraMessageService cameraMessageService;
+
+    @After
+    public void tearDown() {
+        fineService.deleteAllFines();
+        cameraMessageService.deleteAllMessage();
+        vehicleService.deleteAllOwnersAndVehicles();
+    }
 
     @Test
     public void testDetectEmissionFineSucces() throws Exception {
-        CameraMessage testMessage = new CameraMessage(3, "1-ABC-123", LocalDateTime.now());
-        vehicleService.extractPlateInfo(new LicensePlateInfo("1-ABC-123", "NaN", 1));
+        CameraMessage testMessage = new CameraMessage(3, PLATE_ID, LocalDateTime.now());
+        vehicleService.extractPlateInfo(new LicensePlateInfo(PLATE_ID, "NaN", 1));
 
         emissonDetectionService.detectFine(testMessage);
-        fineService.getFine(findFineByPlate("1-ABC-123"));
-        Assert.assertEquals(300.0, fineService.getFine(findFineByPlate("1-ABC-123")).getAmount(), 0.0);
+        fineService.getFine(findFineByPlate());
+        Assert.assertEquals(300.0, fineService.getFine(findFineByPlate()).getAmount(), 0.0);
     }
 
     @Test(expected = Exception.class)
     public void testDetectEmissionFineFail() throws Exception {
-        CameraMessage message = new CameraMessage(1, "2-ABC-123", LocalDateTime.now());
-        vehicleService.extractPlateInfo(new LicensePlateInfo("2-ABC-123", "NaN", 1));
+        CameraMessage message = new CameraMessage(1, PLATE_ID, LocalDateTime.now());
+        vehicleService.extractPlateInfo(new LicensePlateInfo(PLATE_ID, "NaN", 1));
 
         emissonDetectionService.detectFine(message);
-        fineService.getFine(findFineByPlate("2-ABC-123"));
+        fineService.getFine(findFineByPlate());
         Assert.fail("There should not be a fine in the database...");
     }
 
-    private int findFineByPlate(String plate)  {
+    private int findFineByPlate()  {
         return fineService.getFines().stream()
                 .filter(fine -> fine instanceof EmissionFine)
-                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(plate))
+                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(PLATE_ID))
                 .findAny().get().getFineId();
     }
 }
