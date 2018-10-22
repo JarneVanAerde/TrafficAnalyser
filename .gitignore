@@ -87,7 +87,7 @@ fabric.properties
 *.log
 
 # Messages file
-*.txt
+messsages.txt
 
 # BlueJ files
 *.ctxt
