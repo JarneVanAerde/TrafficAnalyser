@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -60,7 +61,7 @@ public class OptionWebController {
      * @return a redirect to show the options.
      */
     @PostMapping("/update")
-    public ModelAndView updateOptions(@ModelAttribute OptionDTOS optionDTOS) {
+    public ModelAndView updateOptions(@ModelAttribute @Valid OptionDTOS optionDTOS) {
         List<OptionDTO> optionDTOSArray = optionDTOS.getOptionDTOList();
 
         for (OptionDTO optionDTO : optionDTOSArray) {

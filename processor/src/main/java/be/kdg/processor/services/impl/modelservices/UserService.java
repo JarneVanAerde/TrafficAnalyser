@@ -1,5 +1,6 @@
 package be.kdg.processor.services.impl.modelservices;
 
+import be.kdg.processor.models.options.Option;
 import be.kdg.processor.models.users.User;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This service is used for user CRUD.
@@ -26,7 +28,7 @@ public class UserService {
     /**
      * Adds the super admin for the application
      */
-    public void addSuperAdmin() {
+    private void addSuperAdmin() {
         saveUser(new User("sa", "sa"));
     }
 
@@ -69,12 +71,10 @@ public class UserService {
     }
 
 
-    /**
-     * @param user user from login page
-     * @return a new or existing user.
-     */
-    public User makeNewUserIfNeeded(User user) {
-        if (!userRepository.existsById(user.getUserId())) return saveUser(user);
-        else return user;
+    public boolean authenticateUser(String name, String password) {
+        Optional<User> optionalUser = userRepository.findAll().stream()
+                .filter(user -> user.getName().equalsIgnoreCase(name) &&
+                        user.getPassword().equalsIgnoreCase(password)).findFirst();
+        return optionalUser.isPresent();
     }
 }
