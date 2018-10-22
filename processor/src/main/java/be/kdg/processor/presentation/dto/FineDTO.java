@@ -24,6 +24,7 @@ public class FineDTO {
     @NotNull
     private String motivation;
     private boolean approved;
+    private String plateId;
 
     //EMISSION SPECIFIC
     private int vehicleEuroNorm;

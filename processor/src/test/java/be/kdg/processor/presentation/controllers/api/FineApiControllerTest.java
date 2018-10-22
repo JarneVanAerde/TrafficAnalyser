@@ -1,6 +1,7 @@
 package be.kdg.processor.presentation.controllers.api;
 
 import be.kdg.processor.models.cameras.CameraMessage;
+import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.persistence.FineRepository;
 import be.kdg.processor.services.api.FineService;
@@ -39,40 +40,52 @@ public class FineApiControllerTest {
     @Autowired
     private VehicleService vehicleService;
 
-    @Before
-    public void setUp() throws Exception {
-        vehicleService.extractPlateInfo(new LicensePlateInfo("1-ABC-123", "NaN", 3));
-        fineService.createEmissionFine(3, 3,
-                new CameraMessage(3, "1-ABC-123", LocalDateTime.now()),
-                "1-ABC-123");
-    }
-
     @Test
     public void testLoadFines() throws Exception {
-        mockMvc.perform(get("/api/fines/2")
+        vehicleService.extractPlateInfo(new LicensePlateInfo("3-ABC-123", "NaN", 3));
+        fineService.createEmissionFine(3, 3,
+                new CameraMessage(3, "3-ABC-123", LocalDateTime.now()),
+                "3-ABC-123");
+
+        mockMvc.perform(get("/api/fines/" + findFineByPlate("3-ABC-123"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testApproveFine() throws Exception {
-        mockMvc.perform(put("/api/fines/approve/2")
+        vehicleService.extractPlateInfo(new LicensePlateInfo("4-ABC-123", "NaN", 3));
+        fineService.createEmissionFine(3, 3,
+                new CameraMessage(3, "4-ABC-123", LocalDateTime.now()),
+                "4-ABC-123");
+
+        mockMvc.perform(put("/api/fines/approve/" + findFineByPlate("4-ABC-123"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        assertTrue(fineService.getFine(2).isApproved());
+        assertTrue(fineService.getFine(findFineByPlate("4-ABC-123")).isApproved());
     }
 
     @Test
     public void testUpdateAmount() throws Exception {
+        vehicleService.extractPlateInfo(new LicensePlateInfo("5-ABC-123", "NaN", 3));
+        fineService.createEmissionFine(3, 3,
+                new CameraMessage(3, "5-ABC-123", LocalDateTime.now()),
+                "5-ABC-123");
         final String jsonString = "{\n" +
                 "  \"amount\": 1000.0,\n" +
                 "  \"motivation\": \"Changed for now reason :))\"\n" +
                 "}";
 
-        mockMvc.perform(put("/api/fines/updateAmount/2")
+        mockMvc.perform(put("/api/fines/updateAmount/" + findFineByPlate("5-ABC-123"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonString))
                 .andExpect(status().isOk());
-        assertFalse(fineService.getFine(2).getChangeAmountMotivation().equalsIgnoreCase("default"));
-        fineService.changeAmount(2, 300.0, "default");
+        assertFalse(fineService.getFine(findFineByPlate("5-ABC-123")).getChangeAmountMotivation().equalsIgnoreCase("default"));
+    }
+
+    private int findFineByPlate(String plate)  {
+        return fineService.getFines().stream()
+                .filter(fine -> fine instanceof EmissionFine)
+                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(plate))
+                .findAny().get().getFineId();
     }
 }

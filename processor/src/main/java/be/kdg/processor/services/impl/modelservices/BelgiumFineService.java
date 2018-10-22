@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -103,7 +105,7 @@ public class BelgiumFineService implements FineService {
 
     /**
      * This method prevents that a vehicle gets more than one
-     * emission fine a day.
+     * emission fine between a configurable time frame.
      *
      * @param plateId used to retrieve the vehicle.
      * @return true if their is already an emission fine created for today, and false if the opposite is true
@@ -111,13 +113,13 @@ public class BelgiumFineService implements FineService {
     @Override
     public boolean checkIfAlreadyHasEmissionfine(String plateId) throws ServiceException {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        double timeFrame = optionService.getOptionValue(OptionKey.TIMEFRAME_EMISSION);
 
         Optional<Fine> optionalFine = vehicle.getFines().stream()
                 .filter(f -> f.getFineType() == FineType.EMISSiON_FINE)
-                .filter(f -> f.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        .equalsIgnoreCase(today))
-                .findAny();
+                .sorted(Comparator.comparing(Fine::getCreationDate))
+                .filter(f -> ChronoUnit.HOURS.between(f.getCreationDate(), LocalDateTime.now()) <= timeFrame)
+                .findFirst();
 
         return optionalFine.isPresent();
     }

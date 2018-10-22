@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+
+import javax.validation.Valid;
 
 /**
  * web controller used for the user related views
@@ -20,32 +21,18 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/user")
 public class UserWebController {
     private final UserService userService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserWebController(UserService userService, ModelMapper modelMapper) {
+    public UserWebController(UserService userService) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
     }
 
     /**
-     * @param userDTO used by the login form
-     * @return a login view with a userDTO
+     * @return a login view with an empty userDTO
      */
     @GetMapping("/login")
     public ModelAndView showLogin(UserDTO userDTO) {
         return new ModelAndView("login", "userDTO", userDTO);
-    }
-
-    /**
-     * @param userDTO userDTO that comes from the form
-     * @return a redirect to the menu.
-     */
-    @PostMapping("/create")
-    public RedirectView makeUser(@ModelAttribute UserDTO userDTO) {
-        User user = modelMapper.map(userDTO, User.class);
-        userService.makeNewUserIfNeeded(user);
-        return new RedirectView("menu");
     }
 
     /**
@@ -56,4 +43,13 @@ public class UserWebController {
         return new ModelAndView("menu");
     }
 
+    /**
+     * @param userDTO user to authenticate.
+     * @return the corresponding view based on the users authentication.
+     */
+    @PostMapping("/verify")
+    public ModelAndView verifyLogin(@ModelAttribute @Valid UserDTO userDTO) {
+        if (userService.authenticateUser(userDTO.getName(), userDTO.getPassword())) return new ModelAndView("redirect:/user/menu");
+        else return new ModelAndView("redirect:/user/login");
+    }
 }

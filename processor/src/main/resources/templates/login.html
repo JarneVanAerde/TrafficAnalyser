@@ -6,8 +6,9 @@
     <noscript>
         <link rel="stylesheet" href="/css/noscript.css" media="screen"/>
     </noscript>
+    <script src="/js/vendor.js"></script>
 
-    <title>Traffic Analyser</title>
+    <title>Login | Register</title>
     <meta charset="utf-8"/>
 </head>
 <body class="is-preload">
@@ -17,42 +18,17 @@
             <h1>Traffic Analyser</h1>
             <p>Login</p>
         </header>
-        <form method="post" action="/user/menu" th:object="${userDTO}">
+        <form method="post" action="/user/verify" th:object="${userDTO}">
             <div class="fields">
                 <div class="field">
                     <input th:field="*{name}" type="text" name="name" id="nameLogin" placeholder="Name"/>
                 </div>
                 <div class="field">
-                    <input th:field="*{password}" type="password" name="password" id="passwordLogin" placeholder="password"/>
+                    <input th:field="*{password}" type="password" name="password" id="passwordLogin"
+                           placeholder="password"/>
                 </div>
             </div>
-            <ul class="actions special">
-                <li><a href="/user/menu" class="button">Go to account</a></li>
-            </ul>
-        </form>
-        <hr/>
-        <header>
-            <p>No account yet? Register!</p>
-        </header>
-        <form method="post" action="/user/menu" th:object="${userDTO}">
-            <div class="fields">
-                <div class="field">
-                    <input th:field="*{name}" type="text" placeholder="name"/>
-                </div>
-                <div class="field">
-                    <input th:field="*{password}" type="password" placeholder="password"/>
-                </div>
-                <div class="field">
-                    <select name="department" id="department">
-                        <option value="">Admin</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <input type="checkbox" id="human" name="human"/><label for="human">Accept terms and
-                    conditions</label>
-                </div>
-            </div>
-            <a type="submit" href="/user/menu" class="button">Get Started</a>
+            <button type="submit"><a>Go to account</a></button>
         </form>
     </section>
 
@@ -60,18 +36,9 @@
     <footer id="footer">
         <ul class="copyright">
             <li>&copy; Karel de Grote Hogeschool</li>
-            <li>Design: Jarne Van Aerde</li>
+            <li>Jarne Van Aerde</li>
         </ul>
     </footer>
 </div>
-
-<script>
-    if ('addEventListener' in window) {
-        window.addEventListener('load', function () {
-            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
-        });
-        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
-    }
-</script>
 </body>
 </html>

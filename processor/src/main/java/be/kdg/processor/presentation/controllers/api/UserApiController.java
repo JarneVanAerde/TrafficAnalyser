@@ -38,7 +38,7 @@ public class UserApiController {
     }
 
     @PostMapping("/users/save")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) throws ServiceException {
         User createdUser = userService.saveUser(modelMapper.map(userDTO, User.class));
         return new ResponseEntity<>(modelMapper.map(createdUser, UserDTO.class), HttpStatus.CREATED);
     }

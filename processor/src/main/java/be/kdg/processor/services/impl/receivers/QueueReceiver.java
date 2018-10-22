@@ -20,7 +20,6 @@ import java.io.IOException;
  * all rabbit handles methods.
  */
 @Component
-@RabbitListener(queues = "${messaging.queue.name}")
 public class QueueReceiver implements Receiver<CameraMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueReceiver.class);
     private final XmlMapper xmlMapper;
@@ -38,7 +37,7 @@ public class QueueReceiver implements Receiver<CameraMessage> {
      * @param message The message from the queue.
      * @throws IOException Throws an exception if the conversion from xml to object failed.
      */
-    @RabbitHandler
+    @RabbitListener(id = "cameraMessageQueue", queues = "${messaging.queue.name}")
     public void receiveMessage(String message) throws IOException {
         CameraMessage cameraMessage = xmlMapper.readValue(message, CameraMessage.class);
         LOGGER.info("Message with license plate " + cameraMessage.getLicensePlate() + " from camera " + cameraMessage.getCameraId() + " has been received.");

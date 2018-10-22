@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This service is used for user CRUD.
@@ -18,15 +19,24 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) throws ServiceException {
         this.userRepository = userRepository;
+        addSuperAdmin();
+    }
+
+    /**
+     * Adds the super admin for the application
+     */
+    private void addSuperAdmin() throws ServiceException {
+        saveUser(new User("sa", "sa"));
     }
 
     /**
      * @param user user to save
      * @return a user with an id
      */
-    public User saveUser(User user) {
+    public User saveUser(User user) throws ServiceException {
+        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException(getClass().getSimpleName() + ": User already exists");
         return userRepository.save(user);
     }
 
@@ -61,12 +71,10 @@ public class UserService {
     }
 
 
-    /**
-     * @param user user from login page
-     * @return a new or existing user.
-     */
-    public User makeNewUserIfNeeded(User user) {
-        if (!userRepository.existsById(user.getUserId())) return saveUser(user);
-        else return user;
+    public boolean authenticateUser(String name, String password) {
+        Optional<User> optionalUser = userRepository.findAll().stream()
+                .filter(user -> user.getName().equalsIgnoreCase(name) &&
+                        user.getPassword().equalsIgnoreCase(password)).findFirst();
+        return optionalUser.isPresent();
     }
 }

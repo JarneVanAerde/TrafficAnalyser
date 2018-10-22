@@ -16,7 +16,7 @@ public interface FineService {
 
     Fine saveFine(Fine fine);
 
-    List<Fine> getFines() throws ServiceException;
+    List<Fine> getFines();
 
     Fine getFine(int id) throws ServiceException;
 
