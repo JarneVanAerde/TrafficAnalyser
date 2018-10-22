@@ -75,4 +75,9 @@ public class VehicleService {
     public Vehicle saveVehicle(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }
+
+    public void deleteAllOwnersAndVehicles() {
+        vehicleRepository.deleteAll();
+        vehicleOwnerRepository.deleteAll();
+    }
 }

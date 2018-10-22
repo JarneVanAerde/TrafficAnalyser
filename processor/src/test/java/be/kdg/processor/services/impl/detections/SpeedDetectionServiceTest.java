@@ -2,12 +2,14 @@ package be.kdg.processor.services.impl.detections;
 
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.EmissionFine;
+import be.kdg.processor.models.fines.SpeedFine;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.api.FineService;
-import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +19,11 @@ import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class EmissonDetectionServiceTest {
+public class SpeedDetectionServiceTest {
     private static final String PLATE_ID = "1-ABC-123";
 
     @Autowired
-    private EmissionFineDetectionService emissonDetectionService;
+    private SpeedFineDetectionService speedFineDetectionService;
     @Autowired
     private VehicleService vehicleService;
     @Autowired
@@ -37,29 +39,34 @@ public class EmissonDetectionServiceTest {
     }
 
     @Test
-    public void testDetectEmissionFineSucces() throws Exception {
-        CameraMessage testMessage = new CameraMessage(3, PLATE_ID, LocalDateTime.now());
+    public void testDetectSpeedFineSucces() throws Exception {
+        CameraMessage testMessage1 = new CameraMessage(4, PLATE_ID, LocalDateTime.now());
+        CameraMessage testMessage2 = new CameraMessage(5, PLATE_ID, LocalDateTime.now().plusSeconds(10));
         vehicleService.extractPlateInfo(new LicensePlateInfo(PLATE_ID, "NaN", 1));
 
-        emissonDetectionService.detectFine(testMessage);
+        speedFineDetectionService.detectFine(testMessage1);
+        speedFineDetectionService.detectFine(testMessage2);
         fineService.getFine(findFineByPlate());
-        Assert.assertEquals(300.0, fineService.getFine(findFineByPlate()).getAmount(), 0.0);
+        Assert.assertEquals(296.0, fineService.getFine(findFineByPlate()).getAmount(), 0.0);
     }
 
     @Test(expected = Exception.class)
-    public void testDetectEmissionFineFail() throws Exception {
-        CameraMessage message = new CameraMessage(1, PLATE_ID, LocalDateTime.now());
+    public void testDetectSpeedFineFail() throws Exception {
+        CameraMessage testMessage1 = new CameraMessage(4, PLATE_ID, LocalDateTime.now());
+        CameraMessage testMessage2 = new CameraMessage(5, PLATE_ID, LocalDateTime.now().plusMinutes(5));
         vehicleService.extractPlateInfo(new LicensePlateInfo(PLATE_ID, "NaN", 1));
 
-        emissonDetectionService.detectFine(message);
+        speedFineDetectionService.detectFine(testMessage1);
+        speedFineDetectionService.detectFine(testMessage2);
         fineService.getFine(findFineByPlate());
         Assert.fail("There should not be a fine in the database...");
     }
 
-    private int findFineByPlate()  {
+    private int findFineByPlate() {
         return fineService.getFines().stream()
-                .filter(fine -> fine instanceof EmissionFine)
-                .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(PLATE_ID))
+                .filter(fine -> fine instanceof SpeedFine)
+                .filter(fine -> ((SpeedFine) fine).getEnterMessage().getLicensePlate().equalsIgnoreCase(PLATE_ID)
+                        && ((SpeedFine) fine).getExitMessage().getLicensePlate().equalsIgnoreCase(PLATE_ID))
                 .findAny().get().getFineId();
     }
 }

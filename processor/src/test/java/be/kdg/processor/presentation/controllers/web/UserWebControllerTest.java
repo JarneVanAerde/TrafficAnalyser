@@ -25,4 +25,11 @@ public class UserWebControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void showMenu() throws Exception {
+        mockMvc.perform(get("/user/menu")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+    }
 }

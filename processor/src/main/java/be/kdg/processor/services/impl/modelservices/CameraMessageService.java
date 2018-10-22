@@ -68,4 +68,8 @@ public class CameraMessageService {
 
         return Optional.empty();
     }
+
+    public void deleteAllMessage() {
+        cameraMessageRepository.deleteAll();
+    }
 }
