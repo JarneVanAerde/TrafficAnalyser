@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Web controller that is used to control everything
+ * that has to do with the application.
+ */
 @Controller
 @RequestMapping("/app")
 public class ApplicationWebController {
@@ -21,6 +25,10 @@ public class ApplicationWebController {
         this.rabbitListenerEndpointRegistry = rabbitListenerEndpointRegistry;
     }
 
+    /**
+     * Toggles the queue from paused to running
+     * @return the corresponding view based on the queue status.
+     */
     @GetMapping("/toggleQueue")
     public ModelAndView showQueueStatus() {
         if (!isQueuePaused) {
@@ -35,6 +43,9 @@ public class ApplicationWebController {
         }
     }
 
+    /**
+     * @return current queue status without toggeling.
+     */
     @GetMapping("/queueStatus")
     public ModelAndView showCurrentQueueStatus() {
         if (!isQueuePaused) return new ModelAndView("queueRunning");

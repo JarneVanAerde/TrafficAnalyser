@@ -55,7 +55,7 @@ public class OptionWebController {
     }
 
     /**
-     * Alls options of the form are saved to the database.
+     * All options of the form are saved to the database.
      *
      * @param optionDTOS wrapper for optionDTO.
      * @return a redirect to show the options.

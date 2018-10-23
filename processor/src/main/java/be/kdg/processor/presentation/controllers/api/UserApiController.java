@@ -30,9 +30,9 @@ public class UserApiController {
     }
 
     /**
-     * @return get all the active users of the system
+     * @return get all the users of the system
      */
-    @GetMapping("/users/active")
+    @GetMapping("/users")
     public ResponseEntity<UserDTO[]> loadUsers() {
         List<User> users = userService.getUsers(false);
         return new ResponseEntity<>(modelMapper.map(users, UserDTO[].class), HttpStatus.OK);
@@ -54,8 +54,8 @@ public class UserApiController {
      * @return created user
      * @throws ServiceException wrapper-exception
      */
-    @PostMapping("/users/save")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) throws ServiceException {
+    @PostMapping("/users")
+    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserDTO userDTO) throws ServiceException {
         User createdUser = userService.saveUser(modelMapper.map(userDTO, User.class));
         return new ResponseEntity<>(modelMapper.map(createdUser, UserDTO.class), HttpStatus.CREATED);
     }
@@ -65,7 +65,7 @@ public class UserApiController {
      * @return the deleted user
      * @throws ServiceException wrapper-exception
      */
-    @DeleteMapping("/users/delete/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable int id) throws ServiceException {
         User userToDelete = userService.deleteUser(id);
         return new ResponseEntity<>(modelMapper.map(userToDelete, UserDTO.class), HttpStatus.CREATED);

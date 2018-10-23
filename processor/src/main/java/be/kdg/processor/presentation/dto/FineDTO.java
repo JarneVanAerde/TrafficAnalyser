@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * FineDTO is used for emission fines and speed fines.
+ * FineDTO is used for transferring information about emission fines and speed fines.
  */
 @AllArgsConstructor
 @NoArgsConstructor

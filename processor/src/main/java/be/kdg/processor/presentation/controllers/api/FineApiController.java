@@ -45,7 +45,7 @@ public class FineApiController {
      * @param after after date.
      * @return all the fines between two dates.
      */
-    @GetMapping("/fines/}{before}/{after}")
+    @GetMapping("/fines/{before}/{after}")
     public ResponseEntity<FineDTO[]> getFinesBetweenDates(@PathVariable LocalDateTime before, @PathVariable LocalDateTime after) {
         List<Fine> fines = fineService.getFinesBetweenDates(before, after);
         if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
