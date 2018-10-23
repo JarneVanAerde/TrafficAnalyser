@@ -1,17 +1,21 @@
+import be.kdg.simulator.configs.FrequencyConfig;
+import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.models.CameraMessage;
 import be.kdg.simulator.services.api.MessageGenerator;
 import be.kdg.simulator.services.exceptions.ServiceException;
+import be.kdg.simulator.services.impl.generators.RandomMessageGenerator;
+import be.kdg.simulator.services.impl.utils.FrequencyDecider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {RandomMessageGenerator.class, GeneratorConfig.class, FrequencyDecider.class, FrequencyConfig.class})
 public class RandomMessageGeneratorTests {
-    //field injection
     @Autowired
     private MessageGenerator messageGenerator;
 

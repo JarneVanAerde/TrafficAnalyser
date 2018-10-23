@@ -45,6 +45,8 @@ public class RandomMessageGenerator implements MessageGenerator {
     }
 
     /**
+     * Thread.sleep is used to simulate traffic peak hours.
+     *
      * @return Gives back a newly generated CameraMessage-instance based on random parameters.
      */
     @Override
