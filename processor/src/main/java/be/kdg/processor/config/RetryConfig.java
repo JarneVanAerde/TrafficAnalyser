@@ -7,10 +7,18 @@ import org.springframework.retry.support.RetryTemplate;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Retry config.
+ * Used for the retrying the calls on the proxy's
+ */
 @Configuration
 public class RetryConfig {
     public static RetryTemplate retryTemplate;
 
+    /**
+     * contrucrs the template with default values
+     * @return configured template
+     */
     @PostConstruct
     public static RetryTemplate configureTemplate() {
         retryTemplate = new RetryTemplate();
@@ -26,12 +34,18 @@ public class RetryConfig {
         return retryTemplate;
     }
 
+    /**
+     * @param attempts new number of attempts
+     */
     public static void setMaxAttemps(int attempts) {
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
         retryPolicy.setMaxAttempts(attempts);
         retryTemplate.setRetryPolicy(retryPolicy);
     }
 
+    /**
+     * @param delay new delay
+     */
     public static void setDelay(long delay) {
         FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
         fixedBackOffPolicy.setBackOffPeriod(delay);
