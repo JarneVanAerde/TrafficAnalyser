@@ -57,6 +57,7 @@ public class FileGenerator implements MessageGenerator {
                 delay = Integer.parseInt(values[2]);
                 localDateTimeForMessage = localDateTimeForMessage.plusNanos(NANO_SECONDS * delay);
 
+                //create new object form line
                 if (Integer.parseInt(values[0]) <= generatorConfig.getMaxId()) {
                     cameraMessages.add(new CameraMessage(
                             Integer.parseInt(values[0]),

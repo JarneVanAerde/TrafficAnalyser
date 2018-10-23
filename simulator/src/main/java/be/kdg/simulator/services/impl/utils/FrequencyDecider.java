@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Decides the frequency for normal -and peak traffic conditions
+ */
 @Service
 public class FrequencyDecider {
     private final FrequencyConfig frequencyConfig;
@@ -19,6 +22,10 @@ public class FrequencyDecider {
         initialzeTimePeriods();
     }
 
+    /**
+     * Initializes the timestamp ranges based on the information
+     * out of the config file
+     */
     private void initialzeTimePeriods() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -31,6 +38,10 @@ public class FrequencyDecider {
         timeEvenigEnd = LocalTime.parse(eveningHours[1], formatter);
     }
 
+    /**
+     * Calculates whether a normal or peak frequency needs to be returned.
+     * @return corresponding frequency.
+     */
     public long getFrequency() {
         LocalTime now = LocalTime.now();
 
