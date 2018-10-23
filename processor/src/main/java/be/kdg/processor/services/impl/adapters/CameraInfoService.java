@@ -27,6 +27,8 @@ public class CameraInfoService implements CameraServiceAdapter {
     }
 
     /**
+     * Cameras are cached to save time
+     *
      * @param id for the requested camera
      * @return a camera from the proxy service
      * @throws ServiceException wrapper-exception
@@ -40,6 +42,5 @@ public class CameraInfoService implements CameraServiceAdapter {
         } catch (IOException | CameraNotFoundException e) {
            throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
         }
-
     }
 }

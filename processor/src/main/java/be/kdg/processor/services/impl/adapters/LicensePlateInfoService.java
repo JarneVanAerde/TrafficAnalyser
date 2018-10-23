@@ -28,6 +28,8 @@ public class LicensePlateInfoService implements LicensePlateServiceAdatpter {
     }
 
     /**
+     * License plates are cached to save time
+     *
      * @param plateId for the requested license plate
      * @return a license plate form the service
      * @throws ServiceException wrapper-exception
