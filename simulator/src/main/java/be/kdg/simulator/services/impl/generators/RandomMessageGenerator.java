@@ -3,6 +3,8 @@ package be.kdg.simulator.services.impl.generators;
 import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.models.CameraMessage;
 import be.kdg.simulator.services.api.MessageGenerator;
+import be.kdg.simulator.services.exceptions.ServiceException;
+import be.kdg.simulator.services.impl.utils.FrequencyDecider;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,10 +21,12 @@ import java.util.Random;
 public class RandomMessageGenerator implements MessageGenerator {
     private final Random generator;
     private final GeneratorConfig generatorConfig;
+    private final FrequencyDecider frequencyDecider;
 
     @Autowired
-    public RandomMessageGenerator(GeneratorConfig generatorConfig) {
+    public RandomMessageGenerator(GeneratorConfig generatorConfig, FrequencyDecider frequencyDecider) {
         this.generatorConfig = generatorConfig;
+        this.frequencyDecider = frequencyDecider;
         this.generator = new Random();
     }
 
@@ -41,10 +45,18 @@ public class RandomMessageGenerator implements MessageGenerator {
     }
 
     /**
+     * Thread.sleep is used to simulate traffic peak hours.
+     *
      * @return Gives back a newly generated CameraMessage-instance based on random parameters.
      */
     @Override
-    public CameraMessage generate() {
+    public CameraMessage generate() throws ServiceException {
+        try {
+            Thread.sleep(frequencyDecider.getFrequency());
+        } catch (InterruptedException e) {
+            throw new ServiceException(getClass().getSimpleName() + ": " + e.getMessage());
+        }
+
         return new CameraMessage(generator.nextInt(generatorConfig.getMaxId()) + 1, generateLicenseplate(), LocalDateTime.now());
     }
 }
