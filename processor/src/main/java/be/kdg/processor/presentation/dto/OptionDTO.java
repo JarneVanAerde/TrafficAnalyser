@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * OptionDTO is used for transferring option information.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

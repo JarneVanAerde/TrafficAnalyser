@@ -10,11 +10,9 @@ import lombok.*;
  * Vehicle
  * VehicleOwner
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class LicensePlateInfo {
     private String plateId;
     private String nationalNumber;

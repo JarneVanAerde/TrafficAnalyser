@@ -4,13 +4,11 @@ import be.kdg.processor.config.RetryConfig;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
-import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.OptionService;
+import be.kdg.processor.services.impl.modelservices.FineService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +44,11 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
      * If the message can't be linked to a fine, then it is
      * thrown away.
      *
+     * If the proxy's throw an exception, then a retry mechanism will go back
+     * and retry several times
+     *
+     * If a emission fine is dedected, then it will be passed to the fineService.
+     *
      * @param message the message that will be used to detect possible emission fines.
      */
     @Override
@@ -59,10 +62,10 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
         LicensePlateInfo licensePlateInfo =
                 retryTemplate.execute(context -> licensePlateInfoService.get(message.getLicensePlate()));
 
-
-        //Detect fine
+        //Detect fine & extract plate info
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
             vehicleService.extractPlateInfo(licensePlateInfo);
+
             if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
                 LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
                 fineService.createEmissionFine(licensePlateInfo.getEuroNumber(), camera.getEuroNorm(),

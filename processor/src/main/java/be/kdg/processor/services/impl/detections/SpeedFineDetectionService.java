@@ -5,14 +5,12 @@ import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.cameras.Segment;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
-import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
-import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
-import be.kdg.processor.services.impl.modelservices.OptionService;
+import be.kdg.processor.services.impl.modelservices.FineService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +23,13 @@ import java.util.Optional;
 
 /**
  * This class is used for the detection of illegal speed.
- * All messages will pass through here to check for illegal emissions.
+ * All messages will pass through here to check for illegal speed.
  */
 @Service
 public class SpeedFineDetectionService implements DetectionService<CameraMessage> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedFineDetectionService.class);
     private static final double SECONDS_IN_HOUR = 3600.0;
     private static final double METERS_IN_KM = 1000.0;
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpeedFineDetectionService.class);
 
     private final CameraInfoService cameraInfoService;
     private final LicensePlateInfoService licensePlateInfoService;
@@ -55,6 +53,17 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
      * If the message can't be linked to a fine, then it is
      * saved to the database.
      *
+     * If the proxy's throw an exception, then a retry mechanism will go back
+     * and retry several times.
+     *
+     * After that, a corresponding message will be retrieved.
+     * if the corresponding messages is not present, then the message will be ignored.
+     *
+     * If the other message of the segment is present, then the speed will be calculated
+     * if the speed of the vehicle exceeds the legal speed, then a fine will be created.
+     *
+     * At the end, the message is stored into a speedMessage buffer.
+     *
      * @param message the message that will be used to detect possible emission fines.
      */
     @Override
@@ -74,14 +83,12 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
             optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
         }
 
-        //detect fine
+        //Detect fine & extract plate info
         if (optionalCameraMessage.isPresent()) {
             vehicleService.extractPlateInfo(licensePlateInfo);
 
             CameraMessage enterMessage = optionalCameraMessage.get();
-            Segment segment;
-            if (camera.getSegment() != null) segment = camera.getSegment();
-            else segment = cameraInfoService.get(enterMessage.getCameraId()).getSegment();
+            Segment segment = cameraInfoService.get(enterMessage.getCameraId()).getSegment();
 
             LOGGER.info("Calculation distance for " + enterMessage.getCameraId() + " and " + camera.getCameraId());
             double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
@@ -94,11 +101,20 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
             }
         }
 
+        //Add current message to buffer
         cameraMessageService.addToBuffer(message);
     }
 
-    private double calculateSpeed(Segment segment, CameraMessage cameraMessageOne, CameraMessage cameraMessageTwo) {
-        Duration duration = Duration.between(cameraMessageTwo.getTimestamp(), cameraMessageOne.getTimestamp());
+    /**
+     * Calculates the speed of the vehicle.
+     *
+     * @param segment the segment of the 2 messages.
+     * @param exitMessage message that corresponds with vehicle leaving the segment.
+     * @param enterMessage message that corresponds with vehicle entering the segment.
+     * @return the speed of the vehicle.
+     */
+    private double calculateSpeed(Segment segment, CameraMessage exitMessage, CameraMessage enterMessage) {
+        Duration duration = Duration.between(enterMessage.getTimestamp(), exitMessage.getTimestamp());
         return (segment.getDistance() / METERS_IN_KM) / (duration.getSeconds() / SECONDS_IN_HOUR);
     }
 }

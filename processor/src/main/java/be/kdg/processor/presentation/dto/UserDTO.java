@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * UserDTO is used for transferring user information.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

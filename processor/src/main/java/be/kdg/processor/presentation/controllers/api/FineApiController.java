@@ -2,8 +2,8 @@ package be.kdg.processor.presentation.controllers.api;
 
 import be.kdg.processor.models.fines.Fine;
 import be.kdg.processor.presentation.dto.FineDTO;
-import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
+import be.kdg.processor.services.impl.modelservices.FineService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class FineApiController {
      * @param after after date.
      * @return all the fines between two dates.
      */
-    @GetMapping("/fines/}{before}/{after}")
+    @GetMapping("/fines/{before}/{after}")
     public ResponseEntity<FineDTO[]> getFinesBetweenDates(@PathVariable LocalDateTime before, @PathVariable LocalDateTime after) {
         List<Fine> fines = fineService.getFinesBetweenDates(before, after);
         if (fines.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);

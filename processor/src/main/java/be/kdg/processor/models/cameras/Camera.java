@@ -3,7 +3,6 @@ package be.kdg.processor.models.cameras;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +19,8 @@ public class Camera {
     private Location location;
     private final List<CameraMessage> cameraMessages;
 
-    public Camera(int id, int euroNorm, Segment segment, Location location) {
-        this.cameraId = id;
+    public Camera(int cameraId, int euroNorm, Segment segment, Location location) {
+        this.cameraId = cameraId;
         this.euroNorm = euroNorm;
         this.segment = segment;
         this.location = location;

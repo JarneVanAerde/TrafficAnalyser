@@ -48,15 +48,16 @@ public class FileGenerator implements MessageGenerator {
         try (Scanner scanner = new Scanner(generatorConfig.getFilePath())) {
             final int NANO_SECONDS = 1000000;
             LocalDateTime localDateTimeForMessage = LocalDateTime.now();
-            int delay;
+            long delay;
 
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(",");
 
-                delay = Integer.parseInt(values[2]);
+                delay = Long.parseLong(values[2]);
                 localDateTimeForMessage = localDateTimeForMessage.plusNanos(NANO_SECONDS * delay);
 
+                //create new object form line
                 if (Integer.parseInt(values[0]) <= generatorConfig.getMaxId()) {
                     cameraMessages.add(new CameraMessage(
                             Integer.parseInt(values[0]),

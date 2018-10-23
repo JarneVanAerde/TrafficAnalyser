@@ -4,6 +4,11 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Config class is used for the configuration
+ * of the frequencies that will be used to mock
+ * real traffic conditions.
+ */
 @Configuration
 @Getter
 public class FrequencyConfig {

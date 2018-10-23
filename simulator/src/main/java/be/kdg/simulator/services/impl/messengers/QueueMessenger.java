@@ -14,19 +14,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+/**
+ * Messenger used for places camera messages on an online
+ * rabbitMQ cloud instance.
+ */
 @Component
 @ConditionalOnProperty(name = "messaging.type", havingValue = "queue")
 public class QueueMessenger implements Messenger {
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class);
     private final RabbitTemplate rabbitTemplate;
     private final Queue camQueue;
     private final XmlMapper xmlMapper;
-    private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessenger.class);
+    private final MessageWriter messageWriter;
 
     @Autowired
-    public QueueMessenger(RabbitTemplate rabbitTemplate, Queue camQueue, XmlMapper xmlMapper) {
+    public QueueMessenger(RabbitTemplate rabbitTemplate, Queue camQueue, XmlMapper xmlMapper, MessageWriter messageWriter) {
         this.rabbitTemplate = rabbitTemplate;
         this.camQueue = camQueue;
         this.xmlMapper = xmlMapper;
+        this.messageWriter = messageWriter;
     }
 
     /**
@@ -37,7 +43,7 @@ public class QueueMessenger implements Messenger {
     @Override
     public void sendMessage(CameraMessage message) throws ServiceException {
         try {
-            MessageWriter.writeMessage(message);
+            messageWriter.writeMessage(message);
             rabbitTemplate.convertAndSend(camQueue.getName(), xmlMapper.writeValueAsString(message));
             LOGGER.info("Message with license " + message.getLicensePlate() + " from camera " + message.getCameraId() + " has been sent to the queue");
         } catch (JsonProcessingException e) {

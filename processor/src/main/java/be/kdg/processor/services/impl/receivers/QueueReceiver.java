@@ -6,18 +6,16 @@ import be.kdg.processor.services.api.Receiver;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 /**
  * This class listens for messages that are on the queue.
- * If a message is on the queue, then the rabbit handler passes that message to
- * all rabbit handles methods.
+ * If a message is on the queue, then it will be passed to the
+ * processor. the type of processor is mentioned in application.properties.
  */
 @Component
 public class QueueReceiver implements Receiver<CameraMessage> {

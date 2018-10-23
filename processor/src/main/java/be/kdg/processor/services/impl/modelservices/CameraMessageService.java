@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,8 +53,6 @@ public class CameraMessageService {
     }
 
     /**
-     * Messages that are out of the fimeframe
-     *
      * @param plateId the plate id of the connected message
      * @param cameraId the camera id of the segment
      * @return the connected camera-message if there is one present.
@@ -68,6 +63,7 @@ public class CameraMessageService {
 
         List<CameraMessage> cameraMessages = speedMessageBuffer.stream()
                 .filter(cm -> cm.getLicensePlate().equalsIgnoreCase(plateId))
+                .sorted(Comparator.comparing(CameraMessage::getTimestamp).reversed())
                 .collect(Collectors.toList());
 
         for (CameraMessage cm : cameraMessages) {
@@ -78,6 +74,10 @@ public class CameraMessageService {
         return Optional.empty();
     }
 
+    /**
+     * Deletes all the speed messages that exceed the time frame.
+     * @throws ServiceException wrapper-exception
+     */
     public void deleteMessageOutOfTimeFrame() throws ServiceException {
         double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_SPEED_MESSAGE);
         speedMessageBuffer.removeIf(message ->
@@ -85,7 +85,7 @@ public class CameraMessageService {
     }
 
     /**
-     * deletes all messages in the repository
+     * deletes all messages in the repository.
      */
     public void deleteAllMessage() {
         cameraMessageRepository.deleteAll();

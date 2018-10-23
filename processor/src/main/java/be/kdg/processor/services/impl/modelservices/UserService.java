@@ -56,7 +56,7 @@ public class UserService {
     public User getUser(int id) throws ServiceException {
         return userRepository.findById(id)
                 .filter(user -> !user.isDeleted())
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": user with cameraId " + id + " wasn't found in the database"));
+                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": user with id " + id + " wasn't found in the database"));
     }
 
     /**
@@ -70,7 +70,11 @@ public class UserService {
         return saveUser(userToDelete);
     }
 
-
+    /**
+     * @param name name of the user
+     * @param password password of the user
+     * @return true if user authentication succeeded.
+     */
     public boolean authenticateUser(String name, String password) {
         Optional<User> optionalUser = userRepository.findAll().stream()
                 .filter(user -> user.getName().equalsIgnoreCase(name) &&
