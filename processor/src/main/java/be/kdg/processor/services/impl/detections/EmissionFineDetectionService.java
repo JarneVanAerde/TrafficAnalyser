@@ -46,10 +46,9 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
      */
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
-        //Call adapter
+        //Call adapters
         Camera camera = cameraInfoService.get(message.getCameraId());
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
-
 
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
