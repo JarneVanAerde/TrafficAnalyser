@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class FineService  {
+public class FineService {
     private final FineRepository fineRepo;
     private final VehicleService vehicleService;
     private final CameraMessageService cameraMessageService;
@@ -163,7 +163,7 @@ public class FineService  {
 
     /**
      * @param beforeDate begin-date
-     * @param afterDate end-date
+     * @param afterDate  end-date
      * @return all fines between the 2 dates
      */
     public List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate) {

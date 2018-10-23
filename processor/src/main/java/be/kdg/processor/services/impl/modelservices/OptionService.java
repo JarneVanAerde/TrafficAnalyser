@@ -27,7 +27,7 @@ public class OptionService {
     }
 
     /**
-     * Adds the default options of the application
+     * Adds the default options of the application.
      */
     private void addDefaultOptions() {
         saveOption(new Option(OptionKey.SPEED_FAC.toString(), 2));
@@ -42,16 +42,15 @@ public class OptionService {
      * if the option has something to do with the retryTemplate,
      * then that template will be updated.
      *
-     * @param option the option to save
-     * @return the saved option with an id.
+     * @param option the option to save.
      */
-    public Option saveOption(Option option) {
+    public void saveOption(Option option) {
         if (option.getKey().equalsIgnoreCase(OptionKey.RETRY_DELAY.toString()))
             RetryConfig.setDelay((long) option.getValue());
         if (option.getKey().equalsIgnoreCase(OptionKey.RETRY_ATTEMPTS.toString()))
             RetryConfig.setMaxAttemps((int) option.getValue());
 
-        return optionsRepository.save(option);
+        optionsRepository.save(option);
     }
 
     /**
@@ -63,16 +62,6 @@ public class OptionService {
         return optionsRepository.findById(key.toString())
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": value for key + " + key + " was not found in the database"))
                 .getValue();
-    }
-
-    /**
-     * @param key the option key
-     * @return the corresponding option
-     * @throws ServiceException wrapper-exception
-     */
-    public Option getOption(OptionKey key) throws ServiceException {
-        return optionsRepository.findById(key.toString())
-                .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": Option with key " + key + " was not found in the database"));
     }
 
     /**

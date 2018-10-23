@@ -70,7 +70,11 @@ public class UserService {
         return saveUser(userToDelete);
     }
 
-
+    /**
+     * @param name name of the user
+     * @param password password of the user
+     * @return true if user authentication succeeded.
+     */
     public boolean authenticateUser(String name, String password) {
         Optional<User> optionalUser = userRepository.findAll().stream()
                 .filter(user -> user.getName().equalsIgnoreCase(name) &&

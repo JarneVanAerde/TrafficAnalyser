@@ -74,6 +74,10 @@ public class CameraMessageService {
         return Optional.empty();
     }
 
+    /**
+     * Deletes all the speed messages that exceed the time frame.
+     * @throws ServiceException wrapper-exception
+     */
     public void deleteMessageOutOfTimeFrame() throws ServiceException {
         double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_SPEED_MESSAGE);
         speedMessageBuffer.removeIf(message ->
@@ -81,7 +85,7 @@ public class CameraMessageService {
     }
 
     /**
-     * deletes all messages in the repository
+     * deletes all messages in the repository.
      */
     public void deleteAllMessage() {
         cameraMessageRepository.deleteAll();

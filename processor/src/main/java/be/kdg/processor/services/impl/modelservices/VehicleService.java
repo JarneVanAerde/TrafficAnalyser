@@ -70,12 +70,14 @@ public class VehicleService {
 
     /**
      * @param vehicle the vehicle that needs to be saved
-     * @return the saved vehicle with id.
      */
-    public Vehicle saveVehicle(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
+    public void saveVehicle(Vehicle vehicle) {
+        vehicleRepository.save(vehicle);
     }
 
+    /**
+     * deletes all rows from the vehicles table and the owner table.
+     */
     public void deleteAllOwnersAndVehicles() {
         vehicleRepository.deleteAll();
         vehicleOwnerRepository.deleteAll();
