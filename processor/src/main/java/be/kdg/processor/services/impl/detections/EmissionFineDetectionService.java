@@ -1,13 +1,16 @@
 package be.kdg.processor.services.impl.detections;
 
+import be.kdg.processor.config.RetryConfig;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,16 +30,14 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
     private final LicensePlateInfoService licensePlateInfoService;
     private final FineService fineService;
     private final VehicleService vehicleService;
-    private final RetryTemplate retryTemplate;
 
     @Autowired
     public EmissionFineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                        FineService fineService, VehicleService licensePlateService, RetryTemplate retryTemplate) {
+                                        FineService fineService, VehicleService licensePlateService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.vehicleService = licensePlateService;
-        this.retryTemplate = retryTemplate;
     }
 
     /**
@@ -49,6 +50,9 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
      */
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
+        //Get retry template
+        RetryTemplate retryTemplate = RetryConfig.retryTemplate;
+
         //Call adapters with retry
         Camera camera =
                 retryTemplate.execute(context -> cameraInfoService.get(message.getCameraId()));

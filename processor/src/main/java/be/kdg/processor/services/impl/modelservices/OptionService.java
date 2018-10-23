@@ -1,5 +1,6 @@
 package be.kdg.processor.services.impl.modelservices;
 
+import be.kdg.processor.config.RetryConfig;
 import be.kdg.processor.models.options.Option;
 import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.persistence.OptionRepository;
@@ -33,13 +34,23 @@ public class OptionService {
         saveOption(new Option(OptionKey.EMISSION_FAC.toString(), 100));
         saveOption(new Option(OptionKey.TIME_FRAME_EMISSION.toString(), 24));
         saveOption(new Option(OptionKey.TIME_FRAME_SPEED_MESSAGE.toString(), 15));
+        saveOption(new Option(OptionKey.RETRY_DELAY.toString(), 2500));
+        saveOption(new Option(OptionKey.RETRY_ATTEMPTS.toString(), 2));
     }
 
     /**
+     * if the option has something to do with the retryTemplate,
+     * then that template will be updated.
+     *
      * @param option the option to save
      * @return the saved option with an id.
      */
     public Option saveOption(Option option) {
+        if (option.getKey().equalsIgnoreCase(OptionKey.RETRY_DELAY.toString()))
+            RetryConfig.setDelay((long) option.getValue());
+        if (option.getKey().equalsIgnoreCase(OptionKey.RETRY_ATTEMPTS.toString()))
+            RetryConfig.setMaxAttemps((int) option.getValue());
+
         return optionsRepository.save(option);
     }
 

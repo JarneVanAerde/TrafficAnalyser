@@ -1,15 +1,18 @@
 package be.kdg.processor.services.impl.detections;
 
+import be.kdg.processor.config.RetryConfig;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.cameras.Segment;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +38,15 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
     private final VehicleService vehicleService;
-    private final RetryTemplate retryTemplate;
 
     @Autowired
     public SpeedFineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService, RetryTemplate retryTemplate) {
+                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.cameraMessageService = cameraMessageService;
         this.vehicleService = vehicleService;
-        this.retryTemplate = retryTemplate;
     }
 
     /**
@@ -58,6 +59,9 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
      */
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
+        //Get retry template
+        RetryTemplate retryTemplate = RetryConfig.retryTemplate;
+
         //Call adapter
         Camera camera =
                 retryTemplate.execute(context -> cameraInfoService.get(message.getCameraId()));
