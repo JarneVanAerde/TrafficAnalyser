@@ -50,6 +50,7 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
         Camera camera = cameraInfoService.get(message.getCameraId());
         LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
 
+
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
             vehicleService.extractPlateInfo(licensePlateInfo);

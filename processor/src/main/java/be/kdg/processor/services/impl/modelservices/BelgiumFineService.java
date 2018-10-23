@@ -131,12 +131,22 @@ public class BelgiumFineService implements FineService {
         return fineRepo.findAll();
     }
 
+    /**
+     * @param id fine that needs to be returned
+     * @return retreived fine
+     * @throws ServiceException wrapper-exception
+     */
     @Override
     public Fine getFine(int id) throws ServiceException {
         return fineRepo.findById(id)
                 .orElseThrow(() -> new ServiceException(getClass().getSimpleName() + ": fine with cameraId " + id + " was not found in the database"));
     }
 
+    /**
+     * @param id of the fine that needs to be approved
+     * @return approved fine
+     * @throws ServiceException wrapper-exception
+     */
     @Override
     public Fine approveFine(int id) throws ServiceException {
         Fine fineToUpdate = getFine(id);
@@ -144,6 +154,13 @@ public class BelgiumFineService implements FineService {
         return saveFine(fineToUpdate);
     }
 
+    /**
+     * @param id         of the fine that needs to be changed
+     * @param amount     the new amount
+     * @param motivation motivation for the changed fine
+     * @return the updated fine
+     * @throws ServiceException wrapper-exception
+     */
     @Override
     public Fine changeAmount(int id, double amount, String motivation) throws ServiceException {
         Fine fineToUpdate = getFine(id);
@@ -152,6 +169,11 @@ public class BelgiumFineService implements FineService {
         return saveFine(fineToUpdate);
     }
 
+    /**
+     * @param beforeDate begin-date
+     * @param afterDate end-date
+     * @return all fines between the 2 dates
+     */
     @Override
     public List<Fine> getFinesBetweenDates(LocalDateTime beforeDate, LocalDateTime afterDate) {
         return getFines().stream()
@@ -160,6 +182,9 @@ public class BelgiumFineService implements FineService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * deletes all fines in the database
+     */
     @Override
     public void deleteAllFines() {
         fineRepo.deleteAll();
