@@ -14,6 +14,7 @@ import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -34,15 +35,17 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
     private final FineService fineService;
     private final CameraMessageService cameraMessageService;
     private final VehicleService vehicleService;
+    private final RetryTemplate retryTemplate;
 
     @Autowired
     public SpeedFineDetectionService(CameraInfoService cameraInfoService, LicensePlateInfoService licensePlateInfoService,
-                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService) {
+                                     FineService fineService, CameraMessageService cameraMessageService, VehicleService vehicleService, RetryTemplate retryTemplate) {
         this.cameraInfoService = cameraInfoService;
         this.licensePlateInfoService = licensePlateInfoService;
         this.fineService = fineService;
         this.cameraMessageService = cameraMessageService;
         this.vehicleService = vehicleService;
+        this.retryTemplate = retryTemplate;
     }
 
     /**
@@ -56,8 +59,10 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
         //Call adapter
-        Camera camera = cameraInfoService.get(message.getCameraId());
-        LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
+        Camera camera =
+                retryTemplate.execute(context -> cameraInfoService.get(message.getCameraId()));
+        LicensePlateInfo licensePlateInfo =
+                retryTemplate.execute(context -> licensePlateInfoService.get(message.getLicensePlate()));
 
         //Collect corresponding message
         Optional<CameraMessage> optionalCameraMessage = Optional.empty();
