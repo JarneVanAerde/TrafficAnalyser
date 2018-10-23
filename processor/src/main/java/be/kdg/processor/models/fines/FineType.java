@@ -4,7 +4,7 @@ package be.kdg.processor.models.fines;
  * Enum that is used for declaring the different fine types.
  */
 public enum FineType {
-    SPEED_FINE("Speed fine"), EMISSiON_FINE("Emission fine");
+    SPEED_FINE("Speed fine"), EMISSION_FINE("Emission fine");
 
     private String type;
 

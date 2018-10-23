@@ -9,9 +9,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Simple POJO used to store information about a camera message.
  */
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

@@ -14,9 +14,12 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class RetryConfig {
     public static RetryTemplate retryTemplate;
+    private static final long DEFAULT_DELAY = 2500L;
+    private static final int DEFAULT_ATTEMPTS = 2;
 
     /**
      * contrucrs the template with default values
+     *
      * @return configured template
      */
     @PostConstruct
@@ -24,11 +27,11 @@ public class RetryConfig {
         retryTemplate = new RetryTemplate();
 
         FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
-        fixedBackOffPolicy.setBackOffPeriod(2500L);
+        fixedBackOffPolicy.setBackOffPeriod(DEFAULT_DELAY);
         retryTemplate.setBackOffPolicy(fixedBackOffPolicy);
 
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-        retryPolicy.setMaxAttempts(2);
+        retryPolicy.setMaxAttempts(DEFAULT_ATTEMPTS);
         retryTemplate.setRetryPolicy(retryPolicy);
 
         return retryTemplate;
@@ -39,7 +42,10 @@ public class RetryConfig {
      */
     public static void setMaxAttemps(int attempts) {
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-        retryPolicy.setMaxAttempts(attempts);
+
+        if (attempts <= 0) retryPolicy.setMaxAttempts(DEFAULT_ATTEMPTS);
+        else retryPolicy.setMaxAttempts(attempts);
+
         retryTemplate.setRetryPolicy(retryPolicy);
     }
 
@@ -48,7 +54,10 @@ public class RetryConfig {
      */
     public static void setDelay(long delay) {
         FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
-        fixedBackOffPolicy.setBackOffPeriod(delay);
+
+        if (delay <= 0) fixedBackOffPolicy.setBackOffPeriod(DEFAULT_DELAY);
+        else fixedBackOffPolicy.setBackOffPeriod(delay);
+
         retryTemplate.setBackOffPolicy(fixedBackOffPolicy);
     }
 }

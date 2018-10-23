@@ -2,14 +2,10 @@ package be.kdg.processor.models.fines;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Abstract super class used by al specific fines for inheritance.
  */
