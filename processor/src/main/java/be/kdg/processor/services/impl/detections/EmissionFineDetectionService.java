@@ -1,17 +1,21 @@
 package be.kdg.processor.services.impl.detections;
 
+import be.kdg.processor.config.RetryConfig;
 import be.kdg.processor.models.cameras.Camera;
 import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
+import be.kdg.processor.models.options.OptionKey;
 import be.kdg.processor.services.api.DetectionService;
 import be.kdg.processor.services.api.FineService;
 import be.kdg.processor.services.exceptions.ServiceException;
 import be.kdg.processor.services.impl.adapters.CameraInfoService;
 import be.kdg.processor.services.impl.adapters.LicensePlateInfoService;
+import be.kdg.processor.services.impl.modelservices.OptionService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -46,9 +50,15 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
      */
     @Override
     public void detectFine(CameraMessage message) throws ServiceException {
-        //Call adapters
-        Camera camera = cameraInfoService.get(message.getCameraId());
-        LicensePlateInfo licensePlateInfo = licensePlateInfoService.get(message.getLicensePlate());
+        //Get retry template
+        RetryTemplate retryTemplate = RetryConfig.retryTemplate;
+
+        //Call adapters with retry
+        Camera camera =
+                retryTemplate.execute(context -> cameraInfoService.get(message.getCameraId()));
+        LicensePlateInfo licensePlateInfo =
+                retryTemplate.execute(context -> licensePlateInfoService.get(message.getLicensePlate()));
+
 
         //Detect fine
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
