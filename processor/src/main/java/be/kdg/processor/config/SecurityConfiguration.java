@@ -45,18 +45,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/").permitAll()
                     .antMatchers("/user/login").permitAll()
                     .antMatchers("/h2-console/**").permitAll()
-                    .antMatchers("/h2-console/login.do").permitAll()
                     .antMatchers("/api/**").permitAll()
-                    .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
+                    .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest().authenticated()
+                    .and()
+                .csrf().disable().formLogin()
                 .loginPage("/user/login")
                     .failureUrl("/user/login?error=true")
                     .defaultSuccessUrl("/user/menu")
                     .passwordParameter("password")
+                    .usernameParameter("name")
                     .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/");
+
+        //enable h2 connection
+        http.headers().frameOptions().disable();
     }
 
     @Override
