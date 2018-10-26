@@ -4,7 +4,6 @@ import be.kdg.processor.models.cameras.CameraMessage;
 import be.kdg.processor.models.fines.EmissionFine;
 import be.kdg.processor.models.licensePlates.LicensePlateInfo;
 import be.kdg.processor.services.exceptions.ServiceException;
-import be.kdg.processor.services.impl.modelservices.CameraMessageService;
 import be.kdg.processor.services.impl.modelservices.FineService;
 import be.kdg.processor.services.impl.modelservices.VehicleService;
 import org.junit.*;
