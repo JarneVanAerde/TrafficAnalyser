@@ -1,6 +1,7 @@
 package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.users.User;
+import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) throws ServiceException {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) throws ServiceException {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         addSuperAdmin();
     }
 
