@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class FineApiControllerTest {
     private static final String PLATE_ID = "1-ABC-123";
 
@@ -36,8 +38,6 @@ public class FineApiControllerTest {
     private FineService fineService;
     @Autowired
     private VehicleService vehicleService;
-    @Autowired
-    private CameraMessageService cameraMessageService;
 
     @Before
     public void setUp() throws ServiceException {
@@ -45,13 +45,6 @@ public class FineApiControllerTest {
         fineService.createEmissionFine(3, 3,
                 new CameraMessage(3, PLATE_ID, LocalDateTime.now()),
                 PLATE_ID);
-    }
-
-    @After
-    public void tearDown() {
-        fineService.deleteAllFines();
-        cameraMessageService.deleteAllMessage();
-        vehicleService.deleteAllOwnersAndVehicles();
     }
 
     @Test

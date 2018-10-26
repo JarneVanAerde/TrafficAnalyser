@@ -13,11 +13,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class SpeedDetectionServiceTest {
     private static final String PLATE_ID = "1-ABC-123";
 
@@ -27,15 +29,6 @@ public class SpeedDetectionServiceTest {
     private VehicleService vehicleService;
     @Autowired
     private FineService fineService;
-    @Autowired
-    private CameraMessageService cameraMessageService;
-
-    @After
-    public void tearDown() {
-        fineService.deleteAllFines();
-        cameraMessageService.deleteAllMessage();
-        vehicleService.deleteAllOwnersAndVehicles();
-    }
 
     @Test
     public void testDetectSpeedFineSucces() throws Exception {
