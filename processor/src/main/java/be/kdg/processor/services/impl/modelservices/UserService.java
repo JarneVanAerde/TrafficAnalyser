@@ -1,15 +1,16 @@
 package be.kdg.processor.services.impl.modelservices;
 
+import be.kdg.processor.models.users.Role;
 import be.kdg.processor.models.users.User;
 import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This service is used for user CRUD.
@@ -18,28 +19,29 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) throws ServiceException {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         addSuperAdmin();
     }
 
     /**
      * Adds the super admin for the application
      */
-    private void addSuperAdmin() throws ServiceException {
-        saveUser(new User("sa", "sa"));
+    private void addSuperAdmin() {
+        Role adminRole = new Role("ADMIN");
+        saveUser(new User("sa", "sa", new HashSet<>(Collections.singletonList(adminRole))));
     }
 
     /**
      * @param user user to save
      * @return a user with an id
      */
-    public User saveUser(User user) throws ServiceException {
-        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException(getClass().getSimpleName() + ": User already exists");
+    public User saveUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -71,17 +73,5 @@ public class UserService {
         User userToDelete = getUser(id);
         userToDelete.setDeleted(true);
         return saveUser(userToDelete);
-    }
-
-    /**
-     * @param name name of the user
-     * @param password password of the user
-     * @return true if user authentication succeeded.
-     */
-    public boolean authenticateUser(String name, String password) {
-        Optional<User> optionalUser = userRepository.findAll().stream()
-                .filter(user -> user.getName().equalsIgnoreCase(name) &&
-                        user.getPassword().equalsIgnoreCase(password)).findFirst();
-        return optionalUser.isPresent();
     }
 }

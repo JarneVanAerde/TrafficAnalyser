@@ -36,15 +36,4 @@ public class UserServiceTest {
         userService.getUser(user.getUserId());
         fail("Deleted users should not be returned");
     }
-
-    @Test
-    public void authenticateUserSucces() {
-        assertTrue(userService.authenticateUser("sa", "sa"));
-    }
-
-    @Test
-    public void authenticateUserFail() {
-        assertFalse(userService.authenticateUser("dummy", "sa"));
-        assertFalse(userService.authenticateUser("sa", "dummy"));
-    }
 }
