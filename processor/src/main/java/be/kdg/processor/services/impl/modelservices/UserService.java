@@ -10,7 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * This service is used for user CRUD.
@@ -19,22 +23,28 @@ import java.util.*;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        addSuperAdmin();
     }
 
     /**
      * Adds the super admin for the application
      */
-    private void addSuperAdmin() {
-        Role adminRole = new Role("ADMIN");
-        saveUser(new User("sa", "sa", new HashSet<>(Collections.singletonList(adminRole))));
-    }
+    /*private void addSuperAdmin() {
+       Role adminRole = new Role("ADMIN");
+
+       User user = new User();
+       user.setUsername("sa");
+       user.setPassword("sa");
+       user.setRoles(new HashSet<>(Collections.singletonList(adminRole)));
+       saveUser(user);
+    }*/
 
     /**
      * @param user user to save
@@ -42,7 +52,13 @@ public class UserService {
      */
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findByRole("ADMIN");
+        user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
         return userRepository.save(user);
+    }
+
+    public User getUser(String username) {
+        return userRepository.findByUsername(username);
     }
 
     /**

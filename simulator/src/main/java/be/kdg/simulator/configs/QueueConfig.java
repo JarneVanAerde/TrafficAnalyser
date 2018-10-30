@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Used for the configuration of the queue.
- * The name of the queue is injected from application.properties.
+ * The username of the queue is injected from application.properties.
  */
 @Configuration
 public class QueueConfig {

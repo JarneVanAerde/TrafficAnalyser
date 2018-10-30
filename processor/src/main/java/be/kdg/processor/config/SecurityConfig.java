@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -13,20 +14,24 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import javax.sql.DataSource;
 
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final DataSource dataSource;
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.users-query}")
     private String usersQuery;
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private DataSource dataSource;
 
     @Autowired
-    public SecurityConfiguration(BCryptPasswordEncoder bCryptPasswordEncoder, DataSource dataSource) {
+    public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, DataSource dataSource) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.dataSource = dataSource;
     }
 
+    /**
+     * Define available users, roles, which database to use and how to encrypt passwords.
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.
@@ -37,36 +42,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
+    /**
+     * Configure which controller methods are secured and how to login.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.
                 authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers("/user/login").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
                     .antMatchers("/api/**").permitAll()
+                    .antMatchers("/user/login").permitAll()
+                    .antMatchers("/user/register").permitAll()
                     .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest().authenticated()
-                    .and()
-                .csrf().disable().formLogin()
-                .loginPage("/user/login")
-                    .failureUrl("/user/login?error=true")
+                    .and().csrf().disable().formLogin()
+                .loginPage("/user/login").failureUrl("/user/login?error=true")
                     .defaultSuccessUrl("/user/menu")
+                    .usernameParameter("username")
                     .passwordParameter("password")
-                    .usernameParameter("name")
                     .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/");
-
-        //enable h2 connection
-        http.headers().frameOptions().disable();
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                    .logoutSuccessUrl("/").and().exceptionHandling()
+                    .accessDeniedPage("/access-denied");
     }
 
+    /**
+     * Define which resources should not be secured.
+     */
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web
                 .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/fonts/**", "/css/**", "/js/**", "/images/**");
+                .antMatchers("/resources/**", "/static/**", "/fonts/**", "/css/**", "/js/**", "/images/**", "/h2-console/**");
     }
 }

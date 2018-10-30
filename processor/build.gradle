@@ -42,7 +42,6 @@ dependencies {
     compile('org.webjars:jquery:3.0.0')
     compile("org.springframework.boot:spring-boot-starter-security")
 
-
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile("org.springframework.security:spring-security-test")
     compileOnly('org.projectlombok:lombok:1.18.2')
