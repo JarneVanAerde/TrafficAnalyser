@@ -98,11 +98,15 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
                         optionalCameraMessage.get().getCameraId() + " and " + camera.getCameraId());
                 fineService.createSpeedFine(vehicleSpeed, segment.getSpeedLimit(),
                         enterMessage, message, licensePlateInfo.getPlateId());
-            }
-        }
 
-        //Add current message to buffer
-        cameraMessageService.addToBuffer(message);
+                //Remove fined messages from buffer
+                cameraMessageService.removeFromBuffer(message);
+                cameraMessageService.removeFromBuffer(enterMessage);
+            }
+        } else {
+            //Add current message to buffer
+            cameraMessageService.addToBuffer(message);
+        }
     }
 
     /**

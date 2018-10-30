@@ -53,6 +53,14 @@ public class CameraMessageService {
     }
 
     /**
+     * Removes a message from the buffer
+     * @param message message to remove from buffer
+     */
+    public void removeFromBuffer(CameraMessage message) {
+        speedMessageBuffer.remove(message);
+    }
+
+    /**
      * @param plateId the plate id of the connected message
      * @param cameraId the camera id of the segment
      * @return the connected camera-message if there is one present.
