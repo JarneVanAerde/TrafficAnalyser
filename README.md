@@ -12,7 +12,7 @@ You will also need a new calculation for the fine. You can add this in the metho
 
 If needed, a new repository can also be added to correspond with your new fine.
 
-## Adding new receivers & processor
+## Adding new receivers & processors
 
 To add a new receivers you can implement the Receiver interface and override the “receiveMessage”.
 
