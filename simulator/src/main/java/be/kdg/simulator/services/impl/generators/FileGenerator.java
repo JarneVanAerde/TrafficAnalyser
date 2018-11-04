@@ -37,7 +37,6 @@ public class FileGenerator implements MessageGenerator, Runnable {
         this.fileCounter = 0;
     }
 
-
     /**
      * File-reader that reads a given file.
      * Information about camera messages is loaded into CameraMessage-objects.

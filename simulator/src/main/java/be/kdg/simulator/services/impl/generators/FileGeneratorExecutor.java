@@ -2,6 +2,7 @@ package be.kdg.simulator.services.impl.generators;
 
 import be.kdg.simulator.configs.GeneratorConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
@@ -12,6 +13,7 @@ import java.util.concurrent.Executors;
  * It enables us to parallel read files.
  */
 @Component
+@ConditionalOnProperty(name = "generator.type", havingValue = "file")
 public class FileGeneratorExecutor {
     private final FileGenerator fileGenerator;
     private final GeneratorConfig generatorConfig;

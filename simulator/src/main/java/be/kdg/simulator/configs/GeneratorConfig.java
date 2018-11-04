@@ -19,6 +19,9 @@ public class GeneratorConfig {
     @Getter
     @Value("${generator.message.maxid}")
     private int maxId;
+    @Value("${generator.numberOfFixedMessages}")
+    @Getter
+    private int numberOfFixedMessages;
     @Value("${generator.filepath}")
     private String filePath;
     @Value("${generator.numberOfFiles}")
