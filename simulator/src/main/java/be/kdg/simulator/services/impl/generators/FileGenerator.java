@@ -22,30 +22,34 @@ import java.util.Scanner;
  */
 @Component
 @ConditionalOnProperty(name = "generator.type", havingValue = "file")
-public class FileGenerator implements MessageGenerator {
+public class FileGenerator implements MessageGenerator, Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileGenerator.class);
     private final GeneratorConfig generatorConfig;
     private final List<CameraMessage> cameraMessages;
-    private int counter;
+    private int messageCounter;
+    private int fileCounter;
 
     @Autowired
-    public FileGenerator(GeneratorConfig generatorConfig) throws ServiceException {
+    public FileGenerator(GeneratorConfig generatorConfig) {
         this.generatorConfig = generatorConfig;
-        this.cameraMessages = extractdata();
-        this.counter = 0;
+        this.cameraMessages = new ArrayList<>();
+        this.messageCounter = 0;
+        this.fileCounter = 0;
     }
+
 
     /**
      * File-reader that reads a given file.
      * Information about camera messages is loaded into CameraMessage-objects.
      * Delay is used to calculate the next LocalDateTime value.
      *
-     * @return A list of Camera messages
+     * This method will be called on by the executor service.
      */
-    private List<CameraMessage> extractdata() throws ServiceException {
+    @Override
+    public void run() {
         List<CameraMessage> cameraMessages = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(generatorConfig.getFilePath())) {
+        try (Scanner scanner = new Scanner(generatorConfig.getFilePath(fileCounter++))) {
             final int NANO_SECONDS = 1000000;
             LocalDateTime localDateTimeForMessage = LocalDateTime.now();
             long delay;
@@ -67,23 +71,25 @@ public class FileGenerator implements MessageGenerator {
                 }
             }
         } catch (IOException ioe) {
-            throw new ServiceException(getClass().getSimpleName() + ": " + ioe.getMessage());
+          LOGGER.warn(getClass().getSimpleName() + ": " + ioe.getMessage());
         }
 
         LOGGER.info("Extraction file succeeded.");
-        return cameraMessages;
+        this.cameraMessages.addAll(cameraMessages);
     }
 
     /**
-     * Every time we return a new camera message, a counter will be incremented
+     * Every time we return a new camera message, a messageCounter will be incremented
      * to make sure the next value is returned when the method is called again.
-     * If the counter is at the end of the collection, then the program will be exited.
+     * If the messageCounter is at the end of the collection, then the program will be exited.
      *
      * @return A generated camera message that was extracted from the file previously.
      */
     @Override
     public CameraMessage generate() {
-        if (counter >= cameraMessages.size()) System.exit(0);
-        return cameraMessages.get(counter++);
+        if (messageCounter >= cameraMessages.size()) System.exit(0);
+        return cameraMessages.get(messageCounter++);
     }
+
+
 }
