@@ -75,7 +75,7 @@ public class FileGenerator implements MessageGenerator, Runnable {
         } catch (IOException ioe) {
           LOGGER.warn(getClass().getSimpleName() + ": " + ioe.getMessage());
         }
-        
+
         this.cameraMessages.addAll(cameraMessages);
     }
 

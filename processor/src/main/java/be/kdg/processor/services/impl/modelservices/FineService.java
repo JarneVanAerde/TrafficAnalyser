@@ -92,10 +92,9 @@ public class FineService {
     }
 
     /**
-     *
      * @param fineType type of the fine
-     * @param plateId
-     * @return
+     * @param plateId used to get fine of specific vehicle
+     * @return the number of fines that are already fined + this fine
      */
     private int getAmountOfFinesForPlateId(FineType fineType, String plateId) {
         long amount = 0;
