@@ -70,11 +70,12 @@ public class FileGenerator implements MessageGenerator, Runnable {
                     ));
                 }
             }
+
+            LOGGER.info("Extraction file succeeded.");
         } catch (IOException ioe) {
           LOGGER.warn(getClass().getSimpleName() + ": " + ioe.getMessage());
         }
-
-        LOGGER.info("Extraction file succeeded.");
+        
         this.cameraMessages.addAll(cameraMessages);
     }
 
