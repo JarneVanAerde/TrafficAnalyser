@@ -90,7 +90,7 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
             CameraMessage enterMessage = optionalCameraMessage.get();
             Segment segment = cameraInfoService.get(enterMessage.getCameraId()).getSegment();
 
-            LOGGER.info("Calculation distance for " + enterMessage.getCameraId() + " and " + camera.getCameraId());
+            LOGGER.info("Calculate distance for " + enterMessage.getCameraId() + " and " + camera.getCameraId());
             double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
 
             if (vehicleSpeed > segment.getSpeedLimit()) {
