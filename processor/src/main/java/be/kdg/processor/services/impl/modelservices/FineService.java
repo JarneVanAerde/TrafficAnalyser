@@ -45,7 +45,7 @@ public class FineService {
      * After the fine is created it is linked to a vehicle.
      */
     public void createEmissionFine(int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
-        double amount = caculateFine(FineType.EMISSION_FINE, legalEuroNorm, ownerEuroNorm);
+        double amount = caculateFine(FineType.EMISSION_FINE, plateId, legalEuroNorm, ownerEuroNorm);
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSION_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         saveFine(emissionFine);
@@ -60,7 +60,7 @@ public class FineService {
      * After the fine is created it is linked to a vehicle.
      */
     public void createSpeedFine(double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
-        double amount = caculateFine(FineType.SPEED_FINE, legalSpeed, carSpeed);
+        double amount = caculateFine(FineType.SPEED_FINE, plateId, legalSpeed, carSpeed);
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
@@ -80,15 +80,39 @@ public class FineService {
      * @return the calculated amount
      * @throws ServiceException wrapper-exception
      */
-    private double caculateFine(FineType fineType, double legal, double actual) throws ServiceException {
+    private double caculateFine(FineType fineType, String plateId, double legal, double actual) throws ServiceException {
         switch (fineType) {
             case EMISSION_FINE:
-                return (legal - actual) * optionService.getOptionValue(OptionKey.EMISSION_FAC);
+                return (legal - actual) * (optionService.getOptionValue(OptionKey.EMISSION_FAC) * getAmountOfFinesForPlateId(fineType, plateId));
             case SPEED_FINE:
-                return (actual - legal) * optionService.getOptionValue(OptionKey.SPEED_FAC);
+                return (actual - legal) * (optionService.getOptionValue(OptionKey.SPEED_FAC) * getAmountOfFinesForPlateId(fineType, plateId));
             default:
                 return 200.0;
         }
+    }
+
+    /**
+     *
+     * @param fineType type of the fine
+     * @param plateId
+     * @return
+     */
+    private int getAmountOfFinesForPlateId(FineType fineType, String plateId) {
+        long amount = 0;
+
+        if (fineType == FineType.EMISSION_FINE) {
+           amount = fineRepo.findAll().stream()
+                    .filter(fine -> fine instanceof EmissionFine)
+                    .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(plateId))
+                    .count();
+        } else if (fineType == FineType.SPEED_FINE) {
+            amount = fineRepo.findAll().stream()
+                    .filter(fine -> fine instanceof SpeedFine)
+                    .filter(fine -> ((SpeedFine) fine).getExitMessage().getLicensePlate().equalsIgnoreCase(plateId))
+                    .count();
+        }
+
+        return (int) amount + 1;
     }
 
     /**
