@@ -29,9 +29,9 @@ public class UserWebController {
      * @return a login view.
      */
     @GetMapping("/login")
-    public ModelAndView showLoginAndRegister() {
+    public ModelAndView showLoginAndRegister(User user) {
         ModelAndView mav = new ModelAndView("login");
-        mav.addObject("user", new User());
+        mav.addObject("user", user);
         return mav;
     }
 
@@ -48,7 +48,7 @@ public class UserWebController {
         } else {
             userService.saveUser(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
+            modelAndView.addObject("user", user);
             modelAndView.setViewName("redirect:/user/login");
         }
 
