@@ -8,7 +8,7 @@
     </noscript>
     <script src="/js/vendor.js"></script>
 
-    <title>Login | Register</title>
+    <title>Login</title>
     <meta charset="utf-8"/>
 </head>
 <body class="is-preload">
@@ -18,21 +18,19 @@
             <h1>Traffic Analyser</h1>
             <p>Login</p>
         </header>
-        <form method="post" action="/user/verify" th:object="${userDTO}">
+        <form method="POST" th:action="@{/user/login}">
             <div class="fields">
                 <div class="field">
-                    <input th:field="*{name}" type="text" name="name" id="nameLogin" placeholder="Name"/>
+                    <input type="text" name="username" id="username" placeholder="username"/>
                 </div>
                 <div class="field">
-                    <input th:field="*{password}" type="password" name="password" id="passwordLogin"
-                           placeholder="password"/>
+                    <input type="password" name="password" id="password" placeholder="password"/>
                 </div>
             </div>
             <button type="submit"><a>Go to account</a></button>
         </form>
     </section>
 
-    <!-- Footer -->
     <footer id="footer">
         <ul class="copyright">
             <li>&copy; Karel de Grote Hogeschool</li>

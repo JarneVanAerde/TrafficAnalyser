@@ -1,43 +1,65 @@
 package be.kdg.processor.services.impl.modelservices;
 
+import be.kdg.processor.models.users.Role;
 import be.kdg.processor.models.users.User;
+import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This service is used for user CRUD.
  */
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) throws ServiceException {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         addSuperAdmin();
     }
 
     /**
      * Adds the super admin for the application
      */
-    private void addSuperAdmin() throws ServiceException {
-        saveUser(new User("sa", "sa"));
+    @PostConstruct
+    private void addSuperAdmin() {
+      User user = new User("sa", bCryptPasswordEncoder.encode("sa"),
+              Collections.singletonList(new Role("ADMIN")));
+
+      if (userRepository.findByUsername(user.getUsername()) == null) userRepository.save(user);
     }
 
     /**
      * @param user user to save
      * @return a user with an id
      */
-    public User saveUser(User user) throws ServiceException {
-        if (authenticateUser(user.getName(), user.getPassword())) throw new ServiceException(getClass().getSimpleName() + ": User already exists");
-        return userRepository.save(user);
+    public User saveUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        Role adminRole = roleRepository.findByRole("ADMIN");
+        user.setRoles(Collections.singletonList(adminRole));
+        userRepository.save(user);
+        return user;
     }
 
     /**
@@ -71,14 +93,27 @@ public class UserService {
     }
 
     /**
-     * @param name name of the user
-     * @param password password of the user
-     * @return true if user authentication succeeded.
+     * @param roles roles to be mapped.
+     * @return mapped roles
      */
-    public boolean authenticateUser(String name, String password) {
-        Optional<User> optionalUser = userRepository.findAll().stream()
-                .filter(user -> user.getName().equalsIgnoreCase(name) &&
-                        user.getPassword().equalsIgnoreCase(password)).findFirst();
-        return optionalUser.isPresent();
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRole()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @param username name of the requested login user
+     * @return The user details of the requested user.
+     * @throws UsernameNotFoundException is thrown if the username was not found.
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       User user = userRepository.findByUsername(username);
+       if (user == null) throw new UsernameNotFoundException("Invalid username of password.");
+       else {
+           return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                   user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+       }
     }
 }
