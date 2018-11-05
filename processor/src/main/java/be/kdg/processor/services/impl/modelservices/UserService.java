@@ -2,7 +2,6 @@ package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.users.Role;
 import be.kdg.processor.models.users.User;
-import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -23,20 +20,19 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        addSuperAdmin();
     }
 
     /**
      * Adds the super admin for the application
      */
-    /*private void addSuperAdmin() {
+    private void addSuperAdmin() {
        Role adminRole = new Role("ADMIN");
 
        User user = new User();
@@ -44,7 +40,7 @@ public class UserService {
        user.setPassword("sa");
        user.setRoles(new HashSet<>(Collections.singletonList(adminRole)));
        saveUser(user);
-    }*/
+    }
 
     /**
      * @param user user to save
@@ -52,13 +48,9 @@ public class UserService {
      */
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByRole("ADMIN");
-        user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
+        //Role userRole = roleRepository.findByRole("ADMIN");
+        //user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
         return userRepository.save(user);
-    }
-
-    public User getUser(String username) {
-        return userRepository.findByUsername(username);
     }
 
     /**

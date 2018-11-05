@@ -14,6 +14,7 @@ import java.util.Set;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @Entity
 @Table(name = "users")

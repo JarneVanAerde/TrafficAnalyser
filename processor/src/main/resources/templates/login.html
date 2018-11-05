@@ -29,21 +29,6 @@
             </div>
             <button type="submit"><a>Go to account</a></button>
         </form>
-        <hr/>
-        <header>
-            <p>Register</p>
-        </header>
-        <form method="POST" th:object="${user}" action="/user/register">
-            <div class="fields">
-                <div class="field">
-                    <input th:field="*{username}" type="text" name="name" id="usernameReg" placeholder="name"/>
-                </div>
-                <div class="field">
-                    <input th:field="*{password}" type="password" name="pass" id="passwordReg" placeholder="pass"/>
-                </div>
-            </div>
-            <button type="submit"><a>Register</a></button>
-        </form>
     </section>
 
     <footer id="footer">
