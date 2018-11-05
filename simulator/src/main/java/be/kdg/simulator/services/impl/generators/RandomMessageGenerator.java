@@ -42,7 +42,7 @@ public class RandomMessageGenerator implements MessageGenerator {
      */
     private void generateRandomPlates() {
         for (int i = 0; i < generatorConfig.getNumberOfFixedMessages(); i++)
-            cameraMessagesPreset.add(new CameraMessage(random.nextInt(generatorConfig.getMaxId()) + 1, generateLicenseplate(), LocalDateTime.now()));
+            cameraMessagesPreset.add(new CameraMessage(random.nextInt(generatorConfig.getMaxId()) + 1, generateLicensePlate(), LocalDateTime.now()));
     }
 
     /**
@@ -52,7 +52,7 @@ public class RandomMessageGenerator implements MessageGenerator {
      *
      * @return A random generated licencing plate
      */
-    private String generateLicenseplate() {
+    private String generateLicensePlate() {
         return String.format("%s-%s-%s",
                 random.nextInt(8) + 1,
                 RandomStringUtils.random(3, true, false).toUpperCase(),
