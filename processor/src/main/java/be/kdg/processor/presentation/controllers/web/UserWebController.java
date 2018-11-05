@@ -15,7 +15,7 @@ public class UserWebController {
      * @return a login view.
      */
     @GetMapping("/login")
-    public ModelAndView showLoginAndRegister() {
+    public ModelAndView showLogin() {
         return new ModelAndView("login");
     }
 

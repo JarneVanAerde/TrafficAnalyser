@@ -1,45 +1,40 @@
 package be.kdg.processor.config;
 
+import be.kdg.processor.services.impl.modelservices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${spring.queries.users-query}")
-    private String usersQuery;
-    @Value("${spring.queries.roles-query}")
-    private String rolesQuery;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private DataSource dataSource;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, DataSource dataSource) {
+    public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.dataSource = dataSource;
+        this.userService = userService;
     }
 
-    /**
-     * Define available users, roles, which database to use and how to encrypt passwords.
-     */
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(bCryptPasswordEncoder);
+        return auth;
+    }
+
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.
-                jdbcAuthentication()
-                .usersByUsernameQuery(usersQuery)
-                .authoritiesByUsernameQuery(rolesQuery)
-                .dataSource(dataSource)
-                .passwordEncoder(bCryptPasswordEncoder);
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     /**
@@ -53,18 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/**").permitAll()
                     .antMatchers("/user/login").permitAll()
                     .antMatchers("/user/register").permitAll()
-                    .antMatchers("/app/**", "/option/**", "/user/menu").permitAll()
-                    //.hasAuthority("ADMIN").anyRequest().authenticated()
-                    .and().csrf().disable().formLogin()
-                .loginPage("/user/login").failureUrl("/user/login?error=true")
-                    .defaultSuccessUrl("/user/menu")
-                    .usernameParameter("username")
-                    .passwordParameter("password")
+                    .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest().authenticated()
+                    .and().csrf().disable()
+                .formLogin().loginPage("/user/login")
+                    .failureUrl("/user/login?error=true")
+                    .defaultSuccessUrl("/user/menu", true)
                     .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                    .logoutSuccessUrl("/").and().exceptionHandling()
-                    .accessDeniedPage("/access-denied");
+                    .logoutSuccessUrl("/");
     }
 
     /**

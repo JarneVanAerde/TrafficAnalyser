@@ -10,5 +10,4 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAllByDeleted(boolean deleted);
     User findByUsername(String userName);
-    //User findById(int id);
 }

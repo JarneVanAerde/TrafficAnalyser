@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -16,6 +15,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id")
     private int id;
+    @Column(name = "role")
     private String role;
 
     public Role(String role) {

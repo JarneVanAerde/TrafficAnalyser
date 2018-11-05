@@ -18,7 +18,7 @@
             <h1>Traffic Analyser</h1>
             <p>Login</p>
         </header>
-        <form method="POST" action="/user/login">
+        <form method="POST" th:action="@{/user/login}">
             <div class="fields">
                 <div class="field">
                     <input type="text" name="username" id="username" placeholder="username"/>
