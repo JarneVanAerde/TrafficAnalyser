@@ -28,18 +28,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        addSuperAdmin();
     }
 
     /**
+     * Post construct is needed to be sure that the role name is inserted
      * Adds the super admin for the application
      */
     @PostConstruct
@@ -47,17 +45,18 @@ public class UserService implements UserDetailsService {
       User user = new User("sa", bCryptPasswordEncoder.encode("sa"),
               Collections.singletonList(new Role("ADMIN")));
 
-      if (userRepository.findByUsername(user.getUsername()) == null) userRepository.save(user);
+      userRepository.save(user);
     }
 
     /**
      * @param user user to save
      * @return a user with an id
+     * @throws ServiceException is thrown is user already exists.
      */
-    public User saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Role adminRole = roleRepository.findByRole("ADMIN");
-        user.setRoles(Collections.singletonList(adminRole));
+    public User saveUser(User user) throws ServiceException {
+        if (userRepository.findByUsername(user.getUsername()) != null)
+            throw new ServiceException("User already exists.");
+
         userRepository.save(user);
         return user;
     }
