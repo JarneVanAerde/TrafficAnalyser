@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * This config class is used for the configuration of security
+ * for the web based application.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,6 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userService = userService;
     }
 
+    /**
+     * Is used for the configuration of the authenticationProvider.
+     * @return a configured authenticationProvider.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
@@ -33,13 +41,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return auth;
     }
 
+    /**
+     * @param auth AuthenticationManagerBuilder with an authenticationProvider.
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
     /**
-     * Configure which controller methods are secured and how to login.
+     * Configure which controller methods are secured and how to login and logout.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
