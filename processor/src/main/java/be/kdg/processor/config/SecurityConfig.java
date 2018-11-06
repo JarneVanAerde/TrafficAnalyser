@@ -56,19 +56,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/api/**").permitAll()
-                    .antMatchers("/user/login").permitAll()
-                    .antMatchers("/user/register").permitAll()
-                    .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest().authenticated()
-                    .and().csrf().disable()
+                .antMatchers("/").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/user/login").permitAll()
+                .antMatchers("/app/**", "/option/**", "/user/menu").hasAuthority("ADMIN").anyRequest().authenticated()
+                .and().csrf().disable()
                 .formLogin().loginPage("/user/login")
-                    .failureUrl("/user/login?error=true")
-                    .defaultSuccessUrl("/user/menu", true)
-                    .and()
+                .failureUrl("/user/login?error=true")
+                .defaultSuccessUrl("/user/menu", true)
+                .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                    .logoutSuccessUrl("/");
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutSuccessUrl("/");
     }
 
     /**
