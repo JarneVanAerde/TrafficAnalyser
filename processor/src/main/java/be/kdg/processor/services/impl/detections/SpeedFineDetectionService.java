@@ -88,11 +88,11 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
             CameraMessage enterMessage = optionalCameraMessage.get();
             Segment segment = cameraInfoService.get(enterMessage.getCameraId()).getSegment();
 
-            LOGGER.info("Calculate distance for " + enterMessage.getCameraId() + " and " + camera.getCameraId());
+            LOGGER.info("Calculate distance for plate " + licensePlateInfo.getPlateId() + " for camera " + enterMessage.getCameraId() + " and " + camera.getCameraId());
             double vehicleSpeed = calculateSpeed(segment, message, enterMessage);
 
             if (vehicleSpeed > segment.getSpeedLimit()) {
-                LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + " On camera " +
+                LOGGER.info("Speed fine detected for " + licensePlateInfo.getPlateId() + " for camera " +
                         optionalCameraMessage.get().getCameraId() + " and " + camera.getCameraId());
                 fineService.createSpeedFine(vehicleSpeed, segment.getSpeedLimit(),
                         enterMessage, message, licensePlateInfo.getPlateId());
