@@ -69,7 +69,7 @@ public class FineApiController {
      * @return approves that a fine was correctly created.
      * @throws ServiceException is handled by ServiceExceptionHandler.
      */
-    @PutMapping("/fines/approve/{id}")
+    @PatchMapping("/fines/approve/{id}")
     public ResponseEntity<FineDTO> approveFine(@PathVariable int id) throws ServiceException {
         Fine approvedFine = fineService.approveFine(id);
         return new ResponseEntity<>(modelMapper.map(approvedFine, FineDTO.class), HttpStatus.OK);
@@ -82,7 +82,7 @@ public class FineApiController {
      * @return updates the amount of a specific fine.
      * @throws ServiceException is handled by ServiceExceptionHandler.
      */
-    @PutMapping("/fines/updateAmount/{id}/{amount}/{message}")
+    @PatchMapping("/fines/updateAmount/{id}/{amount}/{message}")
     public ResponseEntity<FineDTO> updateAmount(@PathVariable int id,
                                                 @PathVariable double amount,
                                                 @PathVariable String message) throws ServiceException {
