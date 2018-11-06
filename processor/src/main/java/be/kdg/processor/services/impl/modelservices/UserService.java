@@ -2,7 +2,6 @@ package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.users.Role;
 import be.kdg.processor.models.users.User;
-import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;

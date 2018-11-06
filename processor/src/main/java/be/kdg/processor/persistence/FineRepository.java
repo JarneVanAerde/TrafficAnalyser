@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface FineRepository extends JpaRepository<Fine, Integer> {
-    List<Fine> getFinesByFineType(FineType fineType);
 }
