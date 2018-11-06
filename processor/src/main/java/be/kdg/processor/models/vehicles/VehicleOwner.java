@@ -16,7 +16,6 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "vehicle_owners")
 public class VehicleOwner {
     @Getter
     @Id

@@ -41,9 +41,7 @@ public class OptionWebController {
      */
     @GetMapping("/settings")
     public ModelAndView showOptions() throws ControllerException {
-        List<Option> options = optionService.getOptions().stream()
-                .sorted(Comparator.comparing(Option::getKey))
-                .collect(Collectors.toList());
+        List<Option> options = optionService.getOptions();
         if (options.isEmpty())
             throw new ControllerException(getClass().getSimpleName() + ": Requested list was empty");
 

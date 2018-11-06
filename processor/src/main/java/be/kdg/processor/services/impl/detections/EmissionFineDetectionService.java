@@ -45,9 +45,9 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
      * thrown away.
      *
      * If the proxy's throw an exception, then a retry mechanism will go back
-     * and retry several times
+     * and retry several times.
      *
-     * If a emission fine is dedected, then it will be passed to the fineService.
+     * If a emission fine is detected, then it will be passed to the fineService.
      *
      * @param message the message that will be used to detect possible emission fines.
      */
@@ -66,7 +66,7 @@ public class EmissionFineDetectionService implements DetectionService<CameraMess
         if (camera.getEuroNorm() > licensePlateInfo.getEuroNumber()) {
             vehicleService.extractPlateInfo(licensePlateInfo);
 
-            if (!fineService.checkIfAlreadyHasEmissionfine(licensePlateInfo.getPlateId())) {
+            if (!fineService.checkIfAlreadyHasEmissionFine(licensePlateInfo.getPlateId())) {
                 LOGGER.info("Emission Fine detected for " + licensePlateInfo.getPlateId() + " on camera " + camera.getCameraId() + ".");
                 fineService.createEmissionFine(licensePlateInfo.getEuroNumber(), camera.getEuroNorm(),
                         message, licensePlateInfo.getPlateId());

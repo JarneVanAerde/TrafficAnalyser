@@ -1,12 +1,10 @@
 package be.kdg.processor.models.users;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Simple POJO used to store information about a user
@@ -17,7 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

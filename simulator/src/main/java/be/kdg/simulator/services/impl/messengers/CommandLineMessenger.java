@@ -2,6 +2,7 @@ package be.kdg.simulator.services.impl.messengers;
 
 import be.kdg.simulator.models.CameraMessage;
 import be.kdg.simulator.services.api.Messenger;
+import be.kdg.simulator.services.exceptions.ServiceException;
 import be.kdg.simulator.services.impl.utils.MessageWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +26,7 @@ public class CommandLineMessenger implements Messenger {
      * and prints it to the commandline.
      */
     @Override
-    public void sendMessage(CameraMessage message) {
+    public void sendMessage(CameraMessage message) throws ServiceException {
         messageWriter.writeMessage(message);
         System.out.println(message);
     }

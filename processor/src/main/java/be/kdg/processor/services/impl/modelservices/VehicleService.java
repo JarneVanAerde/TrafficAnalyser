@@ -74,12 +74,4 @@ public class VehicleService {
     public void saveVehicle(Vehicle vehicle) {
         vehicleRepository.save(vehicle);
     }
-
-    /**
-     * deletes all rows from the vehicles table and the owner table.
-     */
-    public void deleteAllOwnersAndVehicles() {
-        vehicleRepository.deleteAll();
-        vehicleOwnerRepository.deleteAll();
-    }
 }

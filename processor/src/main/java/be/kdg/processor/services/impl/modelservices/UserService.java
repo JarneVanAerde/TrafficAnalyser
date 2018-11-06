@@ -2,7 +2,6 @@ package be.kdg.processor.services.impl.modelservices;
 
 import be.kdg.processor.models.users.Role;
 import be.kdg.processor.models.users.User;
-import be.kdg.processor.persistence.RoleRepository;
 import be.kdg.processor.persistence.UserRepository;
 import be.kdg.processor.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -34,13 +32,13 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        addSuperAdmin();
     }
 
     /**
      * Post construct is needed to be sure that the role name is inserted
      * Adds the super admin for the application
      */
-    @PostConstruct
     private void addSuperAdmin() {
       User user = new User("sa", bCryptPasswordEncoder.encode("sa"),
               Collections.singletonList(new Role("ADMIN")));
@@ -93,7 +91,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * @param roles roles to be mapped.
-     * @return mapped roles
+     * @return mapped roles.
      */
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream()

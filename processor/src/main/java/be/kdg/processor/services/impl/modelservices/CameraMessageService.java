@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CameraMessageService {
-    private final CameraMessageRepository cameraMessageRepository;
+    private final CameraMessageRepository cameraMessageRepo;
     private final CameraInfoService cameraInfoService;
     private final OptionService optionService;
     private final List<CameraMessage> speedMessageBuffer;
 
     @Autowired
     public CameraMessageService(CameraMessageRepository cameraMessageRepository, CameraInfoService cameraInfoService, OptionService optionService) {
-        this.cameraMessageRepository = cameraMessageRepository;
+        this.cameraMessageRepo = cameraMessageRepository;
         this.cameraInfoService = cameraInfoService;
         this.optionService = optionService;
         this.speedMessageBuffer = new ArrayList<>();
@@ -41,11 +41,12 @@ public class CameraMessageService {
      * @return the saved camera messages.
      */
     public CameraMessage saveMessage(CameraMessage message) {
-        return cameraMessageRepository.save(message);
+        return cameraMessageRepo.save(message);
     }
 
     /**
      * Adds the message to the buffer
+     *
      * @param message message to buffer
      */
     public void addToBuffer(CameraMessage message) {
@@ -54,6 +55,7 @@ public class CameraMessageService {
 
     /**
      * Removes a message from the buffer
+     *
      * @param message message to remove from buffer
      */
     public void removeFromBuffer(CameraMessage message) {
@@ -61,12 +63,12 @@ public class CameraMessageService {
     }
 
     /**
-     * @param plateId the plate id of the connected message
+     * @param plateId  the plate id of the connected message
      * @param cameraId the camera id of the segment
      * @return the connected camera-message if there is one present.
      * @throws ServiceException wrapper-exception
      */
-    public Optional<CameraMessage> getConnectedMessageForEmptySegment(String plateId, int cameraId) throws ServiceException {
+    public Optional<CameraMessage> getCorrespondingMessage(String plateId, int cameraId) throws ServiceException {
         deleteMessageOutOfTimeFrame();
 
         List<CameraMessage> cameraMessages = speedMessageBuffer.stream()
@@ -84,18 +86,12 @@ public class CameraMessageService {
 
     /**
      * Deletes all the speed messages that exceed the time frame.
+     *
      * @throws ServiceException wrapper-exception
      */
     public void deleteMessageOutOfTimeFrame() throws ServiceException {
         double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_SPEED_MESSAGE);
         speedMessageBuffer.removeIf(message ->
                 ChronoUnit.MINUTES.between(message.getTimestamp(), LocalDateTime.now()) > timeFrame);
-    }
-
-    /**
-     * deletes all messages in the repository.
-     */
-    public void deleteAllMessage() {
-        cameraMessageRepository.deleteAll();
     }
 }

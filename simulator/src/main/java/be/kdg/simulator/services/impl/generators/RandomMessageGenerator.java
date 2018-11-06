@@ -72,8 +72,8 @@ public class RandomMessageGenerator implements MessageGenerator {
         do {
             CameraMessage possibleCandidate = cameraMessagesPreset.get(random.nextInt(cameraMessagesPreset.size()));
 
-            long sec = Duration.between(possibleCandidate.getTimestamp(), LocalDateTime.now()).getSeconds();
-            if (Duration.between(possibleCandidate.getTimestamp(), LocalDateTime.now()).getSeconds() > 10) {
+            if (Duration.between(possibleCandidate.getTimestamp(), LocalDateTime.now()).getSeconds()
+                    > generatorConfig.getDurationBetweenMessages()) {
                 notFoundCandidate = false;
                 candidate = possibleCandidate;
                 candidate.setTimestamp(LocalDateTime.now());

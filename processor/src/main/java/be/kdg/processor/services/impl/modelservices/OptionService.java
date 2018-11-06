@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This service is used for option CRUD.
@@ -68,6 +70,8 @@ public class OptionService {
      * @return all the options
      */
     public List<Option> getOptions() {
-        return Collections.unmodifiableList(optionsRepository.findAll());
+        return Collections.unmodifiableList(optionsRepository.findAll()).stream()
+                .sorted(Comparator.comparing(Option::getKey))
+                .collect(Collectors.toList());
     }
 }

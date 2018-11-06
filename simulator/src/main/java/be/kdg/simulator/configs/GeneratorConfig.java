@@ -22,6 +22,9 @@ public class GeneratorConfig {
     @Value("${generator.numberOfFixedMessages}")
     @Getter
     private int numberOfFixedMessages;
+    @Value("${generator.minimumDuration}")
+    @Getter
+    private int durationBetweenMessages;
     @Value("${generator.filepath}")
     private String filePath;
     @Value("${generator.numberOfFiles}")
@@ -33,7 +36,7 @@ public class GeneratorConfig {
         this.paths = new ArrayList<>();
     }
 
-    /**4
+    /**
      * Adds all files to the paths collection after the filepath
      * is injected with the @Value annotation.
      */

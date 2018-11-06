@@ -6,13 +6,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 /**
  * Abstract super class used by al specific fines for inheritance.
  */
 @EqualsAndHashCode
 @Getter
 @Entity
-@Table(name = "fines")
 @DiscriminatorColumn(name = "type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Fine {

@@ -3,7 +3,6 @@ package be.kdg.simulator.services.impl.generators;
 import be.kdg.simulator.configs.GeneratorConfig;
 import be.kdg.simulator.models.CameraMessage;
 import be.kdg.simulator.services.api.MessageGenerator;
-import be.kdg.simulator.services.exceptions.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class main purpose is to generate CameraMessage-objects that come
@@ -26,15 +26,16 @@ public class FileGenerator implements MessageGenerator, Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileGenerator.class);
     private final GeneratorConfig generatorConfig;
     private final List<CameraMessage> cameraMessages;
+    private AtomicInteger fileCounter;
     private int messageCounter;
-    private int fileCounter;
+
 
     @Autowired
     public FileGenerator(GeneratorConfig generatorConfig) {
         this.generatorConfig = generatorConfig;
         this.cameraMessages = new ArrayList<>();
+        this.fileCounter = new AtomicInteger();
         this.messageCounter = 0;
-        this.fileCounter = 0;
     }
 
     /**
@@ -48,7 +49,7 @@ public class FileGenerator implements MessageGenerator, Runnable {
     public void run() {
         List<CameraMessage> cameraMessages = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(generatorConfig.getFilePath(fileCounter++))) {
+        try (Scanner scanner = new Scanner(generatorConfig.getFilePath(fileCounter.getAndIncrement()))) {
             final int NANO_SECONDS = 1000000;
             LocalDateTime localDateTimeForMessage = LocalDateTime.now();
             long delay;
@@ -90,6 +91,4 @@ public class FileGenerator implements MessageGenerator, Runnable {
         if (messageCounter >= cameraMessages.size()) System.exit(0);
         return cameraMessages.get(messageCounter++);
     }
-
-
 }

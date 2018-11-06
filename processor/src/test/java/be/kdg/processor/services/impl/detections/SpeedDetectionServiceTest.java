@@ -52,6 +52,10 @@ public class SpeedDetectionServiceTest {
         Assert.fail("There should not be a fine in the database...");
     }
 
+    /**
+     * Used for retrieving the find id.
+     * @return corresponding fine Id.
+     */
     private int findFineByPlate() {
         return fineService.getFines().stream()
                 .filter(fine -> fine instanceof SpeedFine)

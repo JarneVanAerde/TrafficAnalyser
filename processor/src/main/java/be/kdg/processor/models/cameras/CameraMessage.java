@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "camera_messages")
 public class CameraMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
