@@ -16,7 +16,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(value = ControllerException.class)
-    public ModelAndView handleControllerExcepetion(Exception ex) {
+    public ModelAndView handleControllerException(Exception ex) {
         LOGGER.error(ex.getMessage());
         return new ModelAndView("error");
     }

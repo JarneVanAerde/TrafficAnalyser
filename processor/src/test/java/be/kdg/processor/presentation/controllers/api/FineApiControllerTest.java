@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -70,6 +69,10 @@ public class FineApiControllerTest {
         assertEquals(1000.0, fineService.getFine(findFineId()).getAmount(), 0.0);
     }
 
+    /**
+     * Used for retrieving the find id.
+     * @return corresponding fine Id.
+     */
     private int findFineId()  {
         return fineService.getFines().stream()
                 .filter(fine -> fine instanceof EmissionFine)
