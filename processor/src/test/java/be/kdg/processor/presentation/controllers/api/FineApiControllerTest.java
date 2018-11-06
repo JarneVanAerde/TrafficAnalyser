@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,7 +55,7 @@ public class FineApiControllerTest {
 
     @Test
     public void testApproveFine() throws Exception {
-        mockMvc.perform(put("/api/fines/approve/" + findFineId())
+        mockMvc.perform(patch("/api/fines/approve/" + findFineId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         assertTrue(fineService.getFine(findFineId()).isApproved());
@@ -62,7 +63,7 @@ public class FineApiControllerTest {
 
     @Test
     public void testUpdateAmount() throws Exception {
-        mockMvc.perform(put("/api/fines/updateAmount/" + findFineId() + "/1000.0/because I can")
+        mockMvc.perform(patch("/api/fines/updateAmount/" + findFineId() + "/1000.0/because I can")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         assertFalse(fineService.getFine(findFineId()).getChangeAmountMotivation().equalsIgnoreCase("default"));
