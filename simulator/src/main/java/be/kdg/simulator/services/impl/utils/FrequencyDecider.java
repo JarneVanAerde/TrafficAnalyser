@@ -21,14 +21,14 @@ public class FrequencyDecider {
     @Autowired
     public FrequencyDecider(FrequencyConfig frequencyConfig) {
         this.frequencyConfig = frequencyConfig;
-        initialzeTimePeriods();
+        initializeTimePeriods();
     }
 
     /**
      * Initializes the timestamp ranges based on the information
      * out of the config file
      */
-    private void initialzeTimePeriods() {
+    private void initializeTimePeriods() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         String[] morningHours = frequencyConfig.getMorningHours().split("-");
