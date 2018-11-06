@@ -15,7 +15,6 @@ import java.util.List;
 @EqualsAndHashCode
 @Getter
 @Entity
-@Table(name = "vehicles")
 public class Vehicle {
     @Id
     private String licensePlate;
