@@ -33,8 +33,8 @@ public class FineService {
     private final OptionService optionService;
 
     @Autowired
-    public FineService(FineRepository finrRepo, VehicleService vehicleService, CameraMessageService cameraMessageService, OptionService optionService) {
-        this.fineRepo = finrRepo;
+    public FineService(FineRepository fineRepo, VehicleService vehicleService, CameraMessageService cameraMessageService, OptionService optionService) {
+        this.fineRepo = fineRepo;
         this.vehicleService = vehicleService;
         this.cameraMessageService = cameraMessageService;
         this.optionService = optionService;
@@ -46,6 +46,7 @@ public class FineService {
      */
     public void createEmissionFine(int ownerEuroNorm, int legalEuroNorm, CameraMessage emmisionMessage, String plateId) throws ServiceException {
         double amount = caculateFine(FineType.EMISSION_FINE, plateId, legalEuroNorm, ownerEuroNorm);
+
         emmisionMessage = cameraMessageService.saveMessage(emmisionMessage);
         EmissionFine emissionFine = new EmissionFine(FineType.EMISSION_FINE, amount, ownerEuroNorm, legalEuroNorm, emmisionMessage);
         saveFine(emissionFine);
@@ -61,6 +62,7 @@ public class FineService {
      */
     public void createSpeedFine(double carSpeed, double legalSpeed, CameraMessage enterCamera, CameraMessage exitCamera, String plateId) throws ServiceException {
         double amount = caculateFine(FineType.SPEED_FINE, plateId, legalSpeed, carSpeed);
+
         enterCamera = cameraMessageService.saveMessage(enterCamera);
         exitCamera = cameraMessageService.saveMessage(exitCamera);
         SpeedFine speedFine = new SpeedFine(FineType.SPEED_FINE, amount, carSpeed, legalSpeed, enterCamera, exitCamera);
@@ -93,14 +95,14 @@ public class FineService {
 
     /**
      * @param fineType type of the fine
-     * @param plateId used to get fine of specific vehicle
+     * @param plateId  used to get fine of specific vehicle
      * @return the number of fines that are already fined + this fine
      */
     private int getAmountOfFinesForPlateId(FineType fineType, String plateId) {
         long amount = 0;
 
         if (fineType == FineType.EMISSION_FINE) {
-           amount = fineRepo.findAll().stream()
+            amount = fineRepo.findAll().stream()
                     .filter(fine -> fine instanceof EmissionFine)
                     .filter(fine -> ((EmissionFine) fine).getEmmisionMessage().getLicensePlate().equalsIgnoreCase(plateId))
                     .count();
@@ -129,7 +131,7 @@ public class FineService {
      * @param plateId used to retrieve the vehicle.
      * @return true if their is already an emission fine created for today, and false if the opposite is true
      */
-    public boolean checkIfAlreadyHasEmissionfine(String plateId) throws ServiceException {
+    public boolean checkIfAlreadyHasEmissionFine(String plateId) throws ServiceException {
         Vehicle vehicle = vehicleService.getVehicle(plateId);
         double timeFrame = optionService.getOptionValue(OptionKey.TIME_FRAME_EMISSION);
 
@@ -194,12 +196,5 @@ public class FineService {
                 .filter(f -> f.getCreationDate().isAfter(beforeDate) &&
                         f.getCreationDate().isBefore(afterDate))
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * deletes all fines in the database
-     */
-    public void deleteAllFines() {
-        fineRepo.deleteAll();
     }
 }

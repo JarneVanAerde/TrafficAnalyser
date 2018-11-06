@@ -35,6 +35,7 @@ public class QueueReceiver implements Receiver<CameraMessage> {
      * @param message The message from the queue.
      * @throws IOException Throws an exception if the conversion from xml to object failed.
      */
+    @Override
     @RabbitListener(id = "${queue.id}", queues = "${messaging.queue.name}")
     public void receiveMessage(String message) throws IOException {
         CameraMessage cameraMessage = xmlMapper.readValue(message, CameraMessage.class);

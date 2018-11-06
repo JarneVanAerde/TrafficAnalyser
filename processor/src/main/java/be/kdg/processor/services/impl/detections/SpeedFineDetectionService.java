@@ -51,7 +51,7 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
      * The external services are behind an adapter and are used to
      * determine the fines.
      * If the message can't be linked to a fine, then it is
-     * saved to the database.
+     * added to a buffer.
      *
      * If the proxy's throw an exception, then a retry mechanism will go back
      * and retry several times.
@@ -61,8 +61,6 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
      *
      * If the other message of the segment is present, then the speed will be calculated
      * if the speed of the vehicle exceeds the legal speed, then a fine will be created.
-     *
-     * At the end, the message is stored into a speedMessage buffer.
      *
      * @param message the message that will be used to detect possible emission fines.
      */
@@ -80,7 +78,7 @@ public class SpeedFineDetectionService implements DetectionService<CameraMessage
         //Collect corresponding message
         Optional<CameraMessage> optionalCameraMessage = Optional.empty();
         if (camera.getSegment() == null) {
-            optionalCameraMessage = cameraMessageService.getConnectedMessageForEmptySegment(licensePlateInfo.getPlateId(), camera.getCameraId());
+            optionalCameraMessage = cameraMessageService.getCorrespondingMessage(licensePlateInfo.getPlateId(), camera.getCameraId());
         }
 
         //Detect fine & extract plate info
