@@ -1,6 +1,7 @@
 package be.kdg.simulator.services.impl.utils;
 
 import be.kdg.simulator.configs.FrequencyConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -17,6 +18,7 @@ public class FrequencyDecider {
     private LocalTime timeEveningBegin;
     private LocalTime timeEveningEnd;
 
+    @Autowired
     public FrequencyDecider(FrequencyConfig frequencyConfig) {
         this.frequencyConfig = frequencyConfig;
         initialzeTimePeriods();
